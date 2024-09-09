@@ -1,9 +1,12 @@
 import express from 'express';
 import rootRouter from './Routes/rootRoutes.js'; // Ensure this path is correct
+import cors from 'cors';  
 
 const app = express();
 app.use(express.json());
 
+
+app.use(cors()); 
 // Use rootRouter for all routes starting with /api
 app.use('/api', rootRouter);
 

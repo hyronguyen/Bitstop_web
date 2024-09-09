@@ -12,14 +12,3 @@ export const getAllUsers = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
-
-// Tạo người dùng mới
-export const createUser = async (req, res) => {
-    try {
-        const newUser = req.body;
-        const docRef = await addDoc(collection(db, 'USERS'), newUser);
-        res.json({ message: 'User created', userId: docRef.id });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
