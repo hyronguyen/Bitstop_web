@@ -7,6 +7,4 @@ authRouter.post('/register', registerUser);
 // Login existing user
 authRouter.post('/login', loginUser);
 
-
-
 export default authRouter;

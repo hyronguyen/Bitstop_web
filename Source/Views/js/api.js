@@ -4,35 +4,54 @@ const URL = 'http://localhost:8080';
 //login
 async function apiLogin(user_name, user_password) {
   try {
-    // Prepare the login payload
+    // thông tin đăng nhập
     const loginPayload = {
       user_name,
       user_password
     };
 
-    // Make the POST request to the login endpoint using the specified format
+    // tạo yêu cầu post
     const response = await axios({
       method: 'POST',
       url: `${URL}/api/auth/login`,
       data: loginPayload
     });
 
-    // Handle the successful response
+    // thành công
     if (response.status === 200) {
-      const { token } = response.data;  // Extract the token from the response
+      const { token } = response.data; 
       console.log('Login successful!', token);
 
-      // Optionally, you can store the token for later requests (e.g., in localStorage)
+      // lưu vào local storage
       localStorage.setItem('authToken', token);
 
       return token;
     }
   } catch (error) {
-    // Handle errors, such as invalid credentials or server issues
+    //  Báo lỗi
     if (error.response) {
       console.error('Login failed:', error.response.data.message);
     } else {
       console.error('Error:', error.message);
     }
+  }
+}
+
+// lấy thông tin người dùng
+async function apiGetUserByID(userId) {
+  try {
+    const response = await axios({
+      method: 'GET',
+      url: `${URL}/api/users/get_byDocID/${userId}`,
+    });
+    // Thành công
+    if (response.status === 200) {
+      const userData = response.data;  
+      console.log('User fetched successfully!', userData);
+      return userData;
+    }
+  } catch (error) {
+      console.error('Error:', error.message);
+
   }
 }
