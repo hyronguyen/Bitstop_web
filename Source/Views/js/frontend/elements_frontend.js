@@ -1,11 +1,12 @@
 
 document.addEventListener('DOMContentLoaded', () => {
-    const authToken = localStorage.getItem('authToken'); // Check for the auth token
+    const authToken = localStorage.getItem('authToken'); 
     if (!authToken) {
         window.location.href = 'login.html';
     }
     const decodedToken = jwt_decode(authToken);
     const userID = decodedToken.id;
+    
     LoadData(userID)
     
 });

@@ -6,7 +6,7 @@ const usersRouter = Router();
 
 // Route to get all users
 usersRouter.get('/get_users', getAllUsers);
-usersRouter.get('/get_byDocID/:DocID',getUserByDocId );
+usersRouter.get('/get_byDocID/:DocID',authMiddleware,getUserByDocId );
 
 
 export default usersRouter;

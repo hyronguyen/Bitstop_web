@@ -37,12 +37,17 @@ async function apiLogin(user_name, user_password) {
   }
 }
 
-// lấy thông tin người dùng
+// lấy thông tin người dùng với ID truyền vào
 async function apiGetUserByID(userId) {
   try {
+    const authToken = localStorage.getItem('authToken');
+
     const response = await axios({
       method: 'GET',
       url: `${URL}/api/users/get_byDocID/${userId}`,
+      headers: {
+        Authorization: `Bearer ${authToken}` 
+      }
     });
     // Thành công
     if (response.status === 200) {

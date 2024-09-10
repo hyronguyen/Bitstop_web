@@ -4,6 +4,7 @@ const authRouter = Router();
 
 // Register new user
 authRouter.post('/register', registerUser);
+
 // Login existing user
 authRouter.post('/login', loginUser);
 
