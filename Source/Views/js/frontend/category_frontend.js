@@ -13,6 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Auth token is present. User is logged in.');
 
         LoadProducts();
+
+        console.log(currentdisplay);
         AddAction();
         FilterProductByPrice();
     }
@@ -34,7 +36,8 @@ async function LoadProducts() {
                 items.category,
                 items.price,
                 items.platform,
-                items.img
+                items.img,
+                items.description
             );
         });
         
@@ -99,7 +102,8 @@ async function LoadProductsByPlatform(platform) {
                 product.category,
                 product.price,
                 product.platform,
-                product.img
+                product.img,
+                product.description
             );
         });
         currentdisplay = productList;

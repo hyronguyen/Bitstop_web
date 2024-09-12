@@ -16,7 +16,8 @@ export const getAllProduct = async (req, res) => {
                 category: data.pro_category || "No category",
                 price: data.pro_price || 0,
                 platform: data.pro_platform || "Unknown platform",
-                img: data.pro_img || "No image available"
+                img: data.pro_img || "No image available",
+                des: data.pro_des || "No description"
             };
         });
 
@@ -45,7 +46,8 @@ export const getProductbyPlatform = async (req, res) => {
                     price: data.pro_price || 0,
                     platform: data.pro_platform || "Unknown platform",
                     img: data.pro_img || "No image available",
-                    platforms: platforms // store platforms as an array for filtering
+                    platforms: platforms,
+                    des:data.pro_des // store platforms as an array for filtering
                 };
             })
             .filter(product => product.platforms.includes(productPlat)); // Filter by matching platform
