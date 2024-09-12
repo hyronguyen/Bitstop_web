@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
 });
 
-//load data
+//load dữa liệu người dùng
 async function LoadData(userid) {
     try{
         const userData = await apiGetUserByID(userid);
@@ -31,13 +31,13 @@ async function LoadData(userid) {
 }
 
 
- // Logout button event listener
+ // Đăng xuất
  const logoutButton = document.getElementById('logoutButton');
  if (logoutButton) {
      logoutButton.addEventListener('click', async () => {
          try {
-             localStorage.removeItem('authToken'); // Remove token from localStorage
-             window.location.href = 'login.html'; // Redirect to login page
+             localStorage.removeItem('authToken'); // Xóa token đi
+             window.location.href = 'login.html';
          } catch (error) {
              console.error('Logout failed:', error);
          }

@@ -1,11 +1,13 @@
 import express from 'express';
-import usersRouter from './usersRoutes.js'; // Ensure this path is correct
+import usersRouter from './usersRoutes.js'; 
 import authRouter from './authRoutes.js';
+import productsRouter from './productRoutes.js';
 
 const rootRouter = express.Router();
 
-// Mount usersRouter at /users
+
 rootRouter.use('/users', usersRouter);
 rootRouter.use('/auth',authRouter);
+rootRouter.use('/products',productsRouter);
 
 export default rootRouter;

@@ -1,7 +1,8 @@
+
 const URL = 'http://localhost:8080'; 
 
 
-//login
+// API LOGIN
 async function apiLogin(user_name, user_password) {
   try {
     // thông tin đăng nhập
@@ -37,7 +38,7 @@ async function apiLogin(user_name, user_password) {
   }
 }
 
-// lấy thông tin người dùng với ID truyền vào
+// API LẤY USERS THEO ID
 async function apiGetUserByID(userId) {
   try {
     const authToken = localStorage.getItem('authToken');
@@ -54,6 +55,43 @@ async function apiGetUserByID(userId) {
       const userData = response.data;  
       console.log('User fetched successfully!', userData);
       return userData;
+    }
+  } catch (error) {
+      console.error('Error:', error.message);
+
+  }
+}
+
+//APi LẤY TẤT CẢ 
+async function apigetAllProducts() {
+  try {
+    const response = await axios({
+      method: 'GET',
+      url: `${URL}/api/products/get_products`,
+    });
+    // Thành công
+    if (response.status === 200) {
+      const productsData = response.data;  
+      console.log('User fetched successfully!', productsData);
+      return productsData;
+    }
+  } catch (error) {
+      console.error('Error:', error.message);
+  }
+}
+
+//API LẤY PRODUCT THEO PLATFORM
+async function apigetProductsByPlat(platform) {
+  try {
+    const response = await axios({
+      method: 'GET',
+      url: `${URL}/api/products//get_productbyplat/${platform}`,
+    });
+    
+    if (response.status === 200) {
+      const Data = response.data;  
+      console.log('User fetched successfully!');
+      return Data;
     }
   } catch (error) {
       console.error('Error:', error.message);

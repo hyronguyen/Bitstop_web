@@ -6,16 +6,16 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-const form = document.getElementById('loginForm');
 
-form.addEventListener('submit', async (event) => {
+// Form đăng nhập
+document.getElementById('loginForm').addEventListener('submit', async (event) => {
   event.preventDefault(); 
-
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
-
   try {
+    // tạo token từ apiLogin
       const token = await apiLogin(username, password);
+      
       if (token) {
           console.log('Successfully logged in and token stored.');
           localStorage.setItem('authToken', token);

@@ -42,8 +42,7 @@ export const loginUser = async (req, res) => {
   const { user_name, user_password } = req.body;
 
   try {
-    
-    // tìm user name
+    // Tìm user
     const usersCollection = collection(db, 'USERS');
     const q = query(usersCollection, where('user_name', '==', user_name));
     const snapshot = await getDocs(q);
@@ -51,7 +50,6 @@ export const loginUser = async (req, res) => {
     if (snapshot.empty) {
       return res.status(404).json({ message: 'User not found' });
     }
-
 
     const userDoc = snapshot.docs[0];
     const userData = userDoc.data();
@@ -76,4 +74,3 @@ export const loginUser = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-

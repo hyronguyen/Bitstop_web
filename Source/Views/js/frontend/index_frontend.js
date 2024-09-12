@@ -1,11 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const authToken = localStorage.getItem('authToken'); // Assuming you store the token in localStorage
+    const authToken = localStorage.getItem('authToken'); 
 
     if (!authToken) {
-        // Redirect to login page if authToken is not present
-        window.location.href = 'login.html'; // Adjust the path if necessary
+     
+        window.location.href = 'login.html'; 
     } else {
         console.log('Auth token is present. User is logged in.');
-        // You can add more logic here to handle authenticated users
+        
     }
 });
