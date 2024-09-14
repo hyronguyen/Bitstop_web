@@ -255,14 +255,14 @@ $(document).ready(function(){
         noUiSlider.create(nonLinearSlider, {
             connect: true,
             behaviour: 'tap',
-            start: [ 500, 4000 ],
+            start: [ 0, 2000000 ],
             range: {
                 // Starting at 500, step the value by 500,
                 // until 4000 is reached. From there, step by 1000.
                 'min': [ 0 ],
-                '10%': [ 500, 500 ],
-                '50%': [ 4000, 1000 ],
-                'max': [ 10000 ]
+                '10%': [ 0, 100000 ],
+                '50%': [ 10000000, 5000000 ],
+                'max': [ 100000000 ]
             }
         });
 
@@ -275,13 +275,16 @@ $(document).ready(function(){
         // Display the slider value and how far the handle moved
         // from the left edge of the slider.
         nonLinearSlider.noUiSlider.on('update', function ( values, handle, unencoded, isTap, positions ) {
-            nodes[handle].innerHTML = values[handle];
+            nodes[handle].innerHTML = formatPrice(Math.round(values[handle]));
         });
 
         }
 
     });
 
+    function formatPrice(number) {
+      return number.toLocaleString();
+    }
     
     //-------- Have Cupon Button Text Toggle Change -------//
 

@@ -1,27 +1,34 @@
-let currentdisplay = null;
+let currentdisplay;
 
-
+//#region Khởi chạy
 document.addEventListener('DOMContentLoaded', () => {
     // lấy authToken từ localStorage
     const authToken = localStorage.getItem('authToken');
     
-
     if (!authToken) {
         // nếu chưa đăng nhập (không có token)
         window.location.href = 'login.html'; 
     } else {
         console.log('Auth token is present. User is logged in.');
+        currentdisplay = JSON.parse(localStorage.getItem('searchResults') || '[]');
 
-        LoadProducts();
+        if (currentdisplay.length === 0) {
+            LoadProducts();
+        } else {
+            DisplayProducts(currentdisplay);
+            localStorage.removeItem('searchResults');
+        }
 
-        console.log(currentdisplay);
+       
         AddAction();
-        FilterProductByPrice();
+        
     }
 });
+//#endregion
 
 function AddAction(){
     FilterbyPlat();
+    FilterProductByPrice();
 }
 
 
@@ -52,7 +59,7 @@ async function LoadProducts() {
 //Render product ra view
 function DisplayProducts(products) {
     const productContainer = document.querySelector('.lattest-product-area .row');
-    productContainer.innerHTML = ''; // Clear existing content
+    productContainer.innerHTML = ''; 
 
     products.forEach(product => {
         const productHTML = `
@@ -62,8 +69,8 @@ function DisplayProducts(products) {
                     <div class="product-details">
                         <h6>${product.title}</h6>
                         <div class="price">
-                            <h6>$${product.price}</h6>
-                            <h6 class="l-through">$${product.price + 100000 || 'N/A'}</h6>
+                            <h6>${formatNumberWithCommas(product.price)} VND</h6>
+                            <h6 class="l-through">${formatNumberWithCommas(product.price + product.price*0.1 )|| 'N/A'} VND</h6>
                         </div>
                         <div class="prd-bottom">
                             <a href="#" class="social-info">
@@ -113,7 +120,6 @@ async function LoadProductsByPlatform(platform) {
     }
 }
 
-
 //Filter dự trên platform
 function FilterbyPlat(){
     const platLinks = document.querySelectorAll('.main-nav-list.child a');
@@ -140,8 +146,12 @@ function FilterProductByPrice(){
 
     // Event listener for "Apply Filter" button
     applyFilterBtn.addEventListener('click', () => {
-        const lowerValue = parseInt(document.getElementById('lower-value').textContent, 10);
-        const upperValue = parseInt(document.getElementById('upper-value').textContent, 10);
+        const lowerValueString = document.getElementById('lower-value').textContent;
+        const upperValueString = document.getElementById('upper-value').textContent;
+
+        const lowerValue = parsePrice(lowerValueString);
+        const upperValue = parsePrice(upperValueString);
+        console.log(upperValue);
         
 
         const filteredProducts = currentdisplay.filter(product => 
@@ -160,3 +170,15 @@ function FilterProductByPrice(){
         }
     });
 }
+
+//#region ULTS FUNCTION
+
+function formatNumberWithCommas(number) {
+    return number.toLocaleString();
+}
+
+function parsePrice(priceString) {
+    return parseInt(priceString.replace(/,/g, ''), 10);
+}
+
+//#endregion

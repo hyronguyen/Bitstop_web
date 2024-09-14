@@ -72,7 +72,7 @@ async function apigetAllProducts() {
     // Thành công
     if (response.status === 200) {
       const productsData = response.data;  
-      console.log('User fetched successfully!', productsData);
+      console.log('Load sản phẩm thành công', productsData);
       return productsData;
     }
   } catch (error) {
@@ -85,12 +85,31 @@ async function apigetProductsByPlat(platform) {
   try {
     const response = await axios({
       method: 'GET',
-      url: `${URL}/api/products//get_productbyplat/${platform}`,
+      url: `${URL}/api/products/get_productbyplat/${platform}`,
     });
     
     if (response.status === 200) {
       const Data = response.data;  
-      console.log('User fetched successfully!');
+      console.log('Load sản phẩm thành công');
+      return Data;
+    }
+  } catch (error) {
+      console.error('Error:', error.message);
+
+  }
+}
+
+//API SEARCH THEO KEYWORD
+async function apigetProductsByKeyword(keyword) {
+  try {
+    const response = await axios({
+      method: 'GET',
+      url: `${URL}/api/products/get_productbykey/${keyword}`,
+    });
+    
+    if (response.status === 200) {
+      const Data = response.data;  
+      console.log('Tìm thành công với keyword');
       return Data;
     }
   } catch (error) {

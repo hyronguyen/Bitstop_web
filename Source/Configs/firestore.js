@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 
 dotenv.config(); // Tải các biến môi trường từ .env
 
-// Firebase configuration
+// Biến môi trường
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
   authDomain: process.env.FIREBASE_AUTH_DOMAIN,
@@ -14,7 +14,7 @@ const firebaseConfig = {
   appId: process.env.FIREBASE_APP_ID
 };
 
-// Initialize Firebase
+// Cài đặt
 const app = initializeApp(firebaseConfig);
 
 // Initialize Firestore
