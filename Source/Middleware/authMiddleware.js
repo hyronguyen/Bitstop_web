@@ -1,6 +1,7 @@
 import { verifyToken } from '../Utils/jasonwebtoken.js';
 
 export const authMiddleware = (req, res, next) => {
+  
   const token = req.headers.authorization?.split(' ')[1];
 
   if (!token) {

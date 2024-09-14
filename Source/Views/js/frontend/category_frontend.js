@@ -29,9 +29,11 @@ document.addEventListener('DOMContentLoaded', () => {
 function AddAction(){
     FilterbyPlat();
     FilterProductByPrice();
+    addEventToProductImages()
 }
 
-
+//--------------------------------------------------------------------------------------------------------
+//#region REMDER FUNCTIONS
 //Load Product
 async function LoadProducts() {
     try{
@@ -56,16 +58,42 @@ async function LoadProducts() {
     }
 }
 
+//Load product dự trên platform
+async function LoadProductsByPlatform(platform) {
+    try {
+        const response = await apigetProductsByPlat(platform);
+        const productList = response.map(product => {
+            return new Product(
+                product.id,
+                product.title,
+                product.category,
+                product.price,
+                product.platform,
+                product.img,
+                product.description
+            );
+        });
+        currentdisplay = productList;
+        DisplayProducts(currentdisplay);
+    } catch (error) {
+        console.error('Error loading products by platform:', error);
+    }
+}
+
 //Render product ra view
 function DisplayProducts(products) {
     const productContainer = document.querySelector('.lattest-product-area .row');
     productContainer.innerHTML = ''; 
 
     products.forEach(product => {
+
+        const imageUrls = product.img.split(' ');
+        const firstImageUrl = imageUrls[0] || '';
+
         const productHTML = `
             <div class="col-lg-4 col-md-6">
-                <div class="single-product">
-                    <img class="img-fluid" src="${product.img}" alt="${product.title}" style="height:280px; weight:260px;object-fit:cover;">
+                <div class="single-product" >
+                    <img id="image_product" data-id="${product.id}" class="img-fluid" src="${firstImageUrl}" alt="${product.title}" style="height:280px; weight:260px;object-fit:cover;">
                     <div class="product-details">
                         <h6>${product.title}</h6>
                         <div class="price">
@@ -98,27 +126,10 @@ function DisplayProducts(products) {
     });
 }
 
-//Load product dự trên platform
-async function LoadProductsByPlatform(platform) {
-    try {
-        const response = await apigetProductsByPlat(platform);
-        const productList = response.map(product => {
-            return new Product(
-                product.id,
-                product.title,
-                product.category,
-                product.price,
-                product.platform,
-                product.img,
-                product.description
-            );
-        });
-        currentdisplay = productList;
-        DisplayProducts(currentdisplay);
-    } catch (error) {
-        console.error('Error loading products by platform:', error);
-    }
-}
+//#endregion
+
+//--------------------------------------------------------------------------------------------------------
+//#region  FILTER FUNCTIONS
 
 //Filter dự trên platform
 function FilterbyPlat(){
@@ -141,6 +152,7 @@ function FilterbyPlat(){
     });
 }
 
+//Filter dự trên price
 function FilterProductByPrice(){
     const applyFilterBtn = document.getElementById('apply-filter-btn');
 
@@ -170,9 +182,10 @@ function FilterProductByPrice(){
         }
     });
 }
+//#endregion
 
+//--------------------------------------------------------------------------------------------------------
 //#region ULTS FUNCTION
-
 function formatNumberWithCommas(number) {
     return number.toLocaleString();
 }
@@ -180,5 +193,20 @@ function formatNumberWithCommas(number) {
 function parsePrice(priceString) {
     return parseInt(priceString.replace(/,/g, ''), 10);
 }
+
+function addEventToProductImages() {
+    const productContainer = document.querySelector('.lattest-product-area .row');
+
+    // Sử dụng event delegation để lắng nghe sự kiện click
+    productContainer.addEventListener('click', 
+    function(event) {
+        if (event.target.id === 'image_product') {
+            const productId = event.target.dataset.id;
+            sessionStorage.setItem('selectedProductId', productId);
+            window.location.href = 'single-product.html'; 
+        }
+    });
+}
+
 
 //#endregion

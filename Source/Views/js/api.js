@@ -42,7 +42,7 @@ async function apiLogin(user_name, user_password) {
 async function apiGetUserByID(userId) {
   try {
     const authToken = localStorage.getItem('authToken');
-
+    
     const response = await axios({
       method: 'GET',
       url: `${URL}/api/users/get_byDocID/${userId}`,
@@ -53,7 +53,7 @@ async function apiGetUserByID(userId) {
     // Thành công
     if (response.status === 200) {
       const userData = response.data;  
-      console.log('User fetched successfully!', userData);
+      
       return userData;
     }
   } catch (error) {
@@ -71,8 +71,7 @@ async function apigetAllProducts() {
     });
     // Thành công
     if (response.status === 200) {
-      const productsData = response.data;  
-      console.log('Load sản phẩm thành công', productsData);
+      const productsData = response.data;
       return productsData;
     }
   } catch (error) {
@@ -90,7 +89,6 @@ async function apigetProductsByPlat(platform) {
     
     if (response.status === 200) {
       const Data = response.data;  
-      console.log('Load sản phẩm thành công');
       return Data;
     }
   } catch (error) {
@@ -109,11 +107,28 @@ async function apigetProductsByKeyword(keyword) {
     
     if (response.status === 200) {
       const Data = response.data;  
-      console.log('Tìm thành công với keyword');
       return Data;
     }
   } catch (error) {
       console.error('Error:', error.message);
+
+  }
+}
+
+//API SEARCH THEO ID
+async function apigetProductsById(id) {
+  try {
+    const response = await axios({
+      method: 'GET',
+      url: `${URL}/api/products/get_productbyid/${id}`,
+    });
+    
+    if (response.status === 200) {
+      const Data = response.data;  
+      return Data;
+    }
+  } catch (error) {
+      console.error('Lỗi: ', error.message);
 
   }
 }

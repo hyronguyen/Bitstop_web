@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getAllProduct, getProductbyPlatform ,getProductByKeyword} from '../Controller/PRODUCTController.js';
+import { getAllProduct, getProductbyPlatform ,getProductByKeyword, getProductById} from '../Controller/PRODUCTController.js';
 import { authMiddleware } from '../Middleware/authMiddleware.js';
 
 const productsRouter = Router();
@@ -11,5 +11,7 @@ productsRouter.get('/get_products', getAllProduct);
 productsRouter.get('/get_productbyplat/:productPlat',getProductbyPlatform);
 
 productsRouter.get('/get_productbykey/:keyword',getProductByKeyword);
+
+productsRouter.get('/get_productbyid/:DocID',getProductById);
 
 export default productsRouter;

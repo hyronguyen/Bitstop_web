@@ -7,7 +7,7 @@ const SECRET_KEY = process.env.JWT_SECRET || 'bitstop';
 // Function to generate a token
 export const generateToken = (user) => {
   return jwt.sign({  id: user.id  }, SECRET_KEY, {
-    expiresIn: '1h',
+    expiresIn: '7d',
   });
 };
 

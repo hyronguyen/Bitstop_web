@@ -5,17 +5,16 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = 'login.html';
     }
     const decodedToken = jwt_decode(authToken);
-    const userID = decodedToken.id;
-    
-    LoadData(userID)
+    const userId = decodedToken.id;
+    LoadUserData(userId)
     
 });
 
 //load dữa liệu người dùng
-async function LoadData(userid) {
+async function LoadUserData(userId) {
     try{
-        const userData = await apiGetUserByID(userid);
-        document.getElementById('userID').textContent = userid || 'N/A';
+        const userData = await apiGetUserByID(userId);
+        document.getElementById('userID').textContent = userId || 'N/A';
         document.getElementById('userName').textContent = userData.user_name || 'N/A';
         document.getElementById('userEmail').textContent = userData.user_mail || 'N/A';
         document.getElementById('userFullName').textContent = userData.user_fullname || 'N/A';
@@ -36,8 +35,10 @@ async function LoadData(userid) {
  if (logoutButton) {
      logoutButton.addEventListener('click', async () => {
          try {
-             localStorage.removeItem('authToken'); // Xóa token đi
-             window.location.href = 'login.html';
+            localStorage.removeItem('authToken');
+            window.location.href = 'login.html';
+          
+             
          } catch (error) {
              console.error('Logout failed:', error);
          }

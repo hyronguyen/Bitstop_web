@@ -59,7 +59,6 @@ export const getProductbyPlatform = async (req, res) => {
 };
 
 // Lấy sản phẩm theo Keyword
-
 export const getProductByKeyword = async (req, res) => {
     try {
         const { keyword } = req.params;
@@ -104,5 +103,36 @@ export const getProductByKeyword = async (req, res) => {
     } catch (error) {
     
         res.status(500).json({ error: error.message });
+    }
+};
+
+
+//lấy sản phẩm theo ID
+export const getProductById = async (req, res) => {
+    try {
+        const { DocID } = req.params; 
+
+
+        const proDocRef = doc(db, 'PRODUCTS', DocID);
+        const proDoc = await getDoc(proDocRef); 
+
+        if (proDoc.exists()) {
+            const proData = proDoc.data();
+            res.status(200).json({
+                id: proDoc.id,
+                title: proData.pro_title || "No title",  
+                category: proData.pro_category || "No category",
+                price: proData.pro_price || 0,
+                platform: proData.pro_platform || "Unknown platform",
+                img: proData.pro_img || "No image available",
+                platforms: proData.platforms || [], 
+                des: proData.pro_des || "No description available"
+            });
+        } else {
+            res.status(404).json({ message: "Product not found" });
+        }
+
+    } catch (error) {
+        res.status(500).json({ message: `Error fetching product: ${error.message}` });  
     }
 };
