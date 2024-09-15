@@ -29,7 +29,8 @@ document.addEventListener('DOMContentLoaded', () => {
 function AddAction(){
     FilterbyPlat();
     FilterProductByPrice();
-    addEventToProductImages()
+    FilterbyCategory();
+    addEventToProductImages();
 }
 
 //--------------------------------------------------------------------------------------------------------
@@ -80,6 +81,28 @@ async function LoadProductsByPlatform(platform) {
     }
 }
 
+//Load product dựa trên category
+async function LoadProductsByCategory(category) {
+    try {
+        const response = await apigetProductsByCategory(category);
+        const productList = response.map(product => {
+            return new Product(
+                product.id,
+                product.title,
+                product.category,
+                product.price,
+                product.platform,
+                product.img,
+                product.description
+            );
+        });
+        currentdisplay = productList;
+        DisplayProducts(currentdisplay);
+    } catch (error) {
+        console.error('Error loading products by platform:', error);
+    }
+}
+
 //Render product ra view
 function DisplayProducts(products) {
     const productContainer = document.querySelector('.lattest-product-area .row');
@@ -93,7 +116,7 @@ function DisplayProducts(products) {
         const productHTML = `
             <div class="col-lg-4 col-md-6">
                 <div class="single-product" >
-                    <img id="image_product" data-id="${product.id}" class="img-fluid" src="${firstImageUrl}" alt="${product.title}" style="height:280px; weight:260px;object-fit:cover;">
+                    <img id="image_product" data-id="${product.id}" class="img-fluid product_image" src="${firstImageUrl}" alt="${product.title}" style="height:280px; weight:260px;object-fit:cover; cursor:pointer;">
                     <div class="product-details">
                         <h6>${product.title}</h6>
                         <div class="price">
@@ -101,19 +124,19 @@ function DisplayProducts(products) {
                             <h6 class="l-through">${formatNumberWithCommas(product.price + product.price*0.1 )|| 'N/A'} VND</h6>
                         </div>
                         <div class="prd-bottom">
-                            <a href="#" class="social-info">
+                            <a  class="social-info">
                                 <span class="ti-bag"></span>
                                 <p class="hover-text">add to bag</p>
                             </a>
-                            <a href="#" class="social-info">
+                            <a  class="social-info">
                                 <span class="lnr lnr-heart"></span>
                                 <p class="hover-text">Wishlist</p>
                             </a>
-                            <a href="#" class="social-info">
+                            <a  class="social-info">
                                 <span class="lnr lnr-sync"></span>
                                 <p class="hover-text">compare</p>
                             </a>
-                            <a href="#" class="social-info">
+                            <a  class="social-info">
                                 <span class="lnr lnr-move"></span>
                                 <p class="hover-text">view more</p>
                             </a>
@@ -124,6 +147,8 @@ function DisplayProducts(products) {
         `;
         productContainer.innerHTML += productHTML;
     });
+
+    setupAddToCartButtons();
 }
 
 //#endregion
@@ -151,6 +176,29 @@ function FilterbyPlat(){
         });
     });
 }
+
+//Filter dự trên category
+function FilterbyCategory(){
+    const cateLinks = document.querySelectorAll('.main-nav-list.child.cate-filter a');
+    cateLinks.forEach(link => {
+        link.addEventListener('click', (event) => {
+            event.preventDefault();
+
+            const cate = link.textContent.trim();
+            console.log(cate);
+
+            if(cate=="All")
+            {
+                LoadProducts();
+            }
+            else
+            {
+                LoadProductsByCategory(cate);
+            }
+        });
+    });
+}
+
 
 //Filter dự trên price
 function FilterProductByPrice(){
@@ -208,5 +256,41 @@ function addEventToProductImages() {
     });
 }
 
+function setupAddToCartButtons() {
+     const addToCartButtons = document.querySelectorAll('.ti-bag'); 
 
+     // Iterate over each button and add an event listener
+     addToCartButtons.forEach(button => {
+         // Add click event listener
+         button.addEventListener('click', function(event) {
+             // Get the closest '.single-product' parent element of the button
+             const productElement = event.target.closest('.single-product');
+ 
+             // Get the product ID from the 'data-id' attribute of the image element
+             const productId = productElement.querySelector('#image_product').getAttribute('data-id');
+            
+             
+            
+             addToCart(productId);
+ 
+         });
+     });
+}
+
+function addToCart(productId) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+
+    const existingProductIndex = cart.findIndex(item => item.id === productId);
+
+    if (existingProductIndex !== -1) {
+        cart[existingProductIndex].quantity += 1;
+    } else {
+        cart.push({ id: productId, quantity: 1 });
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+
+    console.log("Cart updated:", cart);
+}
 //#endregion

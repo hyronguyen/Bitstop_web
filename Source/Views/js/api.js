@@ -1,4 +1,3 @@
-
 const URL = 'http://localhost:8080'; 
 
 
@@ -95,6 +94,25 @@ async function apigetProductsByPlat(platform) {
       console.error('Error:', error.message);
 
   }
+}
+
+//API LẤY PRODUCT THEO CATEGORY
+async function apigetProductsByCategory(category) {
+  try{
+    const response = await axios({
+      method: 'GET',
+      url: `${URL}/api/products/get_productbycategory/${category}`, 
+    });
+
+    if (response.status === 200){
+      const Data = response.data;  
+      return Data;
+    }
+  }
+  catch (error){
+    console.error(error.message);
+  }
+  
 }
 
 //API SEARCH THEO KEYWORD

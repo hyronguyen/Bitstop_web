@@ -308,16 +308,15 @@ $(document).ready(function(){
 
   //------- Start Quantity Increase & Decrease Value --------//
 
-
-
-
     var value,
         quantity = document.getElementsByClassName('quantity-container');
 
     function createBindings(quantityContainer) {
         var quantityAmount = quantityContainer.getElementsByClassName('quantity-amount')[0];
+
         var increase = quantityContainer.getElementsByClassName('increase')[0];
         var decrease = quantityContainer.getElementsByClassName('decrease')[0];
+        
         increase.addEventListener('click', function () { increaseValue(quantityAmount); });
         decrease.addEventListener('click', function () { decreaseValue(quantityAmount); });
     }

@@ -37,6 +37,7 @@ export const registerUser = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 // Đăng nhập
 export const loginUser = async (req, res) => {
   const { user_name, user_password } = req.body;
