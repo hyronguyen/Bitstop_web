@@ -291,6 +291,6 @@ function addToCart(productId) {
 
     localStorage.setItem('cart', JSON.stringify(cart));
 
-    console.log("Cart updated:", cart);
+   alert("Đã thêm vào giỏ hàng");
 }
 //#endregion
