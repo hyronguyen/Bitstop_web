@@ -9,7 +9,19 @@ document.addEventListener('DOMContentLoaded', () => {
     {
         cart = localStorage.getItem('cart');
         if(!cart){
-            console.log("Giỏ hàng chưa có sản phẩm");
+            const cartInnerDiv = document.querySelector('.table');
+        cartInnerDiv.innerHTML = ''; // Clear the cart content first
+
+        // If the cart is empty, load the image
+        const emptyCartImage = `
+            <tr>
+                <td colspan="4" style="text-align:center;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/11329/11329060.png" alt="Empty Cart" style="width:200px; height:auto;">
+                    <p>Your cart is empty</p>
+                </td>
+            </tr>
+        `;
+        cartInnerDiv.insertAdjacentHTML('beforeend', emptyCartImage);
         }
         else{
           DisplayCart(cart);
@@ -48,6 +60,7 @@ async function DisplayCart(cart) {
         const total = product.price * item.quantity;
         let stt = "sst_" + product.id;
         let totalId = "total_" + product.id;
+        let titleId = "title_" +product.id;
 
         subtotal += total;  
 
@@ -59,7 +72,7 @@ async function DisplayCart(cart) {
                             <img src="${product.img.split(' ')[0]}" alt="${product.title}" style="width: 151.6px; height:101.5px; object-fit:cover">
                         </div>
                         <div class="media-body">
-                            <p>${product.title}</p>
+                            <p id="${titleId}">${product.title}</p>
                         </div>
                     </div>
                 </td>
@@ -115,24 +128,28 @@ async function DisplayCart(cart) {
             <td></td>
             <td></td>
             <td>
-                <h5>Shipping</h5>
+                <h5>Payment method</h5>
             </td>
             <td>
                 <div class="shipping_box">
                     <ul class="list">
-                        <li><a>Highspeed Delivery: $10.00</a></li>
-                        <li class="active"><a>Standard Delivery: $2.00</a></li>
+                        <li><a>Banking/ Viet Qr</a></li>
+                        <li class="active"><a>Ship Cod</a></li>
                     </ul>
                     <h6>Calculate Shipping <i class="fa fa-caret-down" aria-hidden="true"></i></h6>
-                   <input type="text" placeholder="Name">
+
+                   <input id="customer_name" type="text" placeholder="Name">
+
                     <select class="shipping_select">
                         <option value="1">Viet Nam</option>
                         <option value="2">US</option>
                         <option value="4">Japan</option>
                     </select>
                     
-                    <input type="text" placeholder="Address">
-                    <input type="text" maxlength="12" placeholder="Phone number">
+                    <input id="customer_address" type="text" placeholder="Address">
+
+                    <input id="customer_phone" type="text" maxlength="12" placeholder="Phone number">
+
                     <a class="gray_btn" style="cursor:pointer">Use your default address</a>
                 </div>
             </td>
@@ -144,13 +161,18 @@ async function DisplayCart(cart) {
             <td>
                 <div class="checkout_btn_inner d-flex align-items-center">
                     <a class="gray_btn" href="category.html">Continue Shopping</a>
-                    <a class="primary-btn" href="#">Proceed to checkout</a>
+                    <a class="primary-btn" id="checkout_button">Checkout</a>
                 </div>
             </td>
         </tr>
     `;
 
     cartTableBody.insertAdjacentHTML('beforeend', paymentInfo);
+    
+    document.getElementById("checkout_button").addEventListener('click', ()=>{
+        CheckOut();
+    });
+
 }
 
 //#endregion
@@ -222,6 +244,71 @@ function updateSubtotal() {
 
     document.getElementById('subtotal').innerText = `${formatNumberWithCommas(subtotal)} VND`;
 }
+
+function CheckOut() {
+    const customerName = document.getElementById('customer_name').value.trim();
+    const customerAddress = document.getElementById('customer_address').value.trim();
+    const customerPhone = document.getElementById('customer_phone').value.trim();
+    const subtotal = parseInt(document.getElementById('subtotal').innerText.replace(/[^0-9]/g, ''));
+
+    // Validate that all fields are filled
+    if (!customerName || !customerAddress || !customerPhone) {
+        alert('Please fill out all required fields: Name, Address, and Phone number.');
+        return; // Stop further execution if validation fails
+    }
+
+    // Remove existing inforCheckout if it exists
+    if (localStorage.getItem('inforCheckout')) {
+        localStorage.removeItem('inforCheckout');
+    }
+
+    // Fetch the cart from local storage
+    let cart = localStorage.getItem('cart');
+    let cartItems = cart ? JSON.parse(cart) : [];
+
+    // Prepare the checkout information
+    let inforCheckout = {
+        customerName: customerName,
+        customerAddress: customerAddress,
+        customerPhone: customerPhone,
+        subtotal: subtotal,
+        items: []
+    };
+
+    // Loop through the cart and store id, quantity, total price, and product name
+    cartItems.forEach(item => {
+        // Get the total for this product from the h5 tag using totalId
+        const totalId = `total_${item.id}`;
+        const totalElement = document.getElementById(totalId);
+        const total = parseInt(totalElement.innerText.replace(/[^0-9]/g, ''));
+
+        // Get the product name from the p tag using titleId
+        const titleId = `title_${item.id}`;
+        const titleElement = document.getElementById(titleId);
+        const title = titleElement ? titleElement.innerText : 'Unknown Product';
+
+        // Add the product details to the inforCheckout object
+        inforCheckout.items.push({
+            id: item.id,
+            quantity: item.quantity,
+            total: total, // Add total price of each product
+            title: title  // Add product name
+        });
+    });
+
+    // Save the information in local storage
+    localStorage.setItem('inforCheckout', JSON.stringify(inforCheckout));
+
+    // Clear the cart
+    localStorage.removeItem('cart');
+
+    // Redirect to a checkout page or give a confirmation message
+    alert('Checkout completed. Redirecting to confirmation page...');
+    window.location.href = 'checkout.html'; // Example: redirect to a confirmation page
+}
+
+
+
 
 //#endregion
 
