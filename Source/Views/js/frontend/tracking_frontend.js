@@ -7,8 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
     {
         const decodedToken = jwt_decode(authToken);
         userId = decodedToken.id;
-        console.log(userId);
-
         LoadMyOrder(userId);
     }
 });

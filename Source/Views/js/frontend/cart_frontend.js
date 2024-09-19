@@ -156,7 +156,7 @@ async function DisplayCart(cart) {
 
                     <input id="customer_phone" type="text" maxlength="12" placeholder="Phone number">
 
-                    <a class="gray_btn" style="cursor:pointer">Use your default address</a>
+                    <a class="gray_btn" id="default_info" style="cursor:pointer">Use your default address</a>
                 </div>
             </td>
         </tr>
@@ -176,18 +176,26 @@ async function DisplayCart(cart) {
     cartTableBody.insertAdjacentHTML('beforeend', paymentInfo);
 
     DeliveryChoice();
+
+    document.getElementById("default_info").addEventListener('click', async ()=>{
+        const response = await apiGetUserByID(userId);
+        const name = document.getElementById("customer_name");
+        const add = document.getElementById("customer_address");
+        const phone =document.getElementById("customer_phone");
+        name.value = response.user_fullname;
+        add.value = response.user_address;
+        phone.value = response.user_phone;
+    });
      
     document.getElementById("checkout_button").addEventListener('click', ()=>{
         CheckOut();
     });
 
 }
-
 //#endregion
 
 
 //#region Cập nhật số lượng và thành tiền
-
 function updateQuantity(productId, quantityInputId, totalId, price, change) {
     let quantityInput = document.getElementById(quantityInputId);
     let quantity = parseInt(quantityInput.value, 10);
@@ -352,9 +360,6 @@ async function CheckOut() {
         alert('Failed to create the order. Please try again.');
     }
 }
-
-
-
 
 //#endregion
 

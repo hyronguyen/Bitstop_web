@@ -255,3 +255,24 @@ async function apiCreateOrder(orderData) {
     console.error('Error creating order: ', error.message);
   }
 }
+
+async function apiEditProfile(docID, profileData) {
+  try {
+    const response = await axios({
+      method: 'PUT', // Use PUT for updates
+      url: `${URL}/api/users/edit_profile/${docID}`, // Adjust the endpoint accordingly
+      data: profileData, // The profile data to update
+    });
+
+    if (response) {
+      return response; 
+    }
+    else {
+      console.log("No Response");
+    }
+
+  } catch (error) {
+    alert(error.message)
+  }
+}
+
