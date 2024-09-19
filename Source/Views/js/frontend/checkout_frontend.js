@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Check if inforCheckout is available
     if (inforCheckout) {
-        // Get elements to update
+   
         const orderItemsList = document.getElementById('orderItemsList');
         const subtotalDisplay = document.getElementById('subtotalDisplay');
         const totalDisplay = document.getElementById('totalDisplay');
@@ -13,21 +13,31 @@ document.addEventListener('DOMContentLoaded', () => {
         if (orderItemsList && subtotalDisplay && totalDisplay) {
     
 
-            // Populate order items
             inforCheckout.items.forEach(item => {
                 const itemElement = document.createElement('li');
                 itemElement.innerHTML = `<a href="#">${capitalizeEachWord(item.title)} <span class="middle">x ${item.quantity}</span> <span class="last">${formatNumberWithCommas(item.total)} VND</span></a>`;
                 orderItemsList.appendChild(itemElement);
             });
 
-            // Display subtotal
+          
             subtotalDisplay.innerText = formatNumberWithCommas(inforCheckout.subtotal) + ' VND';
 
-            // Calculate total including shipping
-            const shippingCost = 30000; // Flat rate shipping cost
+            // Tính tổng
+            const shippingCost = 30000;
             const total = inforCheckout.subtotal + shippingCost;
             totalDisplay.innerText = formatNumberWithCommas(total) + ' VND';
-        } else {
+
+            // Tạo Qr
+            let  BANK_ID = "970422"
+            let ACCOUNT_NO = "0888399950"
+            let AMOUNT = total;
+            let Des ="Chuyển khoản thanh toán bitstop";
+
+            const QRelement = document.getElementById("qr_img");
+            let Qrlink = `https://img.vietqr.io/image/${BANK_ID}-${ACCOUNT_NO}-compact2.png?amount=${AMOUNT}&addInfo=${encodeURIComponent(Des)}&accountName=Nguyễn Hồ Ngọc Huy`;
+            QRelement.src = Qrlink;
+        } 
+         else {
             console.error('One or more elements not found in the document.');
         }
     } else {

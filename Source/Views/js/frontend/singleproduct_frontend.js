@@ -33,8 +33,11 @@ async function LoadProduct(selectedId){
             productData.price,
             productData.platform,
             productData.img,
-            productData.des
+            productData.des,
+            productData.quan
         );
+
+        console.log(product);
 
         document.querySelector('.product-name').textContent=capitalizeEachWord(product.title);
         RenderProduct(product);

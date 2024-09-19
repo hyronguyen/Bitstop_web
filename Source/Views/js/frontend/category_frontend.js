@@ -47,7 +47,8 @@ async function LoadProducts() {
                 items.price,
                 items.platform,
                 items.img,
-                items.description
+                items.description,
+                items.quan
             );
         });
         
@@ -71,7 +72,8 @@ async function LoadProductsByPlatform(platform) {
                 product.price,
                 product.platform,
                 product.img,
-                product.description
+                product.description,
+                product.quan
             );
         });
         currentdisplay = productList;
@@ -93,7 +95,8 @@ async function LoadProductsByCategory(category) {
                 product.price,
                 product.platform,
                 product.img,
-                product.description
+                product.description,
+                product.quan
             );
         });
         currentdisplay = productList;
@@ -121,7 +124,7 @@ function DisplayProducts(products) {
                         <h6>${product.title}</h6>
                         <div class="price">
                             <h6>${formatNumberWithCommas(product.price)} VND</h6>
-                            <h6 class="l-through">${formatNumberWithCommas(product.price + product.price*0.1 )|| 'N/A'} VND</h6>
+                            <h6 class="l-through">${formatNumberWithCommas(product.price *1.1 )|| 'N/A'} VND</h6>
                         </div>
                         <div class="prd-bottom">
                             <a  class="social-info">

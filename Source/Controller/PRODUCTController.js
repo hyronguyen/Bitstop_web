@@ -17,7 +17,8 @@ export const getAllProduct = async (req, res) => {
                 price: data.pro_price || 0,
                 platform: data.pro_platform || "Unknown platform",
                 img: data.pro_img || "No image available",
-                des: data.pro_des || "No description"
+                des: data.pro_des || "No description",
+                quan: data.pro_qa
             };
         });
 
@@ -48,7 +49,8 @@ export const getProductbyPlatform = async (req, res) => {
                         price: data.pro_price || 0,
                         platform: data.pro_platform || "Unknown platform",
                         img: data.pro_img || "No image available",
-                        des: data.pro_des || "No description available"
+                        des: data.pro_des || "No description available",
+                        quan: data.pro_qa
                     };
                 }
                 return null;
@@ -90,7 +92,8 @@ export const getProductByKeyword = async (req, res) => {
                     price: data.pro_price || 0,
                     platform: data.pro_platform || "Unknown platform",
                     img: data.pro_img || "No image available",
-                    des: data.pro_des || "No description"
+                    des: data.pro_des || "No description",
+                    quan: data.pro_qa
                 });
             }
         });
@@ -126,7 +129,8 @@ export const getProductById = async (req, res) => {
                 price: proData.pro_price || 0,
                 platform: proData.pro_platform || "Unknown platform",
                 img: proData.pro_img || "No image available",
-                des: proData.pro_des || "No description available"
+                des: proData.pro_des || "No description available",
+                quan: proData.pro_qa
             });
         } else {
             res.status(404).json({ message: "Product not found" });
@@ -160,7 +164,8 @@ export const getProductByCategory = async (req, res) => {
                 price: data.pro_price || 0,
                 platform: data.pro_platform || "Unknown platform",
                 img: data.pro_img || "No image available",
-                des: data.pro_des || "No description available"
+                des: data.pro_des || "No description available",
+                quan: data.pro_qa
             });
         });
 

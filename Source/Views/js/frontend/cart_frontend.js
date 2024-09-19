@@ -1,4 +1,5 @@
 let cart;
+let deli;
 
 document.addEventListener('DOMContentLoaded', () => {
     const authToken = localStorage.getItem('authToken'); 
@@ -110,7 +111,7 @@ async function DisplayCart(cart) {
                 <div class="cupon_text d-flex align-items-center">
                     <input type="text" placeholder="Coupon Code">
                     <a class="primary-btn" >Apply</a>
-                    <a class="gray_btn" >Close Coupon</a>
+                    <a class="gray_btn" >Close</a>
                 </div>
             </td>
         </tr>
@@ -133,8 +134,8 @@ async function DisplayCart(cart) {
             <td>
                 <div class="shipping_box">
                     <ul class="list">
-                        <li><a>Banking/ Viet Qr</a></li>
-                        <li class="active"><a>Ship Cod</a></li>
+                        <li id="shipCOD"><a>Ship COD</a></li>
+                        <li id="bankingQR" class="active"><a >Banking/ Viet Qr</a></li>
                     </ul>
                     <h6>Calculate Shipping <i class="fa fa-caret-down" aria-hidden="true"></i></h6>
 
@@ -168,7 +169,9 @@ async function DisplayCart(cart) {
     `;
 
     cartTableBody.insertAdjacentHTML('beforeend', paymentInfo);
-    
+
+    DeliveryChoice();
+     
     document.getElementById("checkout_button").addEventListener('click', ()=>{
         CheckOut();
     });
@@ -245,28 +248,46 @@ function updateSubtotal() {
     document.getElementById('subtotal').innerText = `${formatNumberWithCommas(subtotal)} VND`;
 }
 
+function DeliveryChoice(){
+    const shipCOD = document.getElementById('shipCOD');
+  const bankingQR = document.getElementById('bankingQR');
+
+  shipCOD.addEventListener('click', function() {
+    deli=2;
+    shipCOD.classList.add('active'); 
+    bankingQR.classList.remove('active'); 
+  });
+
+  bankingQR.addEventListener('click', function() {
+    deli=1;
+    bankingQR.classList.add('active');
+    shipCOD.classList.remove('active');
+  });
+  
+}
+
 function CheckOut() {
     const customerName = document.getElementById('customer_name').value.trim();
     const customerAddress = document.getElementById('customer_address').value.trim();
     const customerPhone = document.getElementById('customer_phone').value.trim();
     const subtotal = parseInt(document.getElementById('subtotal').innerText.replace(/[^0-9]/g, ''));
 
-    // Validate that all fields are filled
+ 
     if (!customerName || !customerAddress || !customerPhone) {
         alert('Please fill out all required fields: Name, Address, and Phone number.');
-        return; // Stop further execution if validation fails
+        return; 
     }
 
-    // Remove existing inforCheckout if it exists
+
     if (localStorage.getItem('inforCheckout')) {
         localStorage.removeItem('inforCheckout');
     }
 
-    // Fetch the cart from local storage
+
     let cart = localStorage.getItem('cart');
     let cartItems = cart ? JSON.parse(cart) : [];
 
-    // Prepare the checkout information
+
     let inforCheckout = {
         customerName: customerName,
         customerAddress: customerAddress,
@@ -275,9 +296,9 @@ function CheckOut() {
         items: []
     };
 
-    // Loop through the cart and store id, quantity, total price, and product name
+  
     cartItems.forEach(item => {
-        // Get the total for this product from the h5 tag using totalId
+ 
         const totalId = `total_${item.id}`;
         const totalElement = document.getElementById(totalId);
         const total = parseInt(totalElement.innerText.replace(/[^0-9]/g, ''));
@@ -296,15 +317,16 @@ function CheckOut() {
         });
     });
 
-    // Save the information in local storage
     localStorage.setItem('inforCheckout', JSON.stringify(inforCheckout));
-
-    // Clear the cart
     localStorage.removeItem('cart');
 
-    // Redirect to a checkout page or give a confirmation message
-    alert('Checkout completed. Redirecting to confirmation page...');
-    window.location.href = 'checkout.html'; // Example: redirect to a confirmation page
+    if(deli===1){
+        window.location.href = 'checkout.html';
+    }
+    else{
+        alert("Đã tạo đơn COD");
+        window.location.href = 'index.html';
+    }
 }
 
 
