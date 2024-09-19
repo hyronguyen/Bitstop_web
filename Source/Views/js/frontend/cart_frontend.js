@@ -1,5 +1,6 @@
 let cart;
 let deli;
+let userId;
 
 document.addEventListener('DOMContentLoaded', () => {
     const authToken = localStorage.getItem('authToken'); 
@@ -8,6 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = 'login.html'; 
     } else 
     {
+        const decodedToken = jwt_decode(authToken);
+        userId = decodedToken.id;
+
+
         cart = localStorage.getItem('cart');
         if(!cart){
             const cartInnerDiv = document.querySelector('.table');
@@ -134,8 +139,8 @@ async function DisplayCart(cart) {
             <td>
                 <div class="shipping_box">
                     <ul class="list">
-                        <li id="shipCOD"><a>Ship COD</a></li>
-                        <li id="bankingQR" class="active"><a >Banking/ Viet Qr</a></li>
+                        <li id="shipCOD" class="active"><a>Ship COD</a></li>
+                        <li id="bankingQR" ><a >Banking/ Viet Qr</a></li>
                     </ul>
                     <h6>Calculate Shipping <i class="fa fa-caret-down" aria-hidden="true"></i></h6>
 
@@ -289,6 +294,7 @@ function CheckOut() {
 
 
     let inforCheckout = {
+        customerId: userId,
         customerName: customerName,
         customerAddress: customerAddress,
         customerPhone: customerPhone,
