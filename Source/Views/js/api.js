@@ -150,3 +150,108 @@ async function apigetProductsById(id) {
 
   }
 }
+
+
+// API lấy order theo ID người dùng
+async function apigetOrdersByCustomerId(customerId) {
+  try {
+    const response = await axios({
+      method: 'GET',
+      url: `${URL}/api/orders/customer/${customerId}`,
+    });
+    
+    if (response.status === 200) {
+      const orders = response.data;
+      return orders;
+    }
+  } catch (error) {
+    console.error('Error fetching orders by customer ID: ', error.message);
+  }
+}
+
+// lấy tất cả order
+async function apigetAllOrders() {
+  try {
+    const response = await axios({
+      method: 'GET',
+      url: `${URL}/api/orders/all`,
+    });
+
+    if (response.status === 200) {
+      const orders = response.data;
+      return orders;
+    }
+  } catch (error) {
+    console.error('Error fetching all orders: ', error.message);
+  }
+}
+
+// lấy order đang xử lý
+async function apigetAllProcessingOrders() {
+  try {
+    const response = await axios({
+      method: 'GET',
+      url: `${URL}/api/orders/status/processing`,
+    });
+
+    if (response.status === 200) {
+      const orders = response.data;
+      return orders;
+    }
+  } catch (error) {
+    console.error('Error fetching processing orders: ', error.message);
+  }
+}
+
+//lấy order đang giao
+async function apigetAllDeliveringOrders() {
+  try {
+    const response = await axios({
+      method: 'GET',
+      url: `${URL}/api/orders/status/delivering`,
+    });
+
+    if (response.status === 200) {
+      const orders = response.data;
+      return orders;
+    }
+  } catch (error) {
+    console.error('Error fetching delivering orders: ', error.message);
+  }
+}
+
+
+//lấy order đã thành công 
+async function apigetAllSucceededOrders() {
+  try {
+    const response = await axios({
+      method: 'GET',
+      url: `${URL}/api/orders/status/succeeded`,
+    });
+
+    if (response.status === 200) {
+      const orders = response.data;
+      return orders;
+    }
+  } catch (error) {
+    console.error('Error fetching succeeded orders: ', error.message);
+  }
+}
+
+// tạo đơn hàng
+async function apiCreateOrder(orderData) {
+  try {
+    const response = await axios({
+      method: 'POST',
+      url: `${URL}/api/orders/create_order`,  
+      data: orderData, 
+    });
+
+    if (response.status === 201) {
+      console.log('Order created successfully:', response.data);
+      return response.data;  
+    }
+  } catch (error) {
+    console.error('Error creating order: ', error.message);
+  }
+}

@@ -140,7 +140,7 @@ async function DisplayCart(cart) {
                 <div class="shipping_box">
                     <ul class="list">
                         <li id="shipCOD" class="active"><a>Ship COD</a></li>
-                        <li id="bankingQR" ><a >Banking/ Viet Qr</a></li>
+                        <li id="bankingQR" ><a >Banking/ VietQr</a></li>
                     </ul>
                     <h6>Calculate Shipping <i class="fa fa-caret-down" aria-hidden="true"></i></h6>
 
@@ -271,13 +271,12 @@ function DeliveryChoice(){
   
 }
 
-function CheckOut() {
+async function CheckOut() {
     const customerName = document.getElementById('customer_name').value.trim();
     const customerAddress = document.getElementById('customer_address').value.trim();
     const customerPhone = document.getElementById('customer_phone').value.trim();
     const subtotal = parseInt(document.getElementById('subtotal').innerText.replace(/[^0-9]/g, ''));
 
- 
     if (!customerName || !customerAddress || !customerPhone) {
         alert('Please fill out all required fields: Name, Address, and Phone number.');
         return; 
@@ -292,17 +291,20 @@ function CheckOut() {
     let cart = localStorage.getItem('cart');
     let cartItems = cart ? JSON.parse(cart) : [];
 
+    const payment = deli === 1 ? 'Banking/QR' : "Ship COD";
 
+    // tạo Inforcheckout
     let inforCheckout = {
         customerId: userId,
         customerName: customerName,
         customerAddress: customerAddress,
         customerPhone: customerPhone,
         subtotal: subtotal,
-        items: []
+        items: [],
+        payment: payment
     };
 
-  
+    // thêm sản phẩm vào Inforcheckout
     cartItems.forEach(item => {
  
         const totalId = `total_${item.id}`;
@@ -312,9 +314,9 @@ function CheckOut() {
         // Get the product name from the p tag using titleId
         const titleId = `title_${item.id}`;
         const titleElement = document.getElementById(titleId);
+
         const title = titleElement ? titleElement.innerText : 'Unknown Product';
 
-        // Add the product details to the inforCheckout object
         inforCheckout.items.push({
             id: item.id,
             quantity: item.quantity,
@@ -323,15 +325,31 @@ function CheckOut() {
         });
     });
 
+    // thêm Inforcheckout vào storage dưới dạn json
     localStorage.setItem('inforCheckout', JSON.stringify(inforCheckout));
     localStorage.removeItem('cart');
 
-    if(deli===1){
-        window.location.href = 'checkout.html';
-    }
-    else{
-        alert("Đã tạo đơn COD");
-        window.location.href = 'index.html';
+    try {
+            // Nếu chuyển khoản
+            if (deli === 1) 
+                {
+                window.location.href = 'checkout.html';
+            } 
+            else 
+            {
+            
+                console.log(inforCheckout);
+                const response = await apiCreateOrder(inforCheckout)
+                if(response){
+                    alert('Đã tạo đơn thành công');
+                    window.location.href = 'index.html';
+                }
+                
+            }
+        
+    } catch (error) {
+        console.error('Error creating order: ', error.message);
+        alert('Failed to create the order. Please try again.');
     }
 }
 
