@@ -37,7 +37,6 @@ async function LoadProduct(selectedId){
             productData.quan
         );
 
-        console.log(product);
 
         document.querySelector('.product-name').textContent=capitalizeEachWord(product.title);
         RenderProduct(product);
@@ -81,6 +80,11 @@ function RenderProduct(product) {
 
     // Set availability or other fields as needed
     availabilityElement.innerHTML = `<span>Availability</span> : In Stock`;
+
+    document.getElementById("addtocart").addEventListener("click", () => {
+        const quantity = document.getElementById('sst').value;
+        addToCart(product.id, quantity); // Pass the product ID and quantity to addToCart
+    });
 }
 
 
@@ -93,4 +97,29 @@ function capitalizeEachWord(string) {
         .split(' ')
         .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
         .join(' ');
+}
+
+
+
+
+function addToCart(productId, quantity) {
+    try {
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const existingProductIndex = cart.findIndex(item => item.id === productId);
+        
+        // If the product already exists in the cart, update the quantity
+        if (existingProductIndex !== -1) {
+            cart[existingProductIndex].quantity += parseInt(quantity); // Ensure quantity is an integer
+        } else {
+            // Add new product with the specified quantity
+            cart.push({ id: productId, quantity: parseInt(quantity) });
+        }
+        
+        // Save updated cart to localStorage
+        localStorage.setItem('cart', JSON.stringify(cart));
+        
+        alert("Product added to cart successfully!");
+    } catch (error) {
+        console.log('Error adding product to cart:', error);
+    }
 }
