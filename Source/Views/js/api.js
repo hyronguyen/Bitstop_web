@@ -61,7 +61,7 @@ async function apiGetUserByID(userId) {
   }
 }
 
-//APi LẤY TẤT CẢ 
+//APi LẤY TẤT CẢ sản phẩm
 async function apigetAllProducts() {
   try {
     const response = await axios({
@@ -273,6 +273,24 @@ async function apiEditProfile(docID, profileData) {
 
   } catch (error) {
     alert(error.message)
+  }
+}
+
+//Thêm sản phẩm
+async function apiAddProduct(productdata) {
+  try {
+    const response = await axios({
+      method: 'POST',
+      url: `${URL}/api/products/add_product`,  
+      data: productdata, 
+    });
+
+    if (response.status === 201) {
+      console.log('Product created successfully:', response.data);
+      return response.data;  
+    }
+  } catch (error) {
+    console.error('Error creating order: ', error.message);
   }
 }
 

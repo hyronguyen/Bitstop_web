@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
             subtotalDisplay.innerText = formatNumberWithCommas(inforCheckout.subtotal) + ' VND';
 
             // Tính tổng
-            const shippingCost = 30000;
+            const shippingCost = 1000;
             const total = inforCheckout.subtotal + shippingCost;
             totalDisplay.innerText = formatNumberWithCommas(total) + ' VND';
 

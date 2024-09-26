@@ -1,7 +1,7 @@
 import { collection, query, where, getDocs,addDoc, doc ,getDoc } from 'firebase/firestore';
 import db from '../Configs/firestore.js';
 
-// Lấy tất cả người dùng
+// Lấy tất cả sản phẩm
 export const getAllProduct = async (req, res) => {
     try {
         const productsCollection = collection(db, 'PRODUCTS');
@@ -23,6 +23,36 @@ export const getAllProduct = async (req, res) => {
         });
 
         res.json(productsList);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
+// thêm sản phẩm
+export const addNewProduct = async (req, res) => {
+    try {
+        const { pro_title, pro_category, pro_price, pro_platform, pro_img, pro_des, pro_qa } = req.body;
+
+        if (!pro_title || !pro_category || !pro_price ) {
+            return res.status(400).json({ error: "Missing required fields" });
+        }
+
+        const newProduct = {
+            pro_title,
+            pro_category,
+            pro_price,
+            pro_platform,
+            pro_img: pro_img || "No image available", 
+            pro_des: pro_des || "No description", 
+            pro_qa 
+        };
+
+        const productsCollection = collection(db, 'PRODUCTS');
+
+        const docRef = await addDoc(productsCollection, newProduct);
+
+        res.status(201).json({ id: docRef.id, ...newProduct });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
