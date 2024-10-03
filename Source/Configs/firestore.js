@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage"; // Thêm import cho Storage
 import dotenv from 'dotenv';
 
 dotenv.config(); // Tải các biến môi trường từ .env
@@ -15,9 +16,11 @@ const firebaseConfig = {
 };
 
 // Cài đặt
-const app = initializeApp(firebaseConfig);
+ export const app = initializeApp(firebaseConfig);
 
 // Initialize Firestore
 const db = getFirestore(app);
 
-export default db;
+// Initialize Firebase Storage
+
+export default db; // Xuất cả Firestore và Storage
