@@ -28,7 +28,6 @@ export const getAllProduct = async (req, res) => {
     }
 };
 
-
 // thêm sản phẩm
 export const addNewProduct = async (req, res) => {
     try {
@@ -206,3 +205,15 @@ export const getProductByCategory = async (req, res) => {
         res.status(500).json({ message: 'Error retrieving products by category', error: error.message });
     }
 };
+
+// xóa sản phẩm theo ID
+export const deleteProductById = async (req, res) =>{
+    try{
+        const {docID} = req.params
+
+        
+    }
+    catch(error){
+
+    }
+}

@@ -3,59 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bitstop Admin</title>
+  <title>Bitstop Stock</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
 <!-- Sticky Top Navigation Bar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+<nav class="navbar navbar-expand-lg navbar-dark bg-danger sticky-top">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Bitstop Admin</a>
+    <a class="navbar-brand" href="#">Bitstop's</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="crud.html">Products</a>
+          <a class="nav-link active" aria-current="page" href="stock.html">Stock</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Categories</a>
+          <a class="nav-link" href="purchase.html">Purchase</a>
         </li>
         <li class="nav-item"></li>
-          <a class="nav-link" href="#">Orders</a>
-        </li>
-        <li class="nav-item"></li>
-          <a class="nav-link" href="#">Users</a>
-        </li>
-        <li class="nav-item"></li>
-          <a class="nav-link" href="#">Coupon</a>
+          <a class="nav-link" href="#">Operation</a>
         </li>
       </ul>
       <!-- Search Bar -->
       <form class="d-flex" role="search">
         <input class="form-control me-2" type="search" placeholder="Search products" aria-label="Search" id="searchInput">
-        <button class="btn btn-outline-success" type="submit" onclick="searchProducts()">Search</button>
+        <button class="btn btn-dark" type="submit" onclick="searchProducts()">Search</button>
       </form>
     </div>
   </div>
 </nav>
 
 <div class="container my-5">
-  <h2 class="text-center">Bitstop's Product</h2>
-  <!-- Tab navigation -->
-  <ul class="nav nav-pills  " id="crudTab" role="tablist">
+  <h2 class="text-center">Warehouse <i class="fa-solid fa-warehouse"></i></h2>
+  <!-- Bảng chọn tab -->
+  <ul class="nav nav-tabs  " id="crudTab" role="tablist">
     <li class="nav-item" role="presentation">
-      <button class="nav-link active" id="list-tab" data-bs-toggle="tab" data-bs-target="#list" type="button" role="tab">List Products</button>
+      <button class="nav-link active" id="list-tab" data-bs-toggle="tab" data-bs-target="#list" type="button" role="tab">Stock List</button>
     </li>
     <li class="nav-item" role="presentation" style="display:none;">
       <button class="nav-link" id="edit-tab" data-bs-toggle="tab" data-bs-target="#edit" type="button" role="tab">Edit Product</button>
     </li>
 
     <li class="nav-item" role="presentation" ></li>
-      <button class="nav-link" id="add-tab" data-bs-toggle="tab" data-bs-target="#add" type="button" role="tab">Add Product</button>
+      <button class="nav-link" id="add-tab" data-bs-toggle="tab" data-bs-target="#add" type="button" role="tab">GRN</button>
     </li>
+
   </ul>
 
   
@@ -90,7 +86,6 @@
             <td><img src="https://via.placeholder.com/50" alt="Product Image"></td>
             <td>
               <button class="btn btn-primary btn-sm" onclick="editProduct(1)">Edit</button>
-              <button class="btn btn-danger btn-sm" onclick="confirmDelete(1)">Delete</button>
             </td>
           </tr>
         </tbody>
@@ -143,55 +138,25 @@
       </form>
     </div>
 
-    <!-- Add Product Tab -->
+    <!-- Add Goods Tab -->
     <div class="tab-pane fade" id="add" role="tabpanel">
-     <h3 class="mt-3">Add New Product</h3>
-     <form id="add-form" class="mt-2" onsubmit="AddNewProduct()">
-       <div class="mb-3">
-         <label for="addProTitle" class="form-label">Product Title</label>
-         <input type="text" class="form-control" id="addProTitle" placeholder="Enter product title" required>
-       </div>
-       <div class="mb-3">
-         <label for="addProCategory" class="form-label">Category</label>
-         <select class="form-control" id="addProCategory" required>
-          <option value="" disabled selected>Select a category</option>
-          <option value="Game">Game</option>
-          <option value="Steam Deck">Steam Deck</option>
-          <option value="Nintendo Switch">Nintendo Switch</option>
-        </select>
-       </div>
-       <div class="mb-3">
-         <label for="addProPrice" class="form-label">Price</label>
-         <input type="number" class="form-control" id="addProPrice" placeholder="Enter product price" required>
-       </div>
-       <div class="mb-3">
-         <label for="addProPlatform" class="form-label">Platform</label>
-         <input type="text" class="form-control" id="addProPlatform" placeholder="Enter platform (e.g., Online)" required>
-       </div>
-       <div class="mb-3">
-         <label for="addProDes" class="form-label">Description</label>
-         <textarea class="form-control" id="addProDes" rows="3" placeholder="Enter product description" required></textarea>
-       </div>
-       <div class="mb-3">
-         <label for="addProQA" class="form-label">Quantity Available</label>
-         <input type="number" class="form-control" id="addProQA" placeholder="Enter quantity available" required>
-       </div>
-       <div class="mb-3">
-         <label for="addThumbnail" class="form-label">Thumbnail</label>
-         <input type="text" class="form-control" id="addThumbnail" placeholder="Enter image URL" required>
-       </div>
-       <div class="mb-3">
-         <label for="addProImg1" class="form-label">Image URL 1</label>
-         <input type="text" class="form-control" id="addProImg1" placeholder="Enter image URL" >
-       </div>
-       <div class="mb-3">
-         <label for="addProImg2" class="form-label">Image URL 2</label>
-         <input type="text" class="form-control" id="addProImg2" placeholder="Enter image URL" >
-       </div>
+  <h3 class="mt-3">Create Good Received Note</h3>
+  <form id="add-form" class="mt-2" onsubmit="">
+    <div class="mb-3">
+      <label for="addNccOrder" class="form-label">NCC Order</label>
+      <input type="text" class="form-control" id="addNccOrder" placeholder="Enter NCC Order" required>
+    </div>
+    <button id="checkNccId_btn" type="button" class="btn btn-primary">Check NCC ID</button> <!-- New Button -->
+    <button id="add_btn" type="submit" class="btn btn-success">Stock Goods</button>
+  </form>
 
-       <button id="add_btn" type="submit" class="btn btn-success">Add Product</button>
-     </form>
-   </div>
+  <!-- Product List Section -->
+  <div id="product-list" class="mt-3" style="display:none;">
+    <h4>Products</h4>
+    <ul id="productItems" class="list-group"></ul>
+  </div>
+</div>
+
    
  </div>
 </div>
@@ -222,7 +187,6 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="js/frontend/crud_frontend.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="js/api.js"></script>
 <script src="class/class.js"></script>
