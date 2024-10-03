@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bitstop Stock</title>
+  <title>Bitstop Operation</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
 <!-- Sticky Top Navigation Bar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-danger sticky-top">
+<nav class="navbar navbar-expand-lg navbar-light bg-warning sticky-top">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">Bitstop's</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,13 +19,13 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="stock.html">Stock</a>
+          <a class="nav-link active" aria-current="page" href="operation.html">Operation</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="purchase.html">Purchase</a>
         </li>
         <li class="nav-item"></li>
-          <a class="nav-link" href="operation.html">Operation</a>
+          <a class="nav-link" href="stock.html">Stock</a>
         </li>
       </ul>
       <!-- Search Bar -->
@@ -38,7 +38,7 @@
 </nav>
 
 <div class="container my-5">
-  <h2 class="text-center"><i class="fa-solid fa-cubes"></i> Warehouse</i></h2>
+  <h2 class="text-center"> <i class="fa-solid fa-shop"></i> Operation</i></h2>
   <!-- Bảng chọn tab -->
   <ul class="nav nav-tabs  " id="crudTab" role="tablist">
     <li class="nav-item" role="presentation">
@@ -85,7 +85,7 @@
             <td>10 items in stock</td>
             <td><img src="https://via.placeholder.com/50" alt="Product Image"></td>
             <td>
-              <button class="btn btn-primary btn-sm" onclick="editProduct(1)">Edit</button>
+              <button class="btn btn-primary btn-sm" onclick=""><i class="fa-solid fa-pen-to-square"></i></button>
             </td>
           </tr>
         </tbody>

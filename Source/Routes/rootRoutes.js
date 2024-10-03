@@ -4,6 +4,7 @@ import authRouter from './authRoutes.js';
 import productsRouter from './productRoutes.js';
 import ordersRouter from './orderRoutes.js';
 import categoryRounter from './cateRoutes.js';
+import purchaseRouter from './purchaseRoutes.js';
 
 const rootRouter = express.Router();
 
@@ -12,6 +13,7 @@ rootRouter.use('/users', usersRouter);
 rootRouter.use('/auth',authRouter);
 rootRouter.use('/products',productsRouter);
 rootRouter.use('/orders',ordersRouter);
-rootRouter.use('/categories',categoryRounter)
+rootRouter.use('/categories',categoryRounter);
+rootRouter.use('/purchase',purchaseRouter);
 
 export default rootRouter;
