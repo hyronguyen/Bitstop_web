@@ -52,7 +52,7 @@ function RenderProduct(product) {
     const priceElement = document.querySelector('.s_product_text h2');
     const categoryElement = document.querySelector('.s_product_text .list li:first-child');
     const availabilityElement = document.querySelector('.s_product_text .list li:nth-child(2)');
-    const descriptionElement = document.querySelector('.s_product_text p');
+    const platformElement = document.querySelector('.s_product_text p');
 
     // Split image URLs
     const imageUrls = product.img.split(' ');
@@ -76,7 +76,7 @@ function RenderProduct(product) {
     titleElement.textContent =capitalizeEachWord(product.title);
     priceElement.textContent = formatNumberWithCommas(product.price) + ' VND';
     categoryElement.innerHTML = `<span>Category</span> : ${product.category}`;
-    descriptionElement.textContent = product.description;
+    platformElement.textContent = product.platform;
 
     // Set availability or other fields as needed
     availabilityElement.innerHTML = `<span>Availability</span> : In Stock`;

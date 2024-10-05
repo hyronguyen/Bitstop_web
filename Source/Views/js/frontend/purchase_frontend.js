@@ -1,3 +1,26 @@
+document.addEventListener('DOMContentLoaded', () => {
+  const authToken = localStorage.getItem('authToken'); 
+
+  if (!authToken) {
+      window.location.href = 'login.html'; 
+  } else 
+  {
+      console.log('Auth token is present. User is logged in.');
+      
+      const purchaseTab = document.getElementById('listpur-tab');
+
+     purchaseTab.addEventListener('shown.bs.tab', function(event) {
+    if (event.target.id === 'listpur-tab') {
+      renderPurchases();
+    }
+  });
+
+      
+  }
+});
+
+
+
 // Test
 const productsDB = {
     "P001": { name: "Product 1", price: 100 },
@@ -136,5 +159,36 @@ const productsDB = {
     console.log(orderData);
   
   }
+
+
+ async function renderPurchases() {
+  const purchases =  await apiGetAllPurchase();
+
+    const purchaseList = document.getElementById('purchase-list');
+    purchaseList.innerHTML = ''; // Clear existing content
+  
+    purchases.forEach((purchase, index) => {
+      
+      const purchaseDate = new Date(purchase.pur_date.seconds * 1000);
+      const formattedDate = purchaseDate.toLocaleDateString('en-GB');
+
+      const row = `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${purchase.id || 'N/A'}</td> <!-- Invoice -->
+          <td>${purchase.pur_ncc || 'N/A'}</td> <!-- Supplier (NCC) -->
+          <td>${purchase.pur_items.length} items</td> <!-- Number of items in purchase -->
+          <td>${formattedDate}</td> <!-- Purchase Date -->
+          <td>${purchase.pur_res || 'N/A'}</td> <!-- Responsible person -->
+          <td>${purchase.pur_status || 'Processing'}</td> <!-- Status -->
+          <td>
+            <button class="btn btn-primary btn-sm" onclick="viewDetail()">View detail</button>
+          </td>
+        </tr>
+      `;
+      purchaseList.innerHTML += row;
+    });
+  }
+  
   
   

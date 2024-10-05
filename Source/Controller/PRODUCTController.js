@@ -33,10 +33,33 @@ export const addNewProduct = async (req, res) => {
     try {
         const { pro_title, pro_category, pro_price, pro_platform, pro_img, pro_des, pro_qa } = req.body;
 
+        // Kiểm tra điều kiện input
         if (!pro_title || !pro_category || !pro_price ) {
             return res.status(400).json({ error: "Missing required fields" });
         }
 
+        // Kiểm tra title 
+        const normalizedTitle = pro_title.toLowerCase().replace(/\s+/g, '');
+
+         
+              const productsCollection = collection(db, 'PRODUCTS');
+              const querySnapshot = await getDocs(productsCollection);
+      
+   
+              let isDuplicate = false;
+              querySnapshot.forEach(doc => {
+                  const existingTitle = doc.data().pro_title || '';
+                  const normalizedExistingTitle = existingTitle.toLowerCase().replace(/\s+/g, '');
+      
+                  if (normalizedExistingTitle === normalizedTitle) {
+                      isDuplicate = true;
+                  }
+              });
+              if (isDuplicate) {
+                  return res.status(400).json({ error: "Product title must be unique (case-insensitive and ignoring spaces)" });
+              }
+
+        // Tạo sản phẩm
         const newProduct = {
             pro_title,
             pro_category,
@@ -44,12 +67,21 @@ export const addNewProduct = async (req, res) => {
             pro_platform,
             pro_img: pro_img || "No image available", 
             pro_des: pro_des || "No description", 
-            pro_qa 
+            pro_qa
         };
 
-        const productsCollection = collection(db, 'PRODUCTS');
-
+        // Thêm sản phẩm vào db
         const docRef = await addDoc(productsCollection, newProduct);
+
+        // Cập nhật kho hàng
+        const ProductStorage ={
+            sto_product: docRef.id,
+            sto_qa: 1
+        }
+
+        const productsStorage = collection(db,'STORAGE');
+        const stoRef = await addDoc(productsStorage, ProductStorage);
+
 
         res.status(201).json({ id: docRef.id, ...newProduct });
     } catch (error) {
@@ -215,5 +247,23 @@ export const deleteProductById = async (req, res) =>{
     }
     catch(error){
 
+    }
+}
+
+
+// Xem sản phẩm trong kho
+export const getProductStorage = async (req,res)=>{
+    try {
+        const querySnapshot = await getDocs(collection(db, 'STORAGE'));
+            const Storage = [];
+    
+            querySnapshot.forEach(doc => {
+                Storage.push({ id: doc.id, ...doc.data() });
+            });
+    
+            res.status(200).json(Storage);
+    }
+    catch (error){
+        res.status(500).json({ message: 'Error retrievin storage', error: error.message });
     }
 }

@@ -48,7 +48,7 @@ function renderProductList(productList) {
             <td>${formatNumberWithCommas(product.price)} VND</td>
             <td>${product.platform}</td>
             <td>${product.id}</td>
-            <td>${product.quantity} items in stock</td>
+            <td>${product.quantity} for sale</td>
             <td><img src="${firstImage}" alt="Product Image" width="50" height="50" style="object-fit:cover"></td>
             <td>
                 <button class="btn btn-primary btn-sm" onclick="editProduct(${index + 1})">Edit</button>
@@ -160,13 +160,13 @@ async function AddNewProduct() {
     };
   
 
-  
     try{
       const result = await apiAddProduct(ProductInfo);
     
     if (result) {
         alert('Product added successfully!');
         document.getElementById("add-form").reset(); // Reset the form
+        LoadProducts();
     } else {
         console.log('Failed to add product. Please try again.');
     }

@@ -272,7 +272,7 @@ async function apiEditProfile(docID, profileData) {
     }
 
   } catch (error) {
-    alert(error.message)
+    console.log('Thất bại');
   }
 }
 
@@ -288,9 +288,27 @@ async function apiAddProduct(productdata) {
     if (response.status === 201) {
       console.log('Product created successfully:', response.data);
       return response.data;  
-    }
+    } 
   } catch (error) {
     console.error('Error creating order: ', error.message);
   }
 }
 
+
+//Lấy purchase
+async function apiGetAllPurchase() {
+  try {
+    const response = await axios({
+      method: 'GET',
+      url: `${URL}/api/purchase/get_allpurchase`,
+    });
+
+    if (response.status === 200) {
+      const purchases = response.data;
+      return purchases;
+    }
+  } catch (error) {
+    console.error('Error fetching all orders: ', error.message);
+  }
+  
+}

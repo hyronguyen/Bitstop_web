@@ -39,6 +39,8 @@ async function LoadUserData(userId) {
      logoutButton.addEventListener('click', async () => {
          try {
             localStorage.removeItem('authToken');
+            localStorage.removeItem('cart');
+            localStorage.removeItem('inforCheckout')
             window.location.href = 'login.html';
           
              
@@ -108,16 +110,12 @@ function toggleEditForm() {
             if (result.status === 200) {
                 alert(result.message || 'Profile updated successfully!');
                 toggleEditForm(); 
-    
-               
                 document.getElementById('userFullName').innerText = fullName;
                 document.getElementById('userEmail').innerText = email;
                 document.getElementById('userAddress').innerText = address;
                 document.getElementById('userPhone').innerText = phone;
             }
-            else{
-                alert(result.message);
-            }
+        
             
     } catch (error) {
         alert('Failed to update profile. Please try again.');

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getAllProduct, getProductbyPlatform ,getProductByKeyword, getProductById, getProductByCategory, addNewProduct} from '../Controller/PRODUCTController.js';
+import { getAllProduct, getProductbyPlatform ,getProductByKeyword, getProductById, getProductByCategory, addNewProduct, getProductStorage} from '../Controller/PRODUCTController.js';
 import { authMiddleware } from '../Middleware/authMiddleware.js';
 
 const productsRouter = Router();
@@ -21,5 +21,8 @@ productsRouter.get('/get_productbycategory/:category',getProductByCategory)
 
 // Route add sản phẩm 
 productsRouter.post('/add_product',addNewProduct)
+
+// Route xem sản phẩm trong kho
+productsRouter.get('/check_storage',getProductStorage)
 
 export default productsRouter;

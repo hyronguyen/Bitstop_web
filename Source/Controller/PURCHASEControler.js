@@ -44,3 +44,20 @@ export const CreateANewPurchaseOrder = async (req, res) => {
         res.status(500).json({ error: error.message + " Controller" });
     }
 };
+
+
+// Get all Purchase
+export const GetAllPurchase = async (req, res) => {
+    try {
+            const querySnapshot = await getDocs(collection(db, 'PURCHASE'));
+            const purchase = [];
+    
+            querySnapshot.forEach(doc => {
+                purchase.push({ id: doc.id, ...doc.data() });
+            });
+    
+            res.status(200).json(purchase);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+}
