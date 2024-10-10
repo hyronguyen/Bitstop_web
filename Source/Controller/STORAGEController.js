@@ -55,7 +55,7 @@ export const getPurchaseItems = async (req, res) => {
                 pur_res: purchaseData.pur_res || "Unknown Staff",
                 pur_date: purchaseData.pur_date.toDate().toLocaleDateString(), // Format purchase date
                 pur_status: purchaseData.pur_status || "Processing",
-                pur_items: purchaseData.pur_items || [] // Items array directly from PURCHASE
+                pur_items: purchaseData.pur_items || [] // Items array directly from PURCHAS
             };
         });
 
