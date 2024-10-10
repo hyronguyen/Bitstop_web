@@ -5,6 +5,7 @@ import productsRouter from './productRoutes.js';
 import ordersRouter from './orderRoutes.js';
 import categoryRounter from './cateRoutes.js';
 import purchaseRouter from './purchaseRoutes.js';
+import storageRouter from './storageRoutes.js';
 
 const rootRouter = express.Router();
 
@@ -15,5 +16,7 @@ rootRouter.use('/products',productsRouter);
 rootRouter.use('/orders',ordersRouter);
 rootRouter.use('/categories',categoryRounter);
 rootRouter.use('/purchase',purchaseRouter);
+rootRouter.use('/storage', storageRouter);
+
 
 export default rootRouter;

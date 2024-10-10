@@ -1,0 +1,69 @@
+import { collection, query, where, getDocs,addDoc, doc ,getDoc } from 'firebase/firestore';
+import db from '../Configs/firestore.js';
+
+// Lấy tất cả sản phẩm
+export const getStorgeItems = async (req, res) => {
+    try {
+        const storageCollection = collection(db, 'STORAGE');
+        const storageSnapshot = await getDocs(storageCollection);
+
+
+        const storageList = await Promise.all(storageSnapshot.docs.map(async storageDoc => {
+            const data = storageDoc.data();
+            let productDetails = {};
+
+            if (data.sto_product) {
+                const productDocRef = doc(db, 'PRODUCTS', data.sto_product); 
+                const productDoc = await getDoc(productDocRef);
+                if (productDoc.exists()) {
+                    productDetails = productDoc.data(); 
+                }
+            }
+
+            return {
+                sto_product: data.sto_product,
+                sto_qa: data.sto_qa || "0",
+                pro_title: productDetails.pro_title || "Unknown Product",
+                pro_price: productDetails.pro_price || "N/A",
+                pro_category:productDetails.pro_category,
+                pro_platform:productDetails.pro_platform,
+                pro_img:productDetails.pro_img
+            };
+        }));
+
+        res.json(storageList);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
+// Lấy thông tin từ PURCHASE
+export const getPurchaseItems = async (req, res) => {
+    try {
+        // Get all documents from the PURCHASE collection
+        const purchaseCollection = collection(db, 'PURCHASE');
+        const purchaseSnapshot = await getDocs(purchaseCollection);
+
+        // Map through each purchase document and return its data
+        const purchaseList = purchaseSnapshot.docs.map(purchaseDoc => {
+            const purchaseData = purchaseDoc.data();
+
+            return {
+                id: purchaseDoc.id,
+                pur_ncc: purchaseData.pur_ncc || "Unknown Supplier",
+                pur_res: purchaseData.pur_res || "Unknown Staff",
+                pur_date: purchaseData.pur_date.toDate().toLocaleDateString(), // Format purchase date
+                pur_status: purchaseData.pur_status || "Processing",
+                pur_items: purchaseData.pur_items || [] // Items array directly from PURCHASE
+            };
+        });
+
+        // Send the purchase data as JSON
+        res.json(purchaseList);
+    } catch (error) {
+        // Handle any errors
+        res.status(500).json({ error: error.message });
+    }
+};
+

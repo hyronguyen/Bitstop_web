@@ -312,3 +312,38 @@ async function apiGetAllPurchase() {
   }
   
 }
+
+//Lấy sản phẩm trong kho--Việt
+async function apiGetStorageItems() {
+  try {
+    const response = await axios({
+      method: 'GET',
+      url: `${URL}/api/storage/get_storageItems`,
+    });
+
+    if (response.status === 200) {
+      const purchases = response.data;
+      return purchases;
+    }
+  } catch (error) {
+    console.error('Error fetching all orders: ', error.message);
+  }
+  
+}
+//Lấy hóa đơn--Việt
+// Lấy thông tin từ PURCHASE
+async function apiGetPurchaseItems() {
+  try {
+    const response = await axios({
+      method: 'GET',
+      url: `${URL}/api/storage/get_PurchaseItems`,  
+    });
+
+    if (response.status === 200) {
+      const purchases = response.data;
+      return purchases;
+    }
+  } catch (error) {
+    console.error('Error fetching purchase items: ', error.message);
+  }
+}
