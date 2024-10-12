@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bitstop Purchase</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+<!-- Sticky Top Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-success sticky-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Bitstop's</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="purchase.html">Purchase</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="stock.html">Stock</a>
+          </li>
+          <li class="nav-item"></li>
+            <a class="nav-link" href="operation.html">Operation</a>
+          </li>
+        </ul>
+
+      <!-- Search Bar -->
+      <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search products" aria-label="Search" id="searchInput">
+        <button class="btn btn-dark" type="submit" onclick="searchProducts()">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>
+
+<div class="container my-5">
+  <h2 class="text-center"><i class="fa-solid fa-money-check-dollar"></i> Purchase Order </h2>
+  
+  <!-- Bảng chọn tab -->
+  <ul class="nav nav-tabs " id="crudTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="list-tab" data-bs-toggle="tab" data-bs-target="#list" type="button" role="tab">Low-stock List</button>
+    </li>   
+
+    <li class="nav-item" role="presentation" ></li>
+      <button class="nav-link" id="add-tab" data-bs-toggle="tab" data-bs-target="#add" type="button" role="tab">PRO</button>
+    </li>
+
+    <li class="nav-item" role="presentation" ></li>
+      <button class="nav-link" id="listpur-tab" data-bs-toggle="tab" data-bs-target="#listpur" type="button" role="tab">List of Purchase</button>
+    </li>
+
+  </ul>
+
+  
+  
+  <div class="tab-content" id="crudTabContent">
+    <!-- List Tab -->
+    <div class="tab-pane fade show active" id="list" role="tabpanel">
+      <table class="table table-bordered table-striped mt-2">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Platform</th>
+            <th>Identify</th>
+            <th>QA</th>
+            <th>Image</th>
+           
+          </tr>
+        </thead>
+        <tbody id="product-list">
+          <!-- List products go here -->
+          <tr>
+            <td>1</td>
+            <td>Sample Product</td>
+            <td>Electronics</td>
+            <td>$299</td>
+            <td>Online</td>
+            <td>High-quality headphones</td>
+            <td style="color: red">10 items in stock</td>
+            <td><img src="https://via.placeholder.com/50" alt="Product Image"></td>
+           
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Add Goods Tab -->
+    <div class="tab-pane fade" id="add" role="tabpanel">
+      <h3 class="mt-3">Create Purchase Order Note</h3>
+      <form id="add-form" class="mt-2" onsubmit="CreateOrder()">
+        <div class="mb-3">
+          <label for="addNCCName" class="form-label">NCC Name</label>
+          <select class="form-control" id="addNCCName" required>
+            <option value="" disabled selected>Select a NCC</option>
+            <option value="Vavle">Vavle</option>
+            <option value="Sony">Sony</option>
+            <option value="Microsoft">Microsoft</option>
+            <option value="Nintendo">Nintendo</option>
+            <option value="Asus">Asus</option>
+            <option value="Apple">Apple</option>
+            <option value="Razor">Razor</option>
+          </select>
+        </div>
+    
+        <!-- Table for product entries -->
+        <h5>Product Information</h5>
+        <table class="table table-bordered" id="productTable">
+          <thead>
+            <tr>
+              <th>Product ID</th>
+              <th>Product Name</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="productRows">
+            <tr>
+              <td><input type="text" class="form-control product-id" placeholder="Product ID" required></td>
+              <td><input type="text" class="form-control product-name" placeholder="Product Name" disabled></td>
+              <td><input type="number" class="form-control product-price" placeholder="Price" disabled></td>
+              <td><input type="number" class="form-control product-quantity" placeholder="Quantity" min="1" value="1"></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+    
+        <!-- Button to add more product rows -->
+        <button type="button" id="addProductRow" class="btn btn-primary mb-3"><i class="fa-regular fa-square-plus"></i></button>
+
+        <button id="pur_btn" type="submit" class="btn mb-3 btn-success">Create Order</button>
+      </form>
+    </div>
+    
+     <!-- list Purchase Tab -->
+     <div class="tab-pane fade" id="listpur" role="tabpanel">
+
+      <table class="table table-bordered table-striped mt-2">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Purchase ID</th>
+            <th>NCC Name</th>
+            <th>Total</th>
+            <th>Created Date</th>
+            <th>Responsible</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="purchase-list">
+          <!-- List products go here -->
+          <tr>
+            <td>1</td>
+            <td>#ORDER0001</td>
+            <td>Microsoft</td>
+            <td>$299</td>
+            <td>22/08/2025</td>
+            <td>Nv. Nguyễn Văn An</td>
+            <td>Chờ giao hàng</td>
+            <td>
+              <button class="btn btn-primary btn-sm" onclick="">View detail</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      
+    </div>
+    
+
+   
+ </div>
+</div>
+
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h5>Are you sure to delete this product ID: <span id="productIdToDelete"></span>?</h5>
+        <input type="text" id="confirmProductIdInput" placeholder="Re-input the id to delete" class="form-control">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="js/api.js"></script>
+<script src="class/class.js"></script>
+<script src="js/frontend/purchase_frontend.js"></script>
+
+
+</body>
+</html>

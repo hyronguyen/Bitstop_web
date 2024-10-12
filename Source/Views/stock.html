@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bitstop Stock</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+<!-- Sticky Top Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-danger sticky-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Bitstop's</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="stock.html">Stock</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="purchase.html">Purchase</a>
+        </li>
+        <li class="nav-item"></li>
+          <a class="nav-link" href="operation.html">Operation</a>
+        </li>
+      </ul>
+      <!-- Search Bar -->
+      <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search products" aria-label="Search" id="searchInput">
+        <button class="btn btn-dark" type="submit" onclick="searchProducts()">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>
+
+<div class="container my-5">
+  <h2 class="text-center"><i class="fa-solid fa-cubes"></i> Warehouse</i></h2>
+  <!-- Bảng chọn tab -->
+  <ul class="nav nav-tabs  " id="crudTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="list-tab" data-bs-toggle="tab" data-bs-target="#list" type="button" role="tab">Stock List</button>
+    </li>
+    <li class="nav-item" role="presentation" style="display:none;">
+      <button class="nav-link" id="edit-tab" data-bs-toggle="tab" data-bs-target="#edit" type="button" role="tab">Edit Product</button>
+    </li>
+
+    <li class="nav-item" role="presentation" ></li>
+      <button class="nav-link" id="add-tab" data-bs-toggle="tab" data-bs-target="#add" type="button" role="tab">GRN</button>
+    </li>
+
+  </ul>
+
+  
+  
+  <div class="tab-content" id="crudTabContent">
+    <!-- List Tab -->
+    <div class="tab-pane fade show active" id="list" role="tabpanel">
+      <table class="table table-bordered table-striped mt-2">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Platform</th>
+            <th>Identify</th>
+            <th>QA</th>
+            <th>Image</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="product-list-stock">
+          <!-- List products go here -->
+          <tr>
+            <td>1</td>
+            <td>Sample Product</td>
+            <td>Electronics</td>
+            <td>$299</td>
+            <td>Online</td>
+            <td>High-quality headphones</td>
+            <td>10 items in stock</td>
+            <td><img src="https://via.placeholder.com/50" alt="Product Image"></td>
+            <td>
+              <button class="btn btn-primary btn-sm" onclick="editProduct(1)">Edit</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Edit Tab (Hidden Initially) -->
+    <div class="tab-pane fade" id="edit" role="tabpanel">
+      <h3 class="mt-3">Edit Product</h3>
+      <form id="edit-form" class="mt-2">
+        <div class="mb-3">
+          <label for="editProTitle" class="form-label">Product Title</label>
+          <input type="text" class="form-control" id="editProTitle" placeholder="Enter product title" required>
+        </div>
+        <div class="mb-3">
+          <label for="editProCategory" class="form-label">Category</label>
+          <input type="text" class="form-control" id="editProCategory" placeholder="Enter product category" required>
+        </div>
+        <div class="mb-3">
+          <label for="editProPrice" class="form-label">Price</label>
+          <input type="number" class="form-control" id="editProPrice" placeholder="Enter product price" required>
+        </div>
+        <div class="mb-3">
+          <label for="editProPlatform" class="form-label">Platform</label>
+          <input type="text" class="form-control" id="editProPlatform" placeholder="Enter platform (e.g., Online)" required>
+        </div>
+        <div class="mb-3">
+          <label for="editProDes" class="form-label">Description</label>
+          <textarea class="form-control" id="editProDes" rows="3" placeholder="Enter product description" required></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="editProQA" class="form-label">Quantity Available</label>
+          <input type="number" class="form-control" id="editProQA" placeholder="Enter quantity available" required>
+        </div>
+        <div class="mb-3">
+          <label for="editThumbnail" class="form-label">Thumbnail</label>
+          <input type="text" class="form-control" id="editThumbnail" placeholder="Enter image URL" required>
+        </div>
+        <div class="mb-3">
+          <label for="editProImg1" class="form-label">Image URL 1</label>
+          <input type="text" class="form-control" id="editProImg1" placeholder="Enter image URL" required>
+        </div>
+        <div class="mb-3">
+          <label for="editProImg2" class="form-label">Image URL 2</label>
+          <input type="text" class="form-control" id="editProImg2" placeholder="Enter image URL" required>
+        </div>
+
+        
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </form>
+    </div>
+
+  <!-- Add Goods Tab (Search Section) -->
+<div class="tab-pane fade" id="add" role="tabpanel">
+  <h3 class="mt-3">Create Good Received Note</h3>
+  <form id="add-form" class="mt-2" onsubmit="return false;">
+      <div class="mb-3">
+          <label for="addNccOrder" class="form-label">NCC Order</label>
+          <input type="text" class="form-control" id="addNccOrder" placeholder="Enter NCC Order" required>
+      </div>
+      <button id="checkNccId_btn" type="button" class="btn btn-primary">Check NCC ID</button> 
+      <button id="add_btn" type="button" class="btn btn-success">Stock Goods</button>
+  </form>
+
+  
+  <!-- Product List Section (Initially Hidden) -->
+  <div id="product-list" class="mt-3" style="display:none;">
+      <h4>Products</h4>
+      <ul id="productItems" class="list-group"></ul>
+  </div>
+</div>
+
+
+<!-- Invoice Form (Initially Hidden, Appears after Search) -->
+<div id="invoiceFormSection" class="mt-4" style="display:none;">
+  <h3>Invoice Details</h3>
+  <form id="invoice-form">
+      <!-- Invoice ID -->
+      <div class="mb-3">
+          <label for="invoiceId" class="form-label">Invoice ID</label>
+          <input type="text" class="form-control" id="invoiceId" disabled>
+      </div>
+      <!-- NCC Order -->
+      <div class="mb-3">
+          <label for="invoiceNccOrder" class="form-label">NCC Order</label>
+          <input type="text" class="form-control" id="invoiceNccOrder" disabled>
+      </div>
+      <!-- Supplier -->
+      <div class="mb-3">
+          <label for="invoiceSupplier" class="form-label">Supplier</label>
+          <input type="text" class="form-control" id="invoiceSupplier" disabled>
+      </div>
+      <!-- Date -->
+      <div class="mb-3">
+          <label for="invoiceDate" class="form-label">Date</label>
+          <input type="text" class="form-control" id="invoiceDate" disabled>
+      </div>
+      <!-- Status -->
+      <div class="mb-3">
+          <label for="invoiceStatus" class="form-label">Status</label>
+          <input type="text" class="form-control" id="invoiceStatus" disabled>
+      </div>
+      
+      <!-- Items List -->
+      <h4>Items</h4>
+      <div id="itemsList">
+          <!-- Dynamically generated item rows will be inserted here -->
+      </div>
+  </form>
+</div>
+
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h5>Are you sure to delete this product ID: <span id="productIdToDelete"></span>?</h5>
+        <input type="text" id="confirmProductIdInput" placeholder="Re-input the id to delete" class="form-control">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="js/api.js"></script>
+<script src="class/class.js"></script>
+<script src="js/frontend/stock_frontend.js"></script>
+
+</body>
+</html>
