@@ -347,3 +347,5 @@ async function apiGetPurchaseItems() {
     console.error('Error fetching purchase items: ', error.message);
   }
 }
+
+

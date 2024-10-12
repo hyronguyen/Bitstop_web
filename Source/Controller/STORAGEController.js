@@ -67,3 +67,26 @@ export const getPurchaseItems = async (req, res) => {
     }
 };
 
+export const updateStorageQuantity = async (req, res) => {
+    const { identify, qa } = req.body;
+
+    console.log(`Updating storage for Product ID: ${identify} with quantity: ${qa}`); // Log ID và số lượng
+
+    try {
+        const storageDocRef = doc(db, 'STORAGE', identify);
+        const storageDoc = await getDoc(storageDocRef);
+
+        if (!storageDoc.exists()) {
+            console.log('Product not found in storage');
+            return res.status(404).json({ error: 'Product not found in storage' });
+        }
+
+        await updateDoc(storageDocRef, { sto_qa: qa });
+
+        console.log('Product quantity updated successfully');
+        res.status(200).json({ message: 'Product quantity updated successfully in storage' });
+    } catch (error) {
+        console.error('Error updating product quantity:', error); // Log lỗi
+        res.status(500).json({ error: error.message });
+    }
+};
