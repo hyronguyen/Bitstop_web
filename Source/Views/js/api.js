@@ -348,4 +348,27 @@ async function apiGetPurchaseItems() {
   }
 }
 
+// Cập nhật số lượng kho
+async function apiUpdateProductQuantity(product) {
+  try {
+    const response = await axios({
+      method: 'PUT',
+      url: `${URL}/api/storage/update_StorageQuantity`,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: {
+        identify: product.identify,
+        qa: product.qa,
+      },
+    });
+
+    if (response.status === 200) {
+      console.log('Product quantity updated in storage:', response.data);
+    }
+  } catch (error) {
+    console.error('Error updating product quantity:', error.message);
+  }
+}
+
 

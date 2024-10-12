@@ -161,40 +161,58 @@
 
 <!-- Invoice Form (Initially Hidden, Appears after Search) -->
 <div id="invoiceFormSection" class="mt-4" style="display:none;">
-  <h3>Invoice Details</h3>
-  <form id="invoice-form">
-      <!-- Invoice ID -->
-      <div class="mb-3">
-          <label for="invoiceId" class="form-label">Invoice ID</label>
-          <input type="text" class="form-control" id="invoiceId" disabled>
-      </div>
-      <!-- NCC Order -->
-      <div class="mb-3">
-          <label for="invoiceNccOrder" class="form-label">NCC Order</label>
-          <input type="text" class="form-control" id="invoiceNccOrder" disabled>
-      </div>
-      <!-- Supplier -->
-      <div class="mb-3">
-          <label for="invoiceSupplier" class="form-label">Supplier</label>
-          <input type="text" class="form-control" id="invoiceSupplier" disabled>
-      </div>
-      <!-- Date -->
-      <div class="mb-3">
-          <label for="invoiceDate" class="form-label">Date</label>
-          <input type="text" class="form-control" id="invoiceDate" disabled>
-      </div>
-      <!-- Status -->
-      <div class="mb-3">
-          <label for="invoiceStatus" class="form-label">Status</label>
-          <input type="text" class="form-control" id="invoiceStatus" disabled>
-      </div>
-      
-      <!-- Items List -->
-      <h4>Items</h4>
+  <div class="card">
+    <div class="card-body">
+      <h3 class="card-title">Invoice Details</h3>
+      <form id="invoice-form">
+          <!-- Invoice ID -->
+          <div class="mb-3 row">
+              <label for="invoiceId" class="col-sm-3 col-form-label">Invoice ID</label>
+              <div class="col-sm-9">
+                  <input type="text" class="form-control" id="invoiceId" disabled>
+              </div>
+          </div>
+          <!-- NCC Order -->
+          <div class="mb-3 row">
+              <label for="invoiceNccOrder" class="col-sm-3 col-form-label">NCC Order</label>
+              <div class="col-sm-9">
+                  <input type="text" class="form-control" id="invoiceNccOrder" disabled>
+              </div>
+          </div>
+          <!-- Supplier -->
+          <div class="mb-3 row">
+              <label for="invoiceSupplier" class="col-sm-3 col-form-label">Supplier</label>
+              <div class="col-sm-9">
+                  <input type="text" class="form-control" id="invoiceSupplier" disabled>
+              </div>
+          </div>
+          <!-- Date -->
+          <div class="mb-3 row">
+              <label for="invoiceDate" class="col-sm-3 col-form-label">Date</label>
+              <div class="col-sm-9">
+                  <input type="text" class="form-control" id="invoiceDate" disabled>
+              </div>
+          </div>
+          <!-- Status -->
+          <div class="mb-3 row">
+              <label for="invoiceStatus" class="col-sm-3 col-form-label">Status</label>
+              <div class="col-sm-9">
+                  <input type="text" class="form-control" id="invoiceStatus" disabled>
+              </div>
+          </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Items List Section -->
+  <div class="card mt-3">
+    <div class="card-body">
+      <h4 class="card-title">Items</h4>
       <div id="itemsList">
           <!-- Dynamically generated item rows will be inserted here -->
       </div>
-  </form>
+    </div>
+  </div>
 </div>
 
 

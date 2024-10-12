@@ -1,15 +1,15 @@
 let currentlist;
 let purchaseList = [];
+let invoiceItems = [];
 
 // When the page loads
 document.addEventListener('DOMContentLoaded', () => {
    LoadProducts();
    LoadPurchaseItems();
    
-   // Add event listener for the Check Invoice ID button
+   // Render ra Invoce
    document.getElementById('checkNccId_btn').addEventListener('click', handleCheckInvoiceId);
-   
-   // Add event listener for the form submission (if you have functionality to stock goods)
+   // Xử lý nhập kho
    document.getElementById('add_btn').addEventListener('click', handleStockGoods);
 });
 
@@ -44,7 +44,7 @@ async function LoadProducts() {
     }
 }
 
-// Render product list (this is your inventory)
+// Render danh sách sản phẩm trong kho
 function renderProductList(productList) {
     const productListStock = document.getElementById('product-list-stock');
     productListStock.innerHTML = ''; // Clear the current list
@@ -71,7 +71,7 @@ function renderProductList(productList) {
     });
 }
 
-// Load purchase information (invoices)
+// Load thông tin Hóa đơn mua hàng
 async function LoadPurchaseItems() {
     try {
         const purchaseData = await apiGetPurchaseItems();
@@ -92,7 +92,7 @@ async function LoadPurchaseItems() {
     }
 }
 
-// Handle Check Invoice ID
+// Chức năng kiểm tra ID hóa đơn
 function handleCheckInvoiceId() {
     const invoiceIdInput = document.getElementById('addNccOrder').value.trim(); // Get the input value
 
@@ -115,125 +115,85 @@ function handleCheckInvoiceId() {
     }
 }
 
-// Function to display purchase details in the form below the search
+// Chức năng Render Hóa đơn
 function displayPurchaseDetails(purchase) {
-    // Update the invoice form values
     document.getElementById('invoiceId').value = purchase.id;
     document.getElementById('invoiceNccOrder').value = purchase.nccOrder;
     document.getElementById('invoiceSupplier').value = "Supplier ABC";  // Assuming a fixed supplier for now
     document.getElementById('invoiceDate').value = purchase.date;
     document.getElementById('invoiceStatus').value = purchase.status;
 
-    // Clear the items list first
     const itemsList = document.getElementById('itemsList');
-    itemsList.innerHTML = '';  // Clear any previous items
+    itemsList.innerHTML = ''; 
+    invoiceItems = []; // Reset the global items array
 
-    // Loop through the items array and create a row for each item
     purchase.items.forEach((item, index) => {
         const itemRow = `
-            <div class="mb-3">
-                <label for="itemId${index}" class="form-label">Item ID</label>
+        <div class="mb-3 row">
+            <label for="itemId${index}" class="col-sm-3 col-form-label">Item ID</label>
+            <div class="col-sm-9">
                 <input type="text" class="form-control" id="itemId${index}" value="${item.item_id}" disabled>
             </div>
-            <div class="mb-3">
-                <label for="itemName${index}" class="form-label">Item Name</label>
+        </div>
+        <div class="mb-3 row">
+            <label for="itemName${index}" class="col-sm-3 col-form-label">Item Name</label>
+            <div class="col-sm-9">
                 <input type="text" class="form-control" id="itemName${index}" value="${item.item_name}" disabled>
             </div>
-            <div class="mb-3">
-                <label for="itemQty${index}" class="form-label">Quantity</label>
+        </div>
+        <div class="mb-3 row">
+            <label for="itemQty${index}" class="col-sm-3 col-form-label">Quantity</label>
+            <div class="col-sm-9">
                 <input type="text" class="form-control" id="itemQty${index}" value="${item.item_qty}" disabled>
             </div>
-            <div class="mb-3">
-                <label for="itemPrice${index}" class="form-label">Price</label>
+        </div>
+        <div class="mb-3 row">
+            <label for="itemPrice${index}" class="col-sm-3 col-form-label">Price</label>
+            <div class="col-sm-9">
                 <input type="text" class="form-control" id="itemPrice${index}" value="${item.item_price}" disabled>
             </div>
-            <hr>
-        `;
-        itemsList.innerHTML += itemRow;  // Append each item row to the items list
+        </div>
+        <hr>
+    `;
+        itemsList.innerHTML += itemRow;  
+        invoiceItems.push({
+            item_id: item.item_id,
+            item_name: item.item_name,
+            item_qty: item.item_qty,
+            item_price: item.item_price
+        });
     });
 
-    // Show the form section with the invoice details
     document.getElementById('invoiceFormSection').style.display = 'block';
 }
 
-// Handle Stock Goods
+// Chức năng cập nhật kho
 function handleStockGoods(event) {
-    event.preventDefault(); // Ngăn form gửi yêu cầu
-
-    // Lấy danh sách các items từ hóa đơn (được hiển thị sau khi kiểm tra Invoice ID)
-    const itemsList = document.querySelectorAll('#itemsList > div');
-    
-    // Nếu không có item nào trong hóa đơn, hiển thị thông báo và dừng xử lý
-    if (itemsList.length === 0) {
-        alert('No items to process.');
-        return;
-    }
-
-    console.log(`Number of items to process: ${itemsList.length}`); // Ghi lại số lượng sản phẩm cần xử lý
-
-    // Duyệt qua từng item trong hóa đơn
-    itemsList.forEach((itemRow, index) => {
-        // Lấy ID sản phẩm và số lượng từ hóa đơn
-        const itemId = document.getElementById(`itemId${index}`).value;
-        const itemQty = parseInt(document.getElementById(`itemQty${index}`).value, 10);
-
-        if (!itemId || isNaN(itemQty) || itemQty <= 0) {
-            console.log(`Skipping invalid item at index ${index}: ID = ${itemId}, Quantity = ${itemQty}`); 
-            return; // Bỏ qua nếu ID hoặc số lượng không hợp lệ
+    event.preventDefault(); 
+    try{
+        if (invoiceItems.length === 0) {
+            alert('No items to process.');
+            return;
         }
-
-        console.log(`Processing item ${index + 1}: ID = ${itemId}, Quantity = ${itemQty}`); // Ghi lại thông tin từng item đang xử lý
-
-        // Tìm sản phẩm tương ứng trong danh sách hàng tồn kho bằng cách khớp ID
-        const productInStock = currentlist.find(product => product.identify === itemId);
-
-        if (productInStock) {
-            // Nếu tìm thấy sản phẩm trong kho, cập nhật số lượng
-            productInStock.qa = (productInStock.qa || 0) + itemQty; // Cộng thêm số lượng từ hóa đơn vào số lượng hiện có
-            console.log(`Updated stock for ${productInStock.title}: new quantity is ${productInStock.qa}`); // Ghi lại cập nhật số lượng
-
-            // Gọi hàm api để cập nhật tồn kho vào database
-            apiUpdateProductQuantity(productInStock);
-        } else {
-            console.log(`Item with ID ${itemId} not found in the stock.`); // Ghi lại nếu không tìm thấy sản phẩm
-        }
-    });
-
-    // Hiển thị lại danh sách hàng tồn kho sau khi xử lý
-    console.log("Re-rendering the updated stock list...");
-    renderProductList(currentlist);
-
-    // Ẩn form sau khi cập nhật tồn kho thành công
-    document.getElementById('invoiceFormSection').style.display = 'none';
+        
+        console.log(`Number of items to process: ${invoiceItems.length}`);
     
-    // Hiển thị thông báo cập nhật thành công
-    alert('Stock updated successfully!');
-}
-
-/// Hàm xử lý cập nhật tồn kho từ frontend
-async function apiUpdateProductQuantity(product) {
-    try {
-        console.log(`Sending update for Product ID: ${product.identify}, Quantity: ${product.qa}`); // Log trước khi gửi yêu cầu
-
-        const response = await fetch('http://localhost:8080/api/updateProductQuantity', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                identify: product.identify,
-                qa: product.qa
-            })
+        // Loop through each item in invoiceItems and update product quantities
+        invoiceItems.forEach(item => {
+            const product = {
+                identify: item.item_id,  // Assuming each item has 'identify'
+                qa: item.item_qty,              // Assuming each item has 'qa'
+            };
+    
+            
+             apiUpdateProductQuantity(product);
         });
-
-        if (!response.ok) {
-            console.log('Response status:', response.status); // Log mã trạng thái phản hồi
-            throw new Error('Network response was not ok');
-        }
-
-        const data = await response.json();
-        console.log('Product quantity updated in storage:', data);
-    } catch (error) {
-        console.error('Error updating product quantity:', error);
     }
+    catch (error){
+        console.log(error);
+    }
+
+    
 }
+
+

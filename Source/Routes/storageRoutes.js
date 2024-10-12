@@ -8,6 +8,6 @@ storageRouter.get('/get_storageItems',getStorgeItems);
 storageRouter.get('/get_PurchaseItems',getPurchaseItems);
 
 // Route để cập nhật số lượng sản phẩm
-storageRouter.post('/updateProductQuantity', updateStorageQuantity);
+storageRouter.put('/update_StorageQuantity', updateStorageQuantity);
 
 export default storageRouter;
