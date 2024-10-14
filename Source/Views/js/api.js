@@ -372,3 +372,49 @@ async function apiUpdateProductQuantity(product) {
 }
 
 
+async function apiUpdatePurchaseStatus(purchaseId, status) {
+  try {
+      console.log('Sending purchase ID:', purchaseId); // Log giá trị gửi đi
+      const response = await axios({
+          method: 'PUT',
+          url: `${URL}/api/storage/update_PurchaseStatus`,
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          data: {
+              purchaseId: purchaseId,
+              status: status
+          },
+      });
+
+      if (response.status === 200) {
+          console.log('Purchase status updated successfully:', response.data);
+      }
+  } catch (error) {
+      console.error('Error updating purchase status:', error.message);
+  }
+}
+
+
+async function apiCreateSMInput(purchaseId, smItems, smDes) {
+  try {
+      const response = await axios({
+          method: 'POST',
+          url: `${URL}/api/storage/update_createSMInput`,
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          data: {
+              purchaseId: purchaseId,
+              smItems: smItems,      // The list of items from the purchase
+              smDes: 'Stock goods input'  // You can customize this description
+          },
+      });
+
+      if (response.status === 201) {
+          console.log('SM Input created successfully:', response.data);
+      }
+  } catch (error) {
+      console.error('Error creating SM Input:', error.message);
+  }
+}

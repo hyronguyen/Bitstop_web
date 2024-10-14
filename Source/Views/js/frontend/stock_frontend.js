@@ -183,33 +183,93 @@ function displayPurchaseDetails(purchase) {
     document.getElementById('invoiceFormSection').style.display = 'block';
 }
 
-// Chức năng cập nhật kho
-function handleStockGoods(event) {
+
+
+// Hàm để xử lý việc cập nhật kho
+async function handleStockGoods(event) {
     event.preventDefault(); 
-    try{
+
+    try {
         if (invoiceItems.length === 0) {
             alert('No items to process.');
             return;
         }
-        
+
+        // Lấy giá trị từ ô input invoiceId
+        const purchaseId = document.getElementById('invoiceId').value;
+        const currentStatus = document.getElementById('invoiceStatus').value;  // Lấy trạng thái hiện tại
+
+        if (!purchaseId) {
+            alert('Không tìm thấy thông tin hóa đơn');
+            return;
+        }
+
+        // Kiểm tra nếu đơn hàng đã được xử lý trước đó
+        if (currentStatus === 'Delivered') {
+            alert('Đơn hàng này đã được xử lý');
+            return;
+        }
+
         console.log(`Number of items to process: ${invoiceItems.length}`);
-    
-        // Loop through each item in invoiceItems and update product quantities
-        invoiceItems.forEach(item => {
+        console.log(`Processing Invoice ID: ${purchaseId}`);
+
+        // Cập nhật kho cho từng item
+        for (const item of invoiceItems) {
             const product = {
                 identify: item.item_id,  // Assuming each item has 'identify'
-                qa: item.item_qty,              // Assuming each item has 'qa'
+                qa: item.item_qty,       // Assuming each item has 'qa'
             };
     
-            
-             apiUpdateProductQuantity(product);
-        });
-    }
-    catch (error){
-        console.log(error);
-    }
+            // Gọi API để cập nhật số lượng sản phẩm
+            await apiUpdateProductQuantity(product);
+        }
 
-    
+        // Sau khi cập nhật kho thành công, cập nhật trạng thái đơn hàng
+        await updatePurchaseStatus(purchaseId, 'Delivered');
+
+        // Call the new function to create an SM input record
+        await handleCreateSMInput(purchaseId, invoiceItems);
+        
+        // Thông báo người dùng
+        alert('Số lượng tồn đã được cập nhật và trạng thái đơn hàng đã chuyển sang "Delivered"');
+        console.log("Order has been marked as 'Delivered'.");
+
+    } catch (error) {
+        console.error('Error:', error);
+    }
 }
 
 
+// Hàm để cập nhật trạng thái đơn hàng
+async function updatePurchaseStatus(purchaseId, status) {
+    try {
+        if (!purchaseId) {
+            alert('Không tìm thấy thông tin hóa đơn');
+            return;
+        }
+
+        // Gọi API để cập nhật trạng thái đơn hàng
+        await apiUpdatePurchaseStatus(purchaseId, status);
+        
+        // Thông báo khi cập nhật thành công
+        alert(`Trạng thái đơn hàng đã được cập nhật thành: ${status}`);
+        console.log(`Order status updated to '${status}' for purchase ID: ${purchaseId}`);
+    } catch (error) {
+        console.error('Error updating purchase status:', error);
+    }
+}
+
+async function handleCreateSMInput(purchaseId, smItems) {
+    try {
+        // Create a new SM input record
+        const smDes = 'Stock goods input';  // Description can be customized or dynamic
+        await apiCreateSMInput(purchaseId, smItems, smDes);
+
+        // Notify the user that the SM input has been created
+        console.log('SM Input created for Purchase ID:', purchaseId);
+        alert('SM Input created successfully!');  // Consider using a better UI notification
+    } catch (error) {
+        console.error('Error creating SM Input:', error);
+        alert('Failed to create SM Input. Please try again.');  // Inform user of the error
+    }
+}
