@@ -1,3 +1,6 @@
+
+const productsDB = {};
+
 document.addEventListener('DOMContentLoaded', () => {
   const authToken = localStorage.getItem('authToken'); 
 
@@ -5,6 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
       window.location.href = 'login.html'; 
   } else 
   {
+    LoadProducts();
+
       console.log('Auth token is present. User is logged in.');
       
       const purchaseTab = document.getElementById('listpur-tab');
@@ -19,14 +24,29 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+async function LoadProducts() {
+  try {
+    const productData = await apigetAllProducts();
+    // Clear productsDB before adding new data (optional based on your requirements)
+    Object.keys(productsDB).forEach(key => delete productsDB[key]);
+
+    productData.forEach(items => {
+      productsDB[items.id] = {
+        name: items.title,  // Mapping 'title' to 'name'
+        price: items.price*0.85  // Keeping the 'price' field as it is
+      };
+    });
+
+    console.log(productsDB);
+    
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 
-// Test
-const productsDB = {
-    "P001": { name: "Product 1", price: 100 },
-    "P002": { name: "Product 2", price: 200 },
-    "P003": { name: "Product 3", price: 150 }
-  };
+
+
   
   // Check đơn mua không trùng lập
   function isProductIdUnique(productIdInput) {
@@ -50,7 +70,7 @@ const productsDB = {
     productIdInput.addEventListener("blur", function () {
       const productId = productIdInput.value.trim();
   
-      // Check if the entered ID is unique, excluding the current input field
+      // Kiểm tra id với các hàng còn lại
       if (!isProductIdUnique(productIdInput)) {
         alert("Product ID already exists. Please enter a unique Product ID.");
         productIdInput.value = ""; 
@@ -85,7 +105,7 @@ const productsDB = {
   // Initial row product ID listener
   attachProductIdListener(document.querySelector("#productRows tr"));
   
-  // Add a new row with product ID and quantity input fields
+  // Tạo thêm hàng
   document.getElementById("addProductRow").addEventListener("click", function () {
     const productRows = document.getElementById("productRows");
   
@@ -107,7 +127,7 @@ const productsDB = {
     });
   });
   
-  // Handle row removal for the initial row
+  // Xóa hàng
   document.querySelector(".remove-row").addEventListener("click", function () {
     this.closest("tr").remove();
   });

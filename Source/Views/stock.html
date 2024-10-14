@@ -163,6 +163,7 @@
 <div id="invoiceFormSection" class="mt-4" style="display:none;">
   <div class="card">
     <div class="card-body">
+
       <h3 class="card-title">Invoice Details</h3>
       <form id="invoice-form">
           <!-- Invoice ID -->
@@ -213,6 +214,15 @@
       </div>
     </div>
   </div>
+
+  <div class="card mt-3">
+    <div class="card-body">
+      <h4 class="card-title">Invoice PDF</h4>
+      <a id="downloadInvoiceBtn" class="btn btn-primary" href="#" target="_blank" download>Download Invoice</a>
+      <p id="pdfErrorMsg" style="color:red; display:none;">Unable to download PDF. Please check the link.</p>
+    </div>
+  </div>
+
 </div>
 
 

@@ -37,11 +37,9 @@ export const getStorgeItems = async (req, res) => {
     }
 };
 
-
 // Lấy thông tin từ PURCHASE
 export const getPurchaseItems = async (req, res) => {
     try {
-        // Get all documents from the PURCHASE collection
         const purchaseCollection = collection(db, 'PURCHASE');
         const purchaseSnapshot = await getDocs(purchaseCollection);
 
@@ -51,6 +49,7 @@ export const getPurchaseItems = async (req, res) => {
 
             return {
                 id: purchaseDoc.id,
+                pur_invo: purchaseData.pur_invo || "No Invo",
                 pur_ncc: purchaseData.pur_ncc || "Unknown Supplier",
                 pur_res: purchaseData.pur_res || "Unknown Staff",
                 pur_date: purchaseData.pur_date.toDate().toLocaleDateString(), // Format purchase date
