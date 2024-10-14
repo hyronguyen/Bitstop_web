@@ -61,7 +61,7 @@ function renderProductList(productList) {
             <td>${product.platform}</td>
             <td>${product.identify}</td>
             <td>${product.qa}</td>
-            <td><img src="${thumbnail}" alt="Product Image" width="50" height="50"></td>
+            <td><img src="${thumbnail}" alt="Product Image"  width="50" height="50" style="object-fit:cover"></td>
             <td>
               <button class="btn btn-primary btn-sm" onclick="editProduct(${index})">Edit</button>
             </td>
@@ -81,7 +81,9 @@ async function LoadPurchaseItems() {
                 nccOrder: item.pur_ncc,         // NCC Order
                 date: item.pur_date,            // Date
                 status: item.pur_status,        // Status
-                items: item.pur_items           // Items array
+                items: item.pur_items,
+                res: item.pur_res,
+                invo: item.pur_invo         // Items array
             };
         });
 
@@ -164,6 +166,20 @@ function displayPurchaseDetails(purchase) {
         });
     });
 
+
+    // Update the download button's href with the PDF URL
+    const downloadButton = document.getElementById('downloadInvoiceBtn');
+    const pdfErrorMsg = document.getElementById('pdfErrorMsg');
+
+    if (purchase.invo) {
+        downloadButton.href = purchase.invo;  // Set the PDF URL for download
+        downloadButton.style.display = 'inline-block';  // Show the download button
+        pdfErrorMsg.style.display = 'none';  // Hide error message
+    } else {
+        downloadButton.style.display = 'none';  // Hide the download button
+        pdfErrorMsg.style.display = 'block';  // Show error message
+    }
+    
     document.getElementById('invoiceFormSection').style.display = 'block';
 }
 
