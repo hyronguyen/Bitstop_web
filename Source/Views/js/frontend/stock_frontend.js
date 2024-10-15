@@ -183,8 +183,6 @@ function displayPurchaseDetails(purchase) {
     document.getElementById('invoiceFormSection').style.display = 'block';
 }
 
-
-
 // Hàm để xử lý việc cập nhật kho
 async function handleStockGoods(event) {
     event.preventDefault(); 
@@ -225,23 +223,21 @@ async function handleStockGoods(event) {
         }
 
         // Sau khi cập nhật kho thành công, cập nhật trạng thái đơn hàng
-        await updatePurchaseStatus(purchaseId, 'Delivered');
+        await updatePurchaseStatus(purchaseId);
 
         // Call the new function to create an SM input record
         await handleCreateSMInput(purchaseId, invoiceItems);
         
         // Thông báo người dùng
         alert('Số lượng tồn đã được cập nhật và trạng thái đơn hàng đã chuyển sang "Delivered"');
-        console.log("Order has been marked as 'Delivered'.");
 
     } catch (error) {
         console.error('Error:', error);
     }
 }
 
-
 // Hàm để cập nhật trạng thái đơn hàng
-async function updatePurchaseStatus(purchaseId, status) {
+async function updatePurchaseStatus(purchaseId) {
     try {
         if (!purchaseId) {
             alert('Không tìm thấy thông tin hóa đơn');
@@ -249,24 +245,20 @@ async function updatePurchaseStatus(purchaseId, status) {
         }
 
         // Gọi API để cập nhật trạng thái đơn hàng
-        await apiUpdatePurchaseStatus(purchaseId, status);
-        
-        // Thông báo khi cập nhật thành công
-        alert(`Trạng thái đơn hàng đã được cập nhật thành: ${status}`);
-        console.log(`Order status updated to '${status}' for purchase ID: ${purchaseId}`);
+        await apiUpdatePurchaseStatus(purchaseId);
+    
     } catch (error) {
         console.error('Error updating purchase status:', error);
     }
 }
 
+// Hàm để thêm đơn input
 async function handleCreateSMInput(purchaseId, smItems) {
     try {
         // Create a new SM input record
         const smDes = 'Stock goods input';  // Description can be customized or dynamic
         await apiCreateSMInput(purchaseId, smItems, smDes);
 
-        // Notify the user that the SM input has been created
-        console.log('SM Input created for Purchase ID:', purchaseId);
         alert('SM Input created successfully!');  // Consider using a better UI notification
     } catch (error) {
         console.error('Error creating SM Input:', error);

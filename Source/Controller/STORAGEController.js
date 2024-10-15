@@ -97,7 +97,7 @@ export const updateStorageQuantity = async (req, res) => {
     }
 };
 
-
+// Cập nhật trạng thái
 export const updatePurchaseStatus = async (req, res) => {
     if (!req.body || !req.body.purchaseId) {
         console.error('Invalid request body:', req.body);
@@ -106,45 +106,37 @@ export const updatePurchaseStatus = async (req, res) => {
 
     const { purchaseId } = req.body;
 
-    console.log('Updating purchase status for ID:', purchaseId);
-
     try {
-        // Reference directly to the specific document by its ID
+     
         const purchaseDocRef = doc(db, 'PURCHASE', purchaseId);
-
-        // Update the 'pur_status' field to 'Delivered'
         await updateDoc(purchaseDocRef, { pur_status: 'Delivered' });
 
-        console.log('Purchase status updated to Delivered');
         res.status(200).json({ message: 'Purchase status updated to Delivered' });
     } catch (error) {
-        console.error('Error updating purchase status:', error);
+    
         res.status(500).json({ error: error.message });
     }
 };
 
-
+// Tạo chứng từ nhập hàng
 export const createSMInput = async (req, res) => {
-    const { purchaseId, smItems, smDes } = req.body;
+    const { purchaseId, smItems } = req.body;
 
     try {
-        // Create a new SM document
         const newSMDoc = {
-            sm_purchaseId: purchaseId,   // Link to the related purchase
-            sm_items: smItems,           // Assuming smItems is an array of the items from purchase
-            sm_des: smDes,               // Description
-            sm_type: 'Input for invoice',            // Type is always 'Input'
-            sm_status: 'Processing',     // Default status for a new SM
-            createdAt: new Date()        // Timestamp
+            sm_items: smItems,           
+            sm_des: 'Input for invoice ' + purchaseId,               
+            sm_type:  'Input',            
+            sm_status: 'Done',     
+            sm_date: new Date(),
+            sm_res: `Stock Staff`     
         };
 
         // Add the new SM document to the 'SM' collection
         const smDocRef = await addDoc(collection(db, 'SM'), newSMDoc);
 
-        console.log('New SM Input created with ID:', smDocRef.id);
         res.status(201).json({ message: 'SM Input created', id: smDocRef.id });
     } catch (error) {
-        console.error('Error creating SM Input:', error);
         res.status(500).json({ error: error.message });
     }
 };

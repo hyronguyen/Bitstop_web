@@ -371,8 +371,8 @@ async function apiUpdateProductQuantity(product) {
   }
 }
 
-
-async function apiUpdatePurchaseStatus(purchaseId, status) {
+// cập nhật trạng thái
+async function apiUpdatePurchaseStatus(purchaseId) {
   try {
       console.log('Sending purchase ID:', purchaseId); // Log giá trị gửi đi
       const response = await axios({
@@ -383,7 +383,6 @@ async function apiUpdatePurchaseStatus(purchaseId, status) {
           },
           data: {
               purchaseId: purchaseId,
-              status: status
           },
       });
 
@@ -396,7 +395,7 @@ async function apiUpdatePurchaseStatus(purchaseId, status) {
 }
 
 
-async function apiCreateSMInput(purchaseId, smItems, smDes) {
+async function apiCreateSMInput(purchaseId, smItems) {
   try {
       const response = await axios({
           method: 'POST',
@@ -406,8 +405,7 @@ async function apiCreateSMInput(purchaseId, smItems, smDes) {
           },
           data: {
               purchaseId: purchaseId,
-              smItems: smItems,      // The list of items from the purchase
-              smDes: 'Stock goods input'  // You can customize this description
+              smItems: smItems,    
           },
       });
 
