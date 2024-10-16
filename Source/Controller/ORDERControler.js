@@ -23,9 +23,21 @@ export const CreateANewOrder = async (req, res) => {
             or_payment:payment
         };
 
+
         const docRef = await addDoc(collection(db, 'ORDERS'), orderData);
 
-        res.status(201).json({ message: `Order created with ID: ${docRef.id}` });
+        const newSMDoc = {
+            sm_items: items,           
+            sm_des: 'Output for order: ' + docRef.id,               
+            sm_type:  'Output',            
+            sm_status: 'Processing',     
+            sm_date: new Date(),
+            sm_res: `Stock Staff`     
+        };
+
+        const SMRef = await addDoc(collection(db,'SM'),newSMDoc);
+
+        res.status(201).json({ message: `Order created with ID: ${docRef.id} and resquest ${SMRef.id}` });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
