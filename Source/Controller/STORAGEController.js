@@ -97,6 +97,41 @@ export const updateStorageQuantity = async (req, res) => {
     }
 };
 
+//cập nhật số lượng kho
+export const subtractStorageQuantity = async (req, res) => {
+    const { identify, qa } = req.body;
+
+    try {
+        debugger
+        const storageCollectionRef = collection(db, 'STORAGE');
+        const q = query(storageCollectionRef, where('sto_product', '==', identify));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+            console.log('Product not found in storage');
+            return res.status(404).json({ error: 'Product not found in storage' });
+        }
+
+        const storageDoc = querySnapshot.docs[0];
+
+        // Lấy số lượng hiện tại
+        const currentQuantity = storageDoc.data().sto_qa || 0;
+
+        // Tính số lượng mới
+        const newQuantity = currentQuantity - qa;
+
+        if(newQuantity<1)
+        {return res.status(404).json({ error: 'sản phẩm số lượng không đủ' });}
+        await updateDoc(storageDoc.ref, { sto_qa: newQuantity });
+
+        console.log('Product quantity updated successfully');
+        res.status(200).json({ message: 'Product quantity updated successfully in storage' });
+    } catch (error) {
+        console.error('Error updating product quantity:', error); 
+        res.status(500).json({ error: error.message });
+    }
+};
+
 // Cập nhật trạng thái
 export const updatePurchaseStatus = async (req, res) => {
     if (!req.body || !req.body.purchaseId) {
@@ -125,7 +160,7 @@ export const createSMInput = async (req, res) => {
     try {
         const newSMDoc = {
             sm_items: smItems,           
-            sm_des: 'Input for invoice ' + purchaseId,               
+            sm_des: 'Input for invoice:' + purchaseId,               
             sm_type:  'Input',            
             sm_status: 'Done',     
             sm_date: new Date(),

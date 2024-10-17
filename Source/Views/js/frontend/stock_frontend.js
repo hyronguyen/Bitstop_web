@@ -1,11 +1,15 @@
 let currentlist;
 let purchaseList = [];
 let invoiceItems = [];
+let smList = [];
+let currentSmIndex = null; // Biến để lưu index của SM item hiện tại
+
 
 // When the page loads
 document.addEventListener('DOMContentLoaded', () => {
    LoadProducts();
    LoadPurchaseItems();
+   LoadSMItems();
    
    // Render ra Invoce
    document.getElementById('checkNccId_btn').addEventListener('click', handleCheckInvoiceId);
@@ -265,3 +269,149 @@ async function handleCreateSMInput(purchaseId, smItems) {
         alert('Failed to create SM Input. Please try again.');  // Inform user of the error
     }
 }
+
+// Function to load SM items from the API and map them for rendering
+async function LoadSMItems() {
+    try {
+        const smData = await apiGetSMItems(); // Call the API to fetch SM items
+
+
+
+        // Map the received data into a structured format
+        smList = smData.map(item => {
+            
+            return {
+                sm_id: item.sm_id,           // Stock Management ID
+                sm_date: item.sm_date,       // Date of the SM entry
+                sm_des: item.sm_des,         // Description
+                sm_status: item.sm_status,   // Status of the SM (Input/Output)
+                sm_type: item.sm_type,       // Type (Input/Output)
+                sm_items: item.sm_items,      // Items in the SM
+                sm_res:   item.sm_res
+            };
+        });
+
+        // Log the mapped list before rendering
+        console.log('Mapped SM List:', smList);
+
+        // Render the list of SM items after fetching
+        renderSMList(smList);
+    } catch (error) {
+        console.error('Error loading SM items:', error);
+    }
+}
+
+// Function to render the list of SM items in a table
+function renderSMList(smList) {
+    const smListTable = document.getElementById('product-list-output'); // Assume the table has this ID
+    smListTable.innerHTML = ''; // Clear the current list
+
+    console.log('Rendering SM List...'); // Log when rendering starts
+    smList.forEach((smItem, index) => {
+        // Prepare the items data to display
+        const smItemsDetails = smItem.sm_items.map(item => 
+            `${item.item_name} (ID: ${item.item_id}, Qty: ${item.item_qty}, Price: ${item.item_price})`
+        ).join('<br>');
+
+        // Log the current SM item being rendered
+        console.log(`Rendering SM Item [${index + 1}]:`, smItem);
+
+        const smDate = new Date(smItem.sm_date.seconds * 1000);
+      const formattedDate = smDate.toLocaleDateString('en-GB');
+
+        const row = `
+          <tr>
+            <td>${index + 1}</td>
+            <td>${smItem.sm_id}</td>
+            <td>${formattedDate}</td>
+            <td>${smItem.sm_des}</td>
+            <td>${smItem.sm_status}</td>
+            <td>
+              <button class="btn btn-primary btn-sm" onclick="viewDetails(${index})">View Details</button>
+            </td>
+          </tr>
+        `;
+        smListTable.innerHTML += row; // Append the new row to the table
+    });
+
+    console.log('Rendered SM List Table:', smListTable.innerHTML); // Log the final rendered HTML of the table
+}
+
+
+
+// xem chi tiết
+function viewDetails(index) {
+    const smItem = smList[index]; 
+
+    currentSmIndex = index; 
+
+    document.getElementById('smId').value = smItem.sm_id;
+    document.getElementById('smDate').value = smItem.sm_date;
+    document.getElementById('smDescription').value = smItem.sm_des;
+    document.getElementById('smRes').value = smItem.sm_res; // Resource field
+    document.getElementById('smStatus').value = smItem.sm_status;
+    document.getElementById('smType').value = smItem.sm_type;
+
+    // Hiển thị các mục
+    const smItemsContainer = document.getElementById('smItemsContainer');
+    smItemsContainer.innerHTML = ''; // Clear existing items
+
+    smItem.sm_items.forEach(item => {
+        const itemCard = `
+            <div class="card mb-2 border-secondary">
+                <div class="card-body">
+                    <h6 class="card-title">Item ID: ${item.id}</h6>
+                    <p class="card-text"><strong>Name:</strong> ${item.title}</p>
+                    <p class="card-text"><strong>Price:</strong> ${item.total}</p>
+                    <p class="card-text"><strong>Quantity:</strong> ${item.quantity}</p>
+                </div>
+            </div>
+        `;
+        smItemsContainer.innerHTML += itemCard; // Append item details
+    });
+
+    // Hiển thị modal
+    const detailsModal = new bootstrap.Modal(document.getElementById('detailsModal'));
+    detailsModal.show();
+}
+
+
+async function saveChanges() {
+    console.log("Saving changes...");
+
+    // Lấy thông tin SM item hiện tại
+    const smItems = smList[currentSmIndex].sm_items; 
+    console.log(`Saving changes for SM item index: ${currentSmIndex}`, smItems);
+
+    for (const smItem of smItems) {
+        const productId = smItem.id; // ID sản phẩm trong sm_items
+        const quantityToSubtract = smItem.quantity; // Số lượng cần trừ
+        console.log(`Processing item ID: ${productId} with quantity to subtract: ${quantityToSubtract}`);
+
+        // Tìm sản phẩm tương ứng trong `currentlist` (storage)
+        const productInStock = currentlist.find(product => product.identify === productId);
+
+        if (productInStock) {
+            console.log(`Found product ID: ${productId} in stock with current quantity: ${productInStock.qa}`);
+            const newQuantity = quantityToSubtract;
+
+            // Log số lượng sau khi trừ
+            console.log(`Updating product ID: ${productId} from ${productInStock.qa} to ${newQuantity}`);
+
+            // Cập nhật số lượng mới vào productInStock
+            productInStock.qa = newQuantity;
+
+            // Gọi API cập nhật số lượng sản phẩm trong storage
+            await apiSubstractProductQuantity(productInStock);
+
+        } else {
+            console.warn(`Product ID: ${productId} not found in stock.`);
+        }
+    }
+
+    
+}
+
+
+
+

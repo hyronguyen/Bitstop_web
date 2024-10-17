@@ -30,7 +30,7 @@ export const CreateANewOrder = async (req, res) => {
 
         const newSMDoc = {
             sm_items: items,           
-            sm_des: 'Output for order: ' + docRef.id,               
+            sm_des: 'Output for order:' + docRef.id,               
             sm_type:  'Output',            
             sm_status: 'Processing',     
             sm_date: new Date(),

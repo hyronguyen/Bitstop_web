@@ -379,6 +379,29 @@ async function apiUpdateProductQuantity(product) {
   }
 }
 
+//Trừ số lượng kho
+async function apiSubstractProductQuantity(product) {
+  try {
+    const response = await axios({
+      method: 'PUT',
+      url: `${URL}/api/storage/substract_StorageQuantity`,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: {
+        identify: product.identify,
+        qa: product.qa,
+      },
+    });
+
+    if (response.status === 200) {
+      console.log('Product quantity updated in storage:', response.data);
+    }
+  } catch (error) {
+    console.error('Error updating product quantity:', error.message);
+  }
+}
+
 // cập nhật trạng thái
 async function apiUpdatePurchaseStatus(purchaseId) {
   try {
@@ -422,5 +445,51 @@ async function apiCreateSMInput(purchaseId, smItems) {
       }
   } catch (error) {
       console.error('Error creating SM Input:', error.message);
+  }
+}
+
+async function apiGetSMItems() {
+  try {
+    const response = await axios({
+      method: 'GET',
+      url: `${URL}/api/sm/get_smItems`,  // Ensure the correct base URL is used
+    });
+
+    if (response.status === 200) {
+      const smItems = response.data;
+      return smItems;
+    } else {
+      console.error('Error fetching SM items: ', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error fetching SM items: ', error.message);
+  }
+}
+
+
+// Hàm API để cập nhật số lượng sản phẩm trong storage
+async function apiUpdateStockQuantity(productId, newQuantity) {
+  try {
+      const response = await fetch('/api/storage/update_StorageQuantity', { 
+          method: 'PUT', // PUT hoặc POST tùy thuộc vào yêu cầu API
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+              productId: productId,
+              newQuantity: newQuantity
+          })
+      });
+
+      if (!response.ok) {
+          throw new Error(`Failed to update stock for product ID: ${productId}`);
+      }
+
+      const data = await response.json(); // Giả định rằng API trả về JSON
+      console.log('API Response:', data);
+      return data; // Trả về dữ liệu từ API nếu cần
+  } catch (error) {
+      console.error(`Error in API call for product ID: ${productId}`, error);
+      throw error; // Bắn lỗi lên để xử lý bên ngoài
   }
 }

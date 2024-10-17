@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (event.target.id === 'listpur-tab') {
       renderPurchases();
     }
-  });
+     });
 
       
   }
