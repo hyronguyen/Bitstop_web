@@ -86,6 +86,7 @@ async function LoadProductsByPlatform(platform) {
 //Load product dựa trên category
 async function LoadProductsByCategory(category) {
     try {
+           
         const response = await apigetProductsByCategory(category);
         const productList = response.map(product => {
             return new Product(
@@ -161,26 +162,24 @@ function DisplayProducts(products) {
 
 //Filter dự trên platform
 function FilterbyPlat(){
-    const platLinks = document.querySelectorAll('.main-nav-list.child a');
+    const platLinks = document.querySelectorAll('.main-nav-list.child:not(.cate-filter) a'); // Select only platform links
     platLinks.forEach(link => {
         link.addEventListener('click', (event) => {
             event.preventDefault();
 
             const plat = link.textContent.trim();
+            console.log(plat); // Optional: log the selected platform
 
-            if(plat=="All")
-            {
+            if(plat === "All") {
                 LoadProducts();
-            }
-            else
-            {
+            } else {
                 LoadProductsByPlatform(plat);
             }
         });
     });
 }
 
-//Filter dự trên category
+// Filter based on category
 function FilterbyCategory(){
     const cateLinks = document.querySelectorAll('.main-nav-list.child.cate-filter a');
     cateLinks.forEach(link => {
@@ -188,19 +187,17 @@ function FilterbyCategory(){
             event.preventDefault();
 
             const cate = link.textContent.trim();
-            console.log(cate);
+            console.log(cate); // Optional: log the selected category
 
-            if(cate=="All")
-            {
+            if(cate === "All") {
                 LoadProducts();
-            }
-            else
-            {
+            } else {
                 LoadProductsByCategory(cate);
             }
         });
     });
 }
+
 
 
 //Filter dự trên price

@@ -118,7 +118,7 @@ function toggleEditForm() {
         
             
     } catch (error) {
-        alert('Failed to update profile. Please try again.');
+        console.log('error');
     }
     
         toggleEditForm();

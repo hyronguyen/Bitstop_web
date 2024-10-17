@@ -90,9 +90,11 @@ async function apigetProductsByPlat(platform) {
       const Data = response.data;  
       return Data;
     }
-  } catch (error) {
-      console.error('Error:', error.message);
 
+  } catch (error) {
+    if(error.status === 404){
+      alert("No products of this platform");
+    }
   }
 }
 
@@ -108,9 +110,13 @@ async function apigetProductsByCategory(category) {
       const Data = response.data;  
       return Data;
     }
+
+    
   }
   catch (error){
-    console.error(error.message);
+    if(error.status === 404){
+      alert("No products of this category!");
+    }
   }
   
 }
@@ -267,12 +273,14 @@ async function apiEditProfile(docID, profileData) {
     if (response) {
       return response; 
     }
-    else {
-      console.log("No Response");
-    }
 
   } catch (error) {
-    console.log('Thất bại');
+    if (error.status === 400){
+      alert(error.response.data.message);
+    }
+    if (error.status === 404){
+      alert(error.response.data.message);
+    }
   }
 }
 
