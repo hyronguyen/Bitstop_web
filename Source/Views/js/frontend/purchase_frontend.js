@@ -60,7 +60,7 @@ async function LoadProducts() {
     return true;
   }
   
-  // Sự kiện khi nhập ID
+  //Sự kiện khi nhập ID
   function attachProductIdListener(row) {
     const productIdInput = row.querySelector(".product-id");
     const productNameInput = row.querySelector(".product-name");
