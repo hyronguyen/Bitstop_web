@@ -5,8 +5,20 @@ document.querySelector('#search_input_box form').addEventListener('submit', asyn
     if (searchInput) {
         // Fetch and display products
         const products = await apigetProductsByKeyword(searchInput);
+        const productList = products.map(items => {
+            return new Product(
+                items.id,
+                items.title,
+                items.category,
+                items.price,
+                items.platform,
+                items.img,
+                items.description,
+                items.quan
+            );
+        });
         
-        localStorage.setItem('searchResults', JSON.stringify(products));
+        localStorage.setItem('searchResults', JSON.stringify(productList));
         window.location.href = 'category.html';
     } else {
         alert('Please enter a search keyword.');

@@ -258,7 +258,7 @@ async function apiCreateOrder(orderData) {
       return response.data;  
     }
   } catch (error) {
-    console.error('Error creating order: ', error.message);
+    console.error('Error creating order: ', error.response.data.message);
   }
 }
 

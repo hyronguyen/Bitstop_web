@@ -280,6 +280,7 @@ function DeliveryChoice(){
 }
 
 async function CheckOut() {
+    debugger
     const customerName = document.getElementById('customer_name').value.trim();
     const customerAddress = document.getElementById('customer_address').value.trim();
     const customerPhone = document.getElementById('customer_phone').value.trim();
@@ -350,7 +351,7 @@ async function CheckOut() {
                 const response = await apiCreateOrder(inforCheckout)
                 if(response){
                     alert('Đã tạo đơn thành công');
-                    window.location.href = 'index.html';
+                    window.location.href = 'tracking.html';
                 }
                 
             }

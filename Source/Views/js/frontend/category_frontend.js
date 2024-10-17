@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         console.log('Auth token is present. User is logged in.');
         currentdisplay = JSON.parse(localStorage.getItem('searchResults') || '[]');
+        console.log(currentdisplay);
 
         if (currentdisplay.length === 0) {
             LoadProducts();
@@ -112,35 +113,48 @@ function DisplayProducts(products) {
     const productContainer = document.querySelector('.lattest-product-area .row');
     productContainer.innerHTML = ''; 
 
-    products.forEach(product => {
+    // Arrays for available and sold-out products
+    const availableProducts = [];
+    const soldOut = [];
 
+    // Separate products into available and sold-out categories
+    products.forEach(product => {
+        if (product.quantity < 2) {
+            soldOut.push(product);  // Product is sold out or less than 2 in stock
+        } else {
+            availableProducts.push(product);  // Product is available
+        }
+    });
+
+    // Render available products (with "add to bag" button)
+    availableProducts.forEach(product => {
         const imageUrls = product.img.split(' ');
         const firstImageUrl = imageUrls[0] || '';
 
         const productHTML = `
             <div class="col-lg-4 col-md-6">
-                <div class="single-product" >
-                    <img id="image_product" data-id="${product.id}" class="img-fluid product_image" src="${firstImageUrl}" alt="${product.title}" style="height:280px; weight:260px;object-fit:cover; cursor:pointer;">
+                <div class="single-product">
+                    <img id="image_product" data-id="${product.id}" class="img-fluid product_image" src="${firstImageUrl}" alt="${product.title}" style="height:280px; width:260px; object-fit:cover; cursor:pointer;">
                     <div class="product-details">
                         <h6>${product.title}</h6>
                         <div class="price">
                             <h6>${formatNumberWithCommas(product.price)} VND</h6>
-                            <h6 class="l-through">${formatNumberWithCommas(product.price *1.1 )|| 'N/A'} VND</h6>
+                            <h6 class="l-through">${formatNumberWithCommas(product.price * 1.1) || 'N/A'} VND</h6>
                         </div>
                         <div class="prd-bottom">
-                            <a  class="social-info">
+                            <a class="social-info">
                                 <span class="ti-bag"></span>
                                 <p class="hover-text">add to bag</p>
                             </a>
-                            <a  class="social-info">
+                            <a class="social-info">
                                 <span class="lnr lnr-heart"></span>
                                 <p class="hover-text">Wishlist</p>
                             </a>
-                            <a  class="social-info">
+                            <a class="social-info">
                                 <span class="lnr lnr-sync"></span>
                                 <p class="hover-text">compare</p>
                             </a>
-                            <a  class="social-info">
+                            <a class="social-info">
                                 <span class="lnr lnr-move"></span>
                                 <p class="hover-text">view more</p>
                             </a>
@@ -152,8 +166,45 @@ function DisplayProducts(products) {
         productContainer.innerHTML += productHTML;
     });
 
-    setupAddToCartButtons();
+    // Render sold-out products (with grayscale and no "add to bag" button)
+    soldOut.forEach(product => {
+        const imageUrls = product.img.split(' ');
+        const firstImageUrl = imageUrls[0] || '';
+
+        const productHTML = `
+            <div class="col-lg-4 col-md-6">
+                <div class="single-product">
+                    <img id="image_product" data-id="${product.id}" class="img-fluid product_image" src="${firstImageUrl}" alt="${product.title}" style="height:280px; width:260px; object-fit:cover; cursor:pointer; filter: grayscale(100%);">
+                    <div class="product-details">
+                        <h6>${product.title} - Sold out</h6>
+                        <div class="price">
+                            <h6>${formatNumberWithCommas(product.price)} VND</h6>
+                            <h6 class="l-through">${formatNumberWithCommas(product.price * 1.1) || 'N/A'} VND</h6>
+                        </div>
+                        <div class="prd-bottom">
+                            <a class="social-info">
+                                <span class="lnr lnr-heart"></span>
+                                <p class="hover-text">Wishlist</p>
+                            </a>
+                            <a class="social-info">
+                                <span class="lnr lnr-sync"></span>
+                                <p class="hover-text">compare</p>
+                            </a>
+                            <a class="social-info">
+                                <span class="lnr lnr-move"></span>
+                                <p class="hover-text">view more</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        productContainer.innerHTML += productHTML;
+    });
+
+    setupAddToCartButtons();  // Initialize event listeners for the "add to bag" button
 }
+
 
 //#endregion
 
@@ -258,6 +309,7 @@ function addEventToProductImages() {
 
 function setupAddToCartButtons() {
      const addToCartButtons = document.querySelectorAll('.ti-bag'); 
+     
 
      // Iterate over each button and add an event listener
      addToCartButtons.forEach(button => {
