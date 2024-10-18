@@ -1,0 +1,78 @@
+<!--Game-->
+<!doctype html>
+<html lang="en">
+
+<head>
+    <link rel="icon" href="../../../../public/img/fb_logo.png" />
+    <title>Facebook</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!--CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        .unitygame_canvas {
+            width: 960px;
+            height: 600px;
+            margin-top: 70px;
+            margin-bottom: 100px;
+            border-radius: 20px;
+            box-shadow: 0px 0px 10px 5px grey;
+        }
+
+        .unity_gametitle {
+            color: #58629B;
+        }
+    </style>
+
+</head>
+
+<body class="text-center">
+    <section id="game">
+        <h1 class="unity_gametitle"> <b>TRASH FALL - ĐỪNG ĐỂ RÁCH RƠI</b></h1>
+        <canvas id="unity-canvas" class="unitygame_canvas" width=960 height=600></canvas>
+        <script src="Build/DungDeRacRoi_TrashFall.loader.js"></script>
+        <script>
+            if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+                var meta = document.createElement('meta');
+                meta.name = 'viewport';
+                meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+                document.getElementsByTagName('head')[0].appendChild(meta);
+            }
+            createUnityInstance(document.querySelector("#unity-canvas"), {
+                dataUrl: "Build/DungDeRacRoi_TrashFall.data",
+                frameworkUrl: "Build/DungDeRacRoi_TrashFall.framework.js",
+                codeUrl: "Build/DungDeRacRoi_TrashFall.wasm",
+                streamingAssetsUrl: "StreamingAssets",
+                companyName: "Nhom7_LapTrinhWeb",
+                productName: "Đừng Để Rác Rơi",
+                productVersion: "1.0",
+            });
+        </script>
+        </script>
+    </section>
+    <!-- Script-->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script async defer crossorigin="anonymous"
+        src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v18.0&appId=312188944597611"
+        nonce="l02TyCPA"></script>
+</body>
+</html>

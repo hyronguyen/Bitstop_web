@@ -15,7 +15,7 @@
 	<!-- meta character set -->
 	<meta charset="UTF-8">
 	<!-- Site Title -->
-	<title>Karma Shop</title>
+	<title>Bitstop</title>
 
 	<!--
 		CSS
@@ -116,21 +116,10 @@
 					<div class="details_item">
 						<h4>Order Info</h4>
 						<ul class="list">
-							<li><a href="#"><span>Order number</span> : 60235</a></li>
-							<li><a href="#"><span>Date</span> : Los Angeles</a></li>
-							<li><a href="#"><span>Total</span> : USD 2210</a></li>
-							<li><a href="#"><span>Payment method</span> : Check payments</a></li>
-						</ul>
-					</div>
-				</div>
-				<div class="col-lg-4">
-					<div class="details_item">
-						<h4>Billing Address</h4>
-						<ul class="list">
-							<li><a href="#"><span>Street</span> : 56/8</a></li>
-							<li><a href="#"><span>City</span> : Los Angeles</a></li>
-							<li><a href="#"><span>Country</span> : United States</a></li>
-							<li><a href="#"><span>Postcode </span> : 36952</a></li>
+							<li><a href="#"><span>Order ID</span> : <span id="order_id">60235</span></a></li>
+							<li><a href="#"><span>Date</span> : <span id="order_date">Los Angeles</span></a></li>
+							<li><a href="#"><span>Total</span> : <span id="order_total">USD 2210</span></a></li>
+							<li><a href="#"><span>Payment method</span> : <span id="order_payment">Check payments</span></a></li>
 						</ul>
 					</div>
 				</div>
@@ -138,10 +127,8 @@
 					<div class="details_item">
 						<h4>Shipping Address</h4>
 						<ul class="list">
-							<li><a href="#"><span>Street</span> : 56/8</a></li>
-							<li><a href="#"><span>City</span> : Los Angeles</a></li>
-							<li><a href="#"><span>Country</span> : United States</a></li>
-							<li><a href="#"><span>Postcode </span> : 36952</a></li>
+							<li><a href="#"><span>Address</span> : <span id="shipping_address">56/8</span></a></li>
+							<li><a href="#"><span>Phone</span> : <span id="shipping_phone">00000</span></a></li>
 						</ul>
 					</div>
 				</div>
@@ -157,79 +144,32 @@
 								<th scope="col">Total</th>
 							</tr>
 						</thead>
-						<tbody>
-							<tr>
-								<td>
-									<p>Pixelstore fresh Blackberry</p>
-								</td>
-								<td>
-									<h5>x 02</h5>
-								</td>
-								<td>
-									<p>$720.00</p>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<p>Pixelstore fresh Blackberry</p>
-								</td>
-								<td>
-									<h5>x 02</h5>
-								</td>
-								<td>
-									<p>$720.00</p>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<p>Pixelstore fresh Blackberry</p>
-								</td>
-								<td>
-									<h5>x 02</h5>
-								</td>
-								<td>
-									<p>$720.00</p>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<h4>Subtotal</h4>
-								</td>
-								<td>
-									<h5></h5>
-								</td>
-								<td>
-									<p>$2160.00</p>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<h4>Shipping</h4>
-								</td>
-								<td>
-									<h5></h5>
-								</td>
-								<td>
-									<p>Flat rate: $50.00</p>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<h4>Total</h4>
-								</td>
-								<td>
-									<h5></h5>
-								</td>
-								<td>
-									<p>$2210.00</p>
-								</td>
-							</tr>
+						<tbody id="order_items">
+							<!-- Sẽ được điền vào từ script -->
 						</tbody>
+						<tfoot>
+							<tr>
+								<td><h4>Subtotal</h4></td>
+								<td></td>
+								<td><p id="order_subtotal">$2160.00</p></td>
+							</tr>
+							<tr>
+								<td><h4>Shipping</h4></td>
+								<td></td>
+								<td><p>Flat rate: $50.00</p></td>
+							</tr>
+							<tr>
+								<td><h4>Total</h4></td>
+								<td></td>
+								<td><p id="order_final_total">$2210.00</p></td>
+							</tr>
+						</tfoot>
 					</table>
 				</div>
 			</div>
 		</div>
 	</section>
+	
 	<!--================End Order Details Area =================-->
 
 	<!-- start footer Area -->
@@ -326,6 +266,13 @@
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>
 	<script src="js/gmaps.min.js"></script>
 	<script src="js/main.js"></script>
+
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<script src="js/api.js"></script>
+	<script src="./class/class.js"></script>
+	<script src="js/search_engine.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+    <script src="js/frontend/confirmation_frontend.js"></script>
 </body>
 
 </html>

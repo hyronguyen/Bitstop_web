@@ -36,10 +36,9 @@ console.log(error)
 }
 }
 
+// Hiện thị danh sách sản phẩm
 function displayOrders(orders) {
     const orderListContainer = document.querySelector('.order-list');
-    
-    // Clear any existing content
     orderListContainer.innerHTML = '';
 
     orders.forEach(order => {
@@ -80,6 +79,11 @@ function displayOrders(orders) {
         const viewDetailsButton = document.createElement('button');
         viewDetailsButton.classList.add('btn', 'btn-primary');
         viewDetailsButton.innerText = 'View Details';
+
+        viewDetailsButton.addEventListener('click', () => {
+            window.location.href = `confirmation.html?orderId=${order.id}`;
+        });
+
         orderBody.appendChild(viewDetailsButton);
 
         // Append header and body to the order card

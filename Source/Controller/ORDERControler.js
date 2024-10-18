@@ -78,6 +78,31 @@ export const GetOrderByCID = async (req, res) => {
     }
 };
 
+// lấy order theo id order
+export const GetOrderByID = async (req, res) => {
+    const { orderId } = req.params;
+
+    if (!orderId) {
+        return res.status(400).json({ error: 'Missing orderId' });
+    }
+
+    try {
+        // Lấy tài liệu theo document ID (orderId)
+        const orderDocRef = doc(db, 'ORDERS', orderId);  
+        const orderDoc = await getDoc(orderDocRef);  // Sử dụng getDoc để lấy tài liệu
+
+        if (!orderDoc.exists()) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+
+        // Trả về thông tin đơn hàng
+        res.status(200).json({ id: orderDoc.id, ...orderDoc.data() });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
 // Tham chiếu tất cả đơn hàng
 export const GetAllOrder = async (req, res) => {
     try {

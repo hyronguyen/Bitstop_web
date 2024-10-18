@@ -175,6 +175,23 @@ async function apigetOrdersByCustomerId(customerId) {
   }
 }
 
+// API lấy order theo ID Order
+async function apigetOrdersById(Id) {
+  try {
+    const response = await axios({
+      method: 'GET',
+      url: `${URL}/api/orders/get_OrderByID/${Id}`,
+    });
+    
+    if (response.status === 200) {
+      const orders = response.data;
+      return orders;
+    }
+  } catch (error) {
+    console.error('Error fetching orders by customer ID: ', error.message);
+  }
+}
+
 // lấy tất cả order
 async function apigetAllOrders() {
   try {
