@@ -510,3 +510,60 @@ async function apiUpdateStockQuantity(productId, newQuantity) {
       throw error; // Bắn lỗi lên để xử lý bên ngoài
   }
 }
+
+
+
+async function apiUpdateSMStatus(sm_id, sm_status) {
+  try {
+      const response = await axios({
+          method: 'PUT',
+          url: `${URL}/api/sm/update_SMStatus`, 
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          data: {
+              sm_id: sm_id,
+              sm_status: sm_status,
+          },
+      });
+
+      if (response.status === 200) {
+          console.log('SM status updated successfully:', response.data);
+      }
+  } catch (error) {
+      console.error('Error updating SM status:', error.message);
+  }
+}
+
+
+async function apiGetDoneSMItems() {
+  try {
+    const response = await axios({
+      method: 'GET',
+      url: `${URL}/api/sm/get_DoneSMItems`,  // Ensure the correct base URL is used
+    });
+
+    if (response.status === 200) {
+      const smItems = response.data;
+      return smItems;
+    } else {
+      console.error('Error fetching SM items: ', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error fetching SM items: ', error.message);
+  }
+}
+
+
+async function apiUpdateProductStockQuantity(productId, newQuantity) {
+  try {
+      const response = await axios.put('/api/storage/update_EditStockQuantity', {
+          productId: productId,
+          newQuantity: newQuantity
+      });
+      console.log('Updated product quantity:', response.data);
+  } catch (error) {
+      console.error('Error updating product quantity:', error);
+  }
+}
+

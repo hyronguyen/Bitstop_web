@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import {  getStorgeItems,getPurchaseItems,updateStorageQuantity,updatePurchaseStatus,createSMInput,subtractStorageQuantity } from '../Controller/STORAGEController.js';
+import {  getStorgeItems,getPurchaseItems,updateStorageQuantity,updatePurchaseStatus,createSMInput,subtractStorageQuantity,updateEditStockQuantity } from '../Controller/STORAGEController.js';
 import { authMiddleware } from '../Middleware/authMiddleware.js';
 
 const storageRouter = Router();
@@ -15,4 +15,7 @@ storageRouter.put('/substract_StorageQuantity', subtractStorageQuantity);
 storageRouter.put('/update_PurchaseStatus', updatePurchaseStatus);
 
 storageRouter.post('/update_createSMInput', createSMInput);
+
+storageRouter.put('/update_EditStockQuantity',updateEditStockQuantity);
+
 export default storageRouter;
