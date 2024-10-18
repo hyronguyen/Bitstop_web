@@ -1,5 +1,6 @@
-import { collection, query, where, getDocs,addDoc, doc ,getDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs,addDoc, doc ,getDoc,updateDoc } from 'firebase/firestore';
 import db from '../Configs/firestore.js';
+import {createOrderPDF} from "../Utils/pdfMaker.js";
 
 
 // Tạo đơn hành mới
@@ -12,6 +13,7 @@ export const CreateANewOrder = async (req, res) => {
 
     try {
         const orderData = {
+            or_invo:"",
             or_cid: customerId,
             or_name: customerName,
             or_address: customerAddress,
@@ -20,7 +22,7 @@ export const CreateANewOrder = async (req, res) => {
             or_items: items,
             or_date: new Date(),
             or_status: 'Processing',
-            or_payment:payment
+            or_payment:payment || 'No method'
         };
 
 
@@ -36,6 +38,12 @@ export const CreateANewOrder = async (req, res) => {
         };
 
         const SMRef = await addDoc(collection(db,'SM'),newSMDoc);
+
+
+        const invoiceResult = await createOrderPDF(orderData,docRef.id);
+        await updateDoc(doc(db, 'ORDERS', docRef.id), {
+            or_invo: invoiceResult.fileURL // Update the pur_invo field with the fileURL
+        });
 
         res.status(201).json({ message: `Order created with ID: ${docRef.id} and resquest ${SMRef.id}` });
     } catch (error) {

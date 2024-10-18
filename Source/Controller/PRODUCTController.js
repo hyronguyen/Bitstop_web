@@ -1,32 +1,7 @@
 import { collection, query, where, getDocs,addDoc, doc ,getDoc } from 'firebase/firestore';
 import db from '../Configs/firestore.js';
 
-// Lấy tất cả sản phẩm
-export const getAllProduct = async (req, res) => {
-    try {
-        const productsCollection = collection(db, 'PRODUCTS');
-        const productsSnapshot = await getDocs(productsCollection);
 
-       
-        const productsList = productsSnapshot.docs.map(doc => {
-            const data = doc.data();
-            return {
-                id: doc.id,  
-                title: data.pro_title || "No title",  
-                category: data.pro_category || "No category",
-                price: data.pro_price || 0,
-                platform: data.pro_platform || "Unknown platform",
-                img: data.pro_img || "No image available",
-                des: data.pro_des || "No description",
-                quan: data.pro_qa
-            };
-        });
-
-        res.json(productsList);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
 
 // thêm sản phẩm
 export const addNewProduct = async (req, res) => {
@@ -89,6 +64,46 @@ export const addNewProduct = async (req, res) => {
     }
 };
 
+//#region Tìm kiếm
+// Lấy tất cả sản phẩm
+export const getAllProduct = async (req, res) => {
+    try {
+        const productsCollection = collection(db, 'PRODUCTS');
+        const productsSnapshot = await getDocs(productsCollection);
+
+        const productsList = await Promise.all(productsSnapshot.docs.map(async doc => {
+            const data = doc.data();
+
+            // Query the STORAGE collection for matching sto_product (product ID)
+            const storageCollection = collection(db, 'STORAGE');
+            const storageQuery = query(storageCollection, where('sto_product', '==', doc.id));
+            const storageSnapshot = await getDocs(storageQuery);
+            
+            // Default quantity if not found
+            let quan = "Unknown quantity";
+            if (!storageSnapshot.empty) {
+                const storageData = storageSnapshot.docs[0].data();  // Assuming one matching entry
+                quan = storageData.sto_qa || quan;
+            }
+
+            return {
+                id: doc.id,  
+                title: data.pro_title || "No title",  
+                category: data.pro_category || "No category",
+                price: data.pro_price || 0,
+                platform: data.pro_platform || "Unknown platform",
+                img: data.pro_img || "No image available",
+                des: data.pro_des || "No description",
+                quan  // Use the retrieved quantity from STORAGE
+            };
+        }));
+
+        res.json(productsList);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 // lấy sản phẩm theo platform
 export const getProductbyPlatform = async (req, res) => {
     try {
@@ -96,127 +111,166 @@ export const getProductbyPlatform = async (req, res) => {
         const productsCollection = collection(db, 'PRODUCTS');
         const querySnapshot = await getDocs(productsCollection);
 
-        const products = querySnapshot.docs
-            .map(doc => {
-                const data = doc.data(); 
-                const platforms = data.pro_platform ? data.pro_platform.split(',') : []; // Split platforms by commas
-                
-                // If the product is available on the platform, include it in the result
-                if (platforms.includes(productPlat)) {
-                    return {
-                        id: doc.id,
-                        title: data.pro_title || "No title",  
-                        category: data.pro_category || "No category",
-                        price: data.pro_price || 0,
-                        platform: data.pro_platform || "Unknown platform",
-                        img: data.pro_img || "No image available",
-                        des: data.pro_des || "No description available",
-                        quan: data.pro_qa
-                    };
-                }
-                return null;
-            })
-            .filter(product => product !== null); // Filter out null results
-
-        res.status(200).json(products);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
-// Lấy sản phẩm theo Keyword
-export const getProductByKeyword = async (req, res) => {
-    try {
-        const { keyword } = req.params;
-        const keywordArray = keyword.toLowerCase().split(' ');  
-     
-        const productsCollection = collection(db, 'PRODUCTS');
-
-      
-        const querySnapshot = await getDocs(productsCollection);
-
         const products = [];
 
+        for (const doc of querySnapshot.docs) {
+            const data = doc.data(); 
+            const platforms = data.pro_platform ? data.pro_platform.split(',') : [];
 
-        querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            const titleLower = data.pro_title.toLowerCase();
+            if (platforms.includes(productPlat)) {
+                // Fetch corresponding quantity from STORAGE
+                const storageCollection = collection(db, 'STORAGE');
+                const storageQuery = query(storageCollection, where('sto_product', '==', doc.id));
+                const storageSnapshot = await getDocs(storageQuery);
 
-     
-            const anyKeywordPresent = keywordArray.some(keyword => titleLower.includes(keyword));
+                let quan = data.pro_qa;  // Default to product's quantity from PRODUCTS
+                if (!storageSnapshot.empty) {
+                    const storageData = storageSnapshot.docs[0].data();
+                    quan = storageData.sto_qa || quan;  // Update with STORAGE quantity if available
+                }
 
-            if (anyKeywordPresent) {
                 products.push({
                     id: doc.id,
-                    title: data.pro_title || "No title",  
+                    title: data.pro_title || "No title",
                     category: data.pro_category || "No category",
                     price: data.pro_price || 0,
                     platform: data.pro_platform || "Unknown platform",
                     img: data.pro_img || "No image available",
                     des: data.pro_des || "No description",
-                    quan: data.pro_qa
+                    quan  // Updated quan value
                 });
             }
-        });
-
-       
-        if (products.length === 0) {
-            return res.status(404).json({ message: 'Không tìm thấy sản phẩm phù hợp với từ khóa.' });
         }
 
-       
+        if (products.length === 0) {
+            return res.status(404).json({ message: 'Không tìm thấy sản phẩm phù hợp với nền tảng.' });
+        }
+
         res.status(200).json(products);
     } catch (error) {
-    
         res.status(500).json({ error: error.message });
     }
 };
 
+
+// Lấy sản phẩm theo Keyword
+export const getProductByKeyword = async (req, res) => {
+    try {
+        const { keyword } = req.params;
+        const keywordArray = keyword.toLowerCase().split(' ');
+        const productsCollection = collection(db, 'PRODUCTS');
+        const querySnapshot = await getDocs(productsCollection);
+
+        const products = [];
+
+        for (const doc of querySnapshot.docs) {
+            const data = doc.data();
+            const titleLower = data.pro_title.toLowerCase();
+            const anyKeywordPresent = keywordArray.some((kw) => titleLower.includes(kw));
+
+            if (anyKeywordPresent) {
+                // Fetch corresponding quantity from STORAGE
+                const storageCollection = collection(db, 'STORAGE');
+                const storageQuery = query(storageCollection, where('sto_product', '==', doc.id));
+                const storageSnapshot = await getDocs(storageQuery);
+
+                let quan = data.pro_qa;  // Default to the product quantity from PRODUCTS
+                if (!storageSnapshot.empty) {
+                    const storageData = storageSnapshot.docs[0].data();
+                    quan = storageData.sto_qa || quan;  // Update with STORAGE quantity if available
+                }
+
+                products.push({
+                    id: doc.id,
+                    title: data.pro_title || "No title",
+                    category: data.pro_category || "No category",
+                    price: data.pro_price || 0,
+                    platform: data.pro_platform || "Unknown platform",
+                    img: data.pro_img || "No image available",
+                    des: data.pro_des || "No description",
+                    quan  // Updated quan value
+                });
+            }
+        }
+
+        if (products.length === 0) {
+            return res.status(404).json({ message: 'Không tìm thấy sản phẩm phù hợp với từ khóa.' });
+        }
+
+        res.status(200).json(products);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
+
 //lấy sản phẩm theo ID
 export const getProductById = async (req, res) => {
     try {
-        const { DocID } = req.params; 
-
+        const { DocID } = req.params;
 
         const proDocRef = doc(db, 'PRODUCTS', DocID);
-        const proDoc = await getDoc(proDocRef); 
+        const proDoc = await getDoc(proDocRef);
 
         if (proDoc.exists()) {
             const proData = proDoc.data();
+
+            // Fetch corresponding quantity from STORAGE
+            const storageCollection = collection(db, 'STORAGE');
+            const storageQuery = query(storageCollection, where('sto_product', '==', DocID));
+            const storageSnapshot = await getDocs(storageQuery);
+
+            let quan = proData.pro_qa;  // Default to product's quantity from PRODUCTS
+            if (!storageSnapshot.empty) {
+                const storageData = storageSnapshot.docs[0].data();
+                quan = storageData.sto_qa || quan;  // Update with STORAGE quantity if available
+            }
+
             res.status(200).json({
                 id: proDoc.id,
-                title: proData.pro_title || "No title",  
+                title: proData.pro_title || "No title",
                 category: proData.pro_category || "No category",
                 price: proData.pro_price || 0,
                 platform: proData.pro_platform || "Unknown platform",
                 img: proData.pro_img || "No image available",
                 des: proData.pro_des || "No description available",
-                quan: proData.pro_qa
+                quan  // Updated quan value
             });
         } else {
             res.status(404).json({ message: "Product not found" });
         }
 
     } catch (error) {
-        res.status(500).json({ message: `Error fetching product: ${error.message}` });  
+        res.status(500).json({ message: `Error fetching product: ${error.message}` });
     }
 };
+
+
 
 // Lấy sản phẩm theo category
 export const getProductByCategory = async (req, res) => {
     try {
         const { category } = req.params;
-
         const productsCollection = collection(db, 'PRODUCTS');
-        
         const q = query(productsCollection, where('pro_category', '==', category));
-
         const querySnapshot = await getDocs(q);
 
         const products = [];
 
-        querySnapshot.forEach((doc) => {
+        for (const doc of querySnapshot.docs) {
             const data = doc.data();
+
+            // Fetch corresponding quantity from STORAGE
+            const storageCollection = collection(db, 'STORAGE');
+            const storageQuery = query(storageCollection, where('sto_product', '==', doc.id));
+            const storageSnapshot = await getDocs(storageQuery);
+
+            let quan = data.pro_qa;  // Default to product's quantity from PRODUCTS
+            if (!storageSnapshot.empty) {
+                const storageData = storageSnapshot.docs[0].data();
+                quan = storageData.sto_qa || quan;  // Update with STORAGE quantity if available
+            }
 
             products.push({
                 id: doc.id,
@@ -225,18 +279,23 @@ export const getProductByCategory = async (req, res) => {
                 price: data.pro_price || 0,
                 platform: data.pro_platform || "Unknown platform",
                 img: data.pro_img || "No image available",
-                des: data.pro_des || "No description available",
-                quan: data.pro_qa
+                des: data.pro_des || "No description",
+                quan  // Updated quan value
             });
-        });
+        }
 
-        // Send the products as the response
+        if (products.length === 0) {
+            return res.status(404).json({ message: 'Không tìm thấy sản phẩm trong danh mục.' });
+        }
+
         res.status(200).json(products);
     } catch (error) {
-        // Handle any errors
         res.status(500).json({ message: 'Error retrieving products by category', error: error.message });
     }
 };
+
+
+//#endregion
 
 // xóa sản phẩm theo ID
 export const deleteProductById = async (req, res) =>{

@@ -1,6 +1,6 @@
 import { collection, query, where, getDocs,addDoc, doc ,getDoc,updateDoc } from 'firebase/firestore';
 import db from '../Configs/firestore.js';
-import createPurchaseInvoice from "../Utils/pdfMaker.js";
+import {createPurchaseInvoice} from "../Utils/pdfMaker.js";
 
 // Tạo đơn hàng purchase mới
 export const CreateANewPurchaseOrder = async (req, res) => {
