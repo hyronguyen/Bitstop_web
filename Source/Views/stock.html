@@ -62,45 +62,52 @@
       <button class="nav-link" id="output-tab" data-bs-toggle="tab" data-bs-target="#output" type="button" role="tab">Output Request</button>
     </li>
 
+    <!-- Button for switching to Done Output tab -->
+<li class="nav-item" role="presentation">
+  <button class="nav-link" id="doneoutput-tab-btn" data-bs-toggle="tab" data-bs-target="#doneoutput-tab" type="button" role="tab" aria-controls="doneoutput-tab" aria-selected="false">Done Output</button>
+</li>
+
+    </li>
   </ul>
 
   
   
   <div class="tab-content" id="crudTabContent">
     <!-- List Tab -->
-    <div class="tab-pane fade show active" id="list" role="tabpanel">
-      <table class="table table-bordered table-striped mt-2">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Title</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Platform</th>
-            <th>Identify</th>
-            <th>QA</th>
-            <th>Image</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="product-list-stock">
-          <!-- List products go here -->
-          <tr>
-            <td>1</td>
-            <td>Sample Product</td>
-            <td>Electronics</td>
-            <td>$299</td>
-            <td>Online</td>
-            <td>High-quality headphones</td>
-            <td>10 items in stock</td>
-            <td><img src="https://via.placeholder.com/50" alt="Product Image"></td>
-            <td>
-              <button class="btn btn-primary btn-sm" onclick="editProduct(1)">Edit</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+<div class="tab-pane fade show active" id="list" role="tabpanel">
+  <table class="table table-bordered table-striped mt-2">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Title</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Platform</th>
+        <th>Identify</th>
+        <th>QA</th>
+        <th>Image</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="product-list-stock">
+      <!-- Sample row for products -->
+      <tr id="product-1">
+        <td>1</td>
+        <td>Sample Product</td>
+        <td>Electronics</td>
+        <td>$299</td>
+        <td>Online</td>
+        <td>High-quality headphones</td>
+        <td id="qa-1">10 items in stock</td>
+        <td><img src="https://via.placeholder.com/50" alt="Product Image"></td>
+        <td>
+          <button class="btn btn-primary btn-sm" onclick="editProduct(1)">Edit</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
 
     <!-- Edit Tab (Hidden Initially) -->
     <div class="tab-pane fade" id="edit" role="tabpanel">
@@ -336,6 +343,25 @@
     </div>
     </div>
   </div>
+</div>
+
+<!-- DONE SMs Tab -->
+<div class="tab-pane fade" id="doneoutput-tab" role="tabpanel">
+  <table class="table table-bordered table-striped mt-2">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Id</th>
+        <th>Date</th>
+        <th>Description</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="product-list-done">
+      <!-- SMs with status 'done' will be rendered here -->
+    </tbody>
+  </table>
 </div>
 
 

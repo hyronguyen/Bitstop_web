@@ -13,6 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
    
    // Render ra Invoce
    document.getElementById('checkNccId_btn').addEventListener('click', handleCheckInvoiceId);
+   // Khi tab Done Output được bấm, gọi hàm LoadDoneSMItems
+   document.getElementById('doneoutput-tab-btn').addEventListener('click', LoadDoneSMItems);
+
    // Xử lý nhập kho
    document.getElementById('add_btn').addEventListener('click', handleStockGoods);
 });
@@ -379,29 +382,29 @@ function viewDetails(index) {
 async function saveChanges() {
     console.log("Saving changes...");
 
-    // Lấy thông tin SM item hiện tại
-    const smItems = smList[currentSmIndex].sm_items; 
+    // Get the current SM item details
+    const smItems = smList[currentSmIndex].sm_items;
     console.log(`Saving changes for SM item index: ${currentSmIndex}`, smItems);
 
     for (const smItem of smItems) {
-        const productId = smItem.id; // ID sản phẩm trong sm_items
-        const quantityToSubtract = smItem.quantity; // Số lượng cần trừ
+        const productId = smItem.id; // ID of the product in sm_items
+        const quantityToSubtract = smItem.quantity; // Quantity to subtract
         console.log(`Processing item ID: ${productId} with quantity to subtract: ${quantityToSubtract}`);
 
-        // Tìm sản phẩm tương ứng trong `currentlist` (storage)
+        // Find the corresponding product in `currentlist` (storage)
         const productInStock = currentlist.find(product => product.identify === productId);
 
         if (productInStock) {
             console.log(`Found product ID: ${productId} in stock with current quantity: ${productInStock.qa}`);
             const newQuantity = quantityToSubtract;
 
-            // Log số lượng sau khi trừ
+            // Log the new quantity after subtraction
             console.log(`Updating product ID: ${productId} from ${productInStock.qa} to ${newQuantity}`);
 
-            // Cập nhật số lượng mới vào productInStock
+            // Update the new quantity in productInStock
             productInStock.qa = newQuantity;
 
-            // Gọi API cập nhật số lượng sản phẩm trong storage
+            // Call the API to update product quantity in storage
             await apiSubstractProductQuantity(productInStock);
 
         } else {
@@ -409,9 +412,88 @@ async function saveChanges() {
         }
     }
 
-    
+    // Once all items have been processed, update the SM status
+    smList[currentSmIndex].sm_status = "Done"; // Update the status to "Done"
+
+    // Retrieve the sm_id from the current SM item
+    const sm_id = smList[currentSmIndex].sm_id;
+
+    // Log the status change
+    console.log(`Updated SM status to "Done" for SM item with ID: ${sm_id}`);
+
+    // Call API to update the status in the database
+    await apiUpdateSMStatus(sm_id, 'Done');
+
+    // Show a success message to the user
+    alert("Stock has been successfully processed and SM status updated to 'Done'.");
+
+    // Optionally, re-render the updated SM list to reflect the status change in the UI
+    renderSMList(smList);
 }
 
 
 
+// Function to load SM items with status 'done' from the API and map them for rendering
+async function LoadDoneSMItems() {
+    try {
+        const smData = await apiGetDoneSMItems(); // Call the API to fetch SM items
 
+        // Lọc các mục có trạng thái 'done'
+        const doneSMList = smData.filter(item => item.sm_status === 'Done').map(item => {
+            return {
+                sm_id: item.sm_id,           // Stock Management ID
+                sm_date: item.sm_date,       // Date of the SM entry
+                sm_des: item.sm_des,         // Description
+                sm_status: item.sm_status,   // Status (done)
+                sm_type: item.sm_type,       // Type (Input/Output)
+                sm_items: item.sm_items,     // Items in the SM
+                sm_res: item.sm_res          // Resource
+            };
+        });
+
+        // Log the filtered list of 'done' SM items
+        console.log('Done SM List:', doneSMList);
+
+        // Render the list of 'done' SM items
+        renderDoneSMList(doneSMList);
+    } catch (error) {
+        console.error('Error loading Done SM items:', error);
+    }
+}
+
+// Function to render the list of 'done' SM items in a table
+function renderDoneSMList(smList) {
+    const doneSMTable = document.getElementById('product-list-done'); // Table body for 'done' SMs
+    doneSMTable.innerHTML = ''; // Clear the current list
+
+    smList.forEach((smItem, index) => {
+        // Format the date
+        const smDate = new Date(smItem.sm_date.seconds * 1000);
+        const formattedDate = smDate.toLocaleDateString('en-GB');
+
+        const row = `
+          <tr>
+            <td>${index + 1}</td>
+            <td>${smItem.sm_id}</td>
+            <td>${formattedDate}</td>
+            <td>${smItem.sm_des}</td>
+            <td>${smItem.sm_status}</td>
+            <td>
+              <button class="btn btn-primary btn-sm" onclick="viewDetails(${index})">View Details</button>
+            </td>
+          </tr>
+        `;
+        doneSMTable.innerHTML += row; // Append the new row to the table
+    });
+
+    console.log('Rendered Done SM List Table:', doneSMTable.innerHTML); // Log the rendered table
+}
+
+
+// Function to enable editing of the product's quantity
+function editProduct(productId) {
+    const newQuantity = prompt('Enter new quantity:'); // Hiển thị hộp thoại để nhập số lượng mới
+
+    // Gọi API cập nhật số lượng
+    apiUpdateProductStockQuantity(productId, parseInt(newQuantity, 10));
+}
