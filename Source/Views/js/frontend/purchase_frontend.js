@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
       
       const purchaseTab = document.getElementById('listpur-tab');
 
-     purchaseTab.addEventListener('shown.bs.tab', function(event) {
+   purchaseTab.addEventListener('shown.bs.tab', function(event) {
     if (event.target.id === 'listpur-tab') {
       renderPurchases();
     }

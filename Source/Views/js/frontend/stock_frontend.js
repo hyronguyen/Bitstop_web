@@ -7,17 +7,43 @@ let currentSmIndex = null; // Biến để lưu index của SM item hiện tại
 
 // When the page loads
 document.addEventListener('DOMContentLoaded', () => {
+
+
    LoadProducts();
    LoadPurchaseItems();
-   LoadSMItems();
+   
    
    // Render ra Invoce
    document.getElementById('checkNccId_btn').addEventListener('click', handleCheckInvoiceId);
    // Khi tab Done Output được bấm, gọi hàm LoadDoneSMItems
-   document.getElementById('doneoutput-tab-btn').addEventListener('click', LoadDoneSMItems);
-
    // Xử lý nhập kho
    document.getElementById('add_btn').addEventListener('click', handleStockGoods);
+
+   // Tab Output Request
+   const output = document.getElementById('output-tab');
+   output.addEventListener('shown.bs.tab', function(event) {
+    if (event.target.id === 'output-tab') {
+        LoadSMItems();
+    }
+     });
+
+    // Tab Output Done
+   const done = document.getElementById('doneoutput');
+   done.addEventListener('shown.bs.tab', function(event) {
+    if (event.target.id === 'doneoutput') {
+        LoadDoneSMItems();
+    }
+     });
+
+      // Tab Output Done
+   const stockproduct = document.getElementById('list-tab');
+   stockproduct.addEventListener('shown.bs.tab', function(event) {
+    if (event.target.id === 'list-tab') {
+        LoadProducts();
+    }
+     });
+
+
 });
 
 // Thêm sự kiện lắng nghe khi tab "Stock List" được nhấn
@@ -70,7 +96,7 @@ function renderProductList(productList) {
             <td>${product.qa}</td>
             <td><img src="${thumbnail}" alt="Product Image"  width="50" height="50" style="object-fit:cover"></td>
             <td>
-              <button class="btn btn-primary btn-sm" onclick="editProduct(${index})">Edit</button>
+              <button class="btn btn-primary btn-sm" onclick="editProduct('${product.identify}')">Edit</button>
             </td>
           </tr>
         `;
@@ -202,6 +228,7 @@ async function handleStockGoods(event) {
 
         // Lấy giá trị từ ô input invoiceId
         const purchaseId = document.getElementById('invoiceId').value;
+        
         const currentStatus = document.getElementById('invoiceStatus').value;  // Lấy trạng thái hiện tại
 
         if (!purchaseId) {
@@ -230,10 +257,10 @@ async function handleStockGoods(event) {
         }
 
         // Sau khi cập nhật kho thành công, cập nhật trạng thái đơn hàng
-        await updatePurchaseStatus(purchaseId);
+        updatePurchaseStatus(purchaseId);
 
         // Call the new function to create an SM input record
-        await handleCreateSMInput(purchaseId, invoiceItems);
+        handleCreateSMInput(purchaseId, invoiceItems);
         
         // Thông báo người dùng
         alert('Số lượng tồn đã được cập nhật và trạng thái đơn hàng đã chuyển sang "Delivered"');
@@ -253,6 +280,9 @@ async function updatePurchaseStatus(purchaseId) {
 
         // Gọi API để cập nhật trạng thái đơn hàng
         await apiUpdatePurchaseStatus(purchaseId);
+        const currentStatus = document.getElementById('invoiceStatus');
+        currentStatus.value = "Delivered";
+
     
     } catch (error) {
         console.error('Error updating purchase status:', error);
@@ -340,8 +370,6 @@ function renderSMList(smList) {
     console.log('Rendered SM List Table:', smListTable.innerHTML); // Log the final rendered HTML of the table
 }
 
-
-
 // xem chi tiết
 function viewDetails(index) {
     const smItem = smList[index]; 
@@ -377,7 +405,6 @@ function viewDetails(index) {
     const detailsModal = new bootstrap.Modal(document.getElementById('detailsModal'));
     detailsModal.show();
 }
-
 
 async function saveChanges() {
     console.log("Saving changes...");
@@ -430,8 +457,6 @@ async function saveChanges() {
     // Optionally, re-render the updated SM list to reflect the status change in the UI
     renderSMList(smList);
 }
-
-
 
 // Function to load SM items with status 'done' from the API and map them for rendering
 async function LoadDoneSMItems() {
@@ -490,10 +515,42 @@ function renderDoneSMList(smList) {
 }
 
 
-// Function to enable editing of the product's quantity
 function editProduct(productId) {
-    const newQuantity = prompt('Enter new quantity:'); // Hiển thị hộp thoại để nhập số lượng mới
-
-    // Gọi API cập nhật số lượng
-    apiUpdateProductStockQuantity(productId, parseInt(newQuantity, 10));
+    console.log('Editing product with ID:', productId);
+    
+    const newQuantity = prompt('Enter new quantity:');
+    console.log('Entered quantity:', newQuantity);
+    
+    if (newQuantity === null) {
+        console.log('User cancelled the prompt.');
+        return;
+    }
+    
+    if (isNaN(newQuantity) || newQuantity.trim() === '' || parseInt(newQuantity) < 0) {
+        alert('Please enter a valid positive number for the quantity.');
+        console.log('Invalid quantity entered:', newQuantity);
+        return;
+    }
+    
+    const quantity = parseInt(newQuantity);
+    console.log('Parsed quantity:', quantity);
+    
+    const confirmUpdate = confirm(`Are you sure you want to update the product quantity to ${quantity}?`);
+    console.log('User confirmation to update quantity:', confirmUpdate);
+    
+    if (confirmUpdate) {
+        console.log('About to call API with:', productId, quantity);  // Added log for debugging
+        apiUpdateEditStockQuantity(productId, quantity)
+            .then(response => {
+                console.log('API response:', response);
+                alert('Product quantity updated successfully!');
+                window.location.reload();
+            })
+            .catch(error => {
+                console.error('Error updating product quantity:', error.message);
+                alert('Failed to update product quantity. Please try again.');
+            });
+    } else {
+        alert('Product quantity update cancelled.');
+    }
 }

@@ -16,6 +16,8 @@ storageRouter.put('/update_PurchaseStatus', updatePurchaseStatus);
 
 storageRouter.post('/update_createSMInput', createSMInput);
 
-storageRouter.put('/update_EditStockQuantity',updateEditStockQuantity);
+storageRouter.put('/update_EditStockQuantity', updateEditStockQuantity);
+
+
 
 export default storageRouter;

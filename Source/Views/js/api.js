@@ -538,15 +538,26 @@ async function apiGetDoneSMItems() {
 }
 
 
-async function apiUpdateProductStockQuantity(productId, newQuantity) {
+async function apiUpdateEditStockQuantity(productId, editQuantity) {
   try {
-      const response = await axios.put('/api/storage/update_EditStockQuantity', {
-          productId: productId,
-          newQuantity: newQuantity
+      const response = await axios({
+          method: 'PUT',
+          url:`${URL}/api/storage/update_EditStockQuantity`, 
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          data: {
+              productId: productId,
+              editQuantity: editQuantity,
+          },
       });
-      console.log('Updated product quantity:', response.data);
+
+      if (response.status === 200) {
+          console.log('Product quantity updated successfully:', response.data);
+          return response.data;
+      }
   } catch (error) {
-      console.error('Error updating product quantity:', error);
+      console.error('Error updating product quantity:', error.message);
+      throw error;
   }
 }
-
