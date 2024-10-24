@@ -177,7 +177,6 @@ export const createSMInput = async (req, res) => {
 };
 
 
-
 export const updateEditStockQuantity = async (req, res) => {
     const { productId, editQuantity } = req.body;
 
