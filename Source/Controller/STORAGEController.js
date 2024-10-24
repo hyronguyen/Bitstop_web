@@ -178,34 +178,36 @@ export const createSMInput = async (req, res) => {
 
 
 
-// Controller để cập nhật số lượng sản phẩm trong kho
 export const updateEditStockQuantity = async (req, res) => {
-    const { productId, newQuantity } = req.body; // Lấy productId và số lượng mới từ request body
+    const { productId, editQuantity } = req.body;
+
+    // Validate input values
+    if (!productId) {
+        console.error('Product ID is required');
+        return res.status(400).json({ error: 'Product ID is required' });
+    }
+    if (editQuantity === undefined) {
+        console.error('Edit quantity is required');
+        return res.status(400).json({ error: 'Edit quantity is required' });
+    }
 
     try {
-        // Tạo tham chiếu đến collection 'STORAGE' trong Firestore
         const storageCollectionRef = collection(db, 'STORAGE');
-        
-        // Tạo query để tìm kiếm sản phẩm dựa trên productId (identify)
         const q = query(storageCollectionRef, where('sto_product', '==', productId));
         const querySnapshot = await getDocs(q);
 
-        // Kiểm tra nếu sản phẩm không tồn tại trong kho
         if (querySnapshot.empty) {
             console.log('Product not found in storage');
             return res.status(404).json({ error: 'Product not found in storage' });
         }
 
-        const storageDoc = querySnapshot.docs[0]; // Lấy document đầu tiên phù hợp với truy vấn
-
-        // Cập nhật số lượng mới cho sản phẩm
-        await updateDoc(storageDoc.ref, { sto_qa: newQuantity });
+        const storageDoc = querySnapshot.docs[0];
+        await updateDoc(storageDoc.ref, { sto_qa: editQuantity });
 
         console.log('Product quantity updated successfully');
         res.status(200).json({ message: 'Product quantity updated successfully in storage' });
     } catch (error) {
-        // Xử lý lỗi nếu có
-        console.error('Error updating product quantity:', error); 
+        console.error('Error updating product quantity:', error);
         res.status(500).json({ error: error.message });
     }
 };
