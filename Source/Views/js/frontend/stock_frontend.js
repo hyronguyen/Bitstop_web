@@ -2,7 +2,8 @@ let currentlist;
 let purchaseList = [];
 let invoiceItems = [];
 let smList = [];
-let currentSmIndex = null; // Biến để lưu index của SM item hiện tại
+let currentSmIndex = null;
+let doneSMList =[]; // Biến để lưu index của SM item hiện tại
 
 
 // When the page loads
@@ -88,7 +89,7 @@ function renderProductList(productList) {
         const row = `
           <tr>
             <td>${index + 1}</td>
-            <td>${product.title}</td>
+            <td>${capitalizeEachWord(product.title)}</td>
             <td>${product.category}</td>
             <td>${product.price}</td>
             <td>${product.platform}</td>
@@ -96,7 +97,7 @@ function renderProductList(productList) {
             <td>${product.qa}</td>
             <td><img src="${thumbnail}" alt="Product Image"  width="50" height="50" style="object-fit:cover"></td>
             <td>
-              <button class="btn btn-primary btn-sm" onclick="editProduct('${product.identify}')">Edit</button>
+              <button class="btn btn-primary btn-sm" onclick="editProduct('${product.identify}')"><i class="fa-solid fa-database"></i></button>
             </td>
           </tr>
         `;
@@ -324,9 +325,6 @@ async function LoadSMItems() {
             };
         });
 
-        // Log the mapped list before rendering
-        console.log('Mapped SM List:', smList);
-
         // Render the list of SM items after fetching
         renderSMList(smList);
     } catch (error) {
@@ -352,13 +350,16 @@ function renderSMList(smList) {
         const smDate = new Date(smItem.sm_date.seconds * 1000);
       const formattedDate = smDate.toLocaleDateString('en-GB');
 
+       // Get the status badge class
+       const statusBadgeClass = getOrderStatusBadge(smItem.sm_status);
+
         const row = `
           <tr>
             <td>${index + 1}</td>
             <td>${smItem.sm_id}</td>
             <td>${formattedDate}</td>
             <td>${smItem.sm_des}</td>
-            <td>${smItem.sm_status}</td>
+            <td><span class="badge ${statusBadgeClass}">${smItem.sm_status}</span></td>
             <td>
               <button class="btn btn-primary btn-sm" onclick="viewDetails(${index})">View Details</button>
             </td>
@@ -375,9 +376,11 @@ function viewDetails(index) {
     const smItem = smList[index]; 
 
     currentSmIndex = index; 
+    const smDate = new Date(smItem.sm_date.seconds * 1000);
+    const formattedDate = smDate.toLocaleDateString('en-GB');
 
     document.getElementById('smId').value = smItem.sm_id;
-    document.getElementById('smDate').value = smItem.sm_date;
+    document.getElementById('smDate').value = formattedDate;
     document.getElementById('smDescription').value = smItem.sm_des;
     document.getElementById('smRes').value = smItem.sm_res; // Resource field
     document.getElementById('smStatus').value = smItem.sm_status;
@@ -401,37 +404,76 @@ function viewDetails(index) {
         smItemsContainer.innerHTML += itemCard; // Append item details
     });
 
+    const acceptButton = document.getElementById('accpectbutton');
+    acceptButton.style.display = 'inline-block';
+
+    // Hiển thị modal
+    const detailsModal = new bootstrap.Modal(document.getElementById('detailsModal'));
+    detailsModal.show();
+}
+
+// xem chi tiết Done
+function viewDetailsDone(index) {
+    const smItem = doneSMList[index]; 
+
+    currentSmIndex = index; 
+
+    const smDate = new Date(smItem.sm_date.seconds * 1000);
+    const formattedDate = smDate.toLocaleDateString('en-GB');
+
+    document.getElementById('smId').value = smItem.sm_id;
+    document.getElementById('smDate').value = formattedDate;
+    document.getElementById('smDescription').value = smItem.sm_des;
+    document.getElementById('smRes').value = smItem.sm_res; // Resource field
+    document.getElementById('smStatus').value = smItem.sm_status;
+    document.getElementById('smType').value = smItem.sm_type;
+
+   
+
+    // Hiển thị các mục
+    const smItemsContainer = document.getElementById('smItemsContainer');
+    smItemsContainer.innerHTML = ''; // Clear existing items
+
+    smItem.sm_items.forEach(item => {
+        const itemCard = `
+            <div class="card mb-2 border-secondary">
+                <div class="card-body">
+                    <h6 class="card-title">Item ID: ${item.id}</h6>
+                    <p class="card-text"><strong>Name:</strong> ${item.title}</p>
+                    <p class="card-text"><strong>Price:</strong> ${item.total}</p>
+                    <p class="card-text"><strong>Quantity:</strong> ${item.quantity}</p>
+                </div>
+            </div>
+        `;
+        smItemsContainer.innerHTML += itemCard; // Append item details
+    });
+    const acceptButton = document.getElementById('accpectbutton');
+    acceptButton.style.display = 'none'
+
+
     // Hiển thị modal
     const detailsModal = new bootstrap.Modal(document.getElementById('detailsModal'));
     detailsModal.show();
 }
 
 async function saveChanges() {
-    console.log("Saving changes...");
-
-    // Get the current SM item details
+    try{
     const smItems = smList[currentSmIndex].sm_items;
-    console.log(`Saving changes for SM item index: ${currentSmIndex}`, smItems);
+    const SmDescription = smList[currentSmIndex].sm_des;
+    const orderId = SmDescription.split("order:")[1].trim();
+    console.log(orderId);
 
     for (const smItem of smItems) {
-        const productId = smItem.id; // ID of the product in sm_items
-        const quantityToSubtract = smItem.quantity; // Quantity to subtract
-        console.log(`Processing item ID: ${productId} with quantity to subtract: ${quantityToSubtract}`);
+        const productId = smItem.id;
+        const quantityToSubtract = smItem.quantity;
 
-        // Find the corresponding product in `currentlist` (storage)
         const productInStock = currentlist.find(product => product.identify === productId);
 
         if (productInStock) {
-            console.log(`Found product ID: ${productId} in stock with current quantity: ${productInStock.qa}`);
             const newQuantity = quantityToSubtract;
-
-            // Log the new quantity after subtraction
-            console.log(`Updating product ID: ${productId} from ${productInStock.qa} to ${newQuantity}`);
-
-            // Update the new quantity in productInStock
             productInStock.qa = newQuantity;
 
-            // Call the API to update product quantity in storage
+            // Trừ số lượng trong kho
             await apiSubstractProductQuantity(productInStock);
 
         } else {
@@ -439,23 +481,19 @@ async function saveChanges() {
         }
     }
 
-    // Once all items have been processed, update the SM status
-    smList[currentSmIndex].sm_status = "Done"; // Update the status to "Done"
+    smList[currentSmIndex].sm_status = "Done";
 
-    // Retrieve the sm_id from the current SM item
     const sm_id = smList[currentSmIndex].sm_id;
 
-    // Log the status change
-    console.log(`Updated SM status to "Done" for SM item with ID: ${sm_id}`);
-
-    // Call API to update the status in the database
+    // Cập nhật SM thành Done
     await apiUpdateSMStatus(sm_id, 'Done');
 
-    // Show a success message to the user
-    alert("Stock has been successfully processed and SM status updated to 'Done'.");
-
-    // Optionally, re-render the updated SM list to reflect the status change in the UI
     renderSMList(smList);
+    alert("Stock has been successfully processed and SM status updated to 'Done'.");
+    }
+    catch(error){
+        console.log(error);
+    }
 }
 
 // Function to load SM items with status 'done' from the API and map them for rendering
@@ -464,7 +502,7 @@ async function LoadDoneSMItems() {
         const smData = await apiGetDoneSMItems(); // Call the API to fetch SM items
 
         // Lọc các mục có trạng thái 'done'
-        const doneSMList = smData.filter(item => item.sm_status === 'Done').map(item => {
+         doneSMList = smData.filter(item => item.sm_status === 'Done').map(item => {
             return {
                 sm_id: item.sm_id,           // Stock Management ID
                 sm_date: item.sm_date,       // Date of the SM entry
@@ -496,15 +534,18 @@ function renderDoneSMList(smList) {
         const smDate = new Date(smItem.sm_date.seconds * 1000);
         const formattedDate = smDate.toLocaleDateString('en-GB');
 
+         // Get the status badge class
+       const statusBadgeClass = getOrderStatusBadge(smItem.sm_status);
+
         const row = `
           <tr>
             <td>${index + 1}</td>
             <td>${smItem.sm_id}</td>
             <td>${formattedDate}</td>
             <td>${smItem.sm_des}</td>
-            <td>${smItem.sm_status}</td>
+               <td><span class="badge ${statusBadgeClass}">${smItem.sm_status}</span></td>
             <td>
-              <button class="btn btn-primary btn-sm" onclick="viewDetails(${index})">View Details</button>
+              <button class="btn btn-primary btn-sm" onclick="viewDetailsDone(${index})">View Details</button>
             </td>
           </tr>
         `;
@@ -513,7 +554,6 @@ function renderDoneSMList(smList) {
 
     console.log('Rendered Done SM List Table:', doneSMTable.innerHTML); // Log the rendered table
 }
-
 
 function editProduct(productId) {
     console.log('Editing product with ID:', productId);
@@ -554,3 +594,22 @@ function editProduct(productId) {
         alert('Product quantity update cancelled.');
     }
 }
+
+function capitalizeEachWord(string) {
+    return string
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ');
+}
+
+function getOrderStatusBadge(status) {
+    switch (status.toLowerCase()) {
+        case 'done':
+            return 'bg-success';
+        case 'processing':
+            return 'bg-warning';
+        default:
+            return 'bg-secondary';
+    }
+}
+
