@@ -2,8 +2,25 @@
 let orders = [];
 
 document.addEventListener('DOMContentLoaded', () => {
-    apiGetOrders();
+    const authToken = localStorage.getItem('authToken'); 
+
+    if (!authToken) {
+        window.location.href = 'login.html'; 
+    } else 
+    {
+        console.log('Auth token is present. User is logged in.');
+        LoadOrder();
+        
+    }
 });
+
+async function LoadOrder() {
+    const response = await apiGetOrders();
+    renderOrders(response);
+    
+    
+}
+
 
 // Add event listeners to each tab
 document.getElementById('list-tab').addEventListener('click', apiGetOrders);
@@ -11,8 +28,6 @@ document.getElementById('list-coupon-tab').addEventListener('click', apiGetCoupo
 
 // renderCoupons.js
 function renderCoupons(coupons) {
-    console.log("Render Coupons function called"); // Log when the function is invoked
-    console.log("Coupons data:", coupons); // Log the coupons data
     const couponsList = document.getElementById('coupons-list'); // Ensure this ID matches your HTML
     couponsList.innerHTML = ''; // Clear any existing content
 
@@ -35,8 +50,6 @@ function renderCoupons(coupons) {
         couponsList.insertAdjacentHTML('beforeend', couponRow);
     });
 }
-
-
 
 // Function to render orders in the HTML table
 function renderOrders(ordersData) {
@@ -150,7 +163,6 @@ async function addCoupon() {
     try {
         // Call the API to add the coupon
         const response = await apiAddCoupon(couponData);
-        console.log('Coupon added successfully:', response);
 
         // Show success notification
         alert('Coupon added successfully!');

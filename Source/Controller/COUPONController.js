@@ -33,7 +33,6 @@ export const getAllOrders = async (req, res) => {
 
         querySnapshot.forEach(doc => {
             const orderData = doc.data();
-            console.log(orderData); // Log the raw order data
 
             orders.push({
                 id: doc.id,
@@ -59,7 +58,6 @@ export const getAllOrders = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
-
 
 export const addNewCoupon = async (req, res) => {
     try {

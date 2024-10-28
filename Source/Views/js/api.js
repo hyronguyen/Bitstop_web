@@ -607,13 +607,11 @@ async function apiGetOrders() {
   try {
     const response = await axios({
       method: 'GET',
-      url: `${URL}/api/coupon/get_allOrders`,  // Update this to match your orders API route
+      url: `${URL}/api/coupon/get_allOrders`,
     });
 
     if (response.status === 200) {
-      const orders = response.data;
-      console.log("API response data:", orders); // Log the API response
-      renderOrders(orders); // Call the render function to display orders
+      return response.data;
     } else {
       console.error('Error fetching orders: ', response.statusText);
     }
