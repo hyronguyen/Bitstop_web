@@ -6,6 +6,8 @@
   <title>Bitstop Operation</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
 </head>
 
 <body>
@@ -39,161 +41,163 @@
 
 <div class="container my-5">
   <h2 class="text-center"> <i class="fa-solid fa-shop"></i> Operation</i></h2>
-  <!-- Bảng chọn tab -->
-  <ul class="nav nav-tabs  " id="crudTab" role="tablist">
-    <li class="nav-item" role="presentation">
-      <button class="nav-link active" id="list-tab" data-bs-toggle="tab" data-bs-target="#list" type="button" role="tab">Order List</button>
-    </li>
-    <li class="nav-item" role="presentation" style="display:none;">
-      <button class="nav-link" id="edit-tab" data-bs-toggle="tab" data-bs-target="#edit" type="button" role="tab">Edit Order</button>
-    </li>
-
-    <li class="nav-item" role="presentation" ></li>
-      <button class="nav-link" id="add-tab" data-bs-toggle="tab" data-bs-target="#couponlist" type="button" role="tab">Coupon List</button>
-    </li>
-
-    <li class="nav-item" role="presentation" ></li>
-      <button class="nav-link" id="add-tab" data-bs-toggle="tab" data-bs-target="#addcoupon" type="button" role="tab">Add Coupon</button>
-    </li>
-
-  </ul>
+  
 
   
   
   <div class="tab-content" id="crudTabContent">
-    <!-- List Tab -->
-    <div class="tab-pane fade show active" id="list" role="tabpanel">
-      <table class="table table-bordered table-striped mt-2">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Title</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Platform</th>
-            <th>Identify</th>
-            <th>QA</th>
-            <th>Image</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="product-list">
-          <!-- List products go here -->
-          <tr>
-            <td>1</td>
-            <td>Sample Product</td>
-            <td>Electronics</td>
-            <td>$299</td>
-            <td>Online</td>
-            <td>High-quality headphones</td>
-            <td>10 items in stock</td>
-            <td><img src="https://via.placeholder.com/50" alt="Product Image"></td>
-            <td>
-              <button class="btn btn-primary btn-sm" onclick=""><i class="fa-solid fa-pen-to-square"></i></button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+  <!-- Bảng chọn tab -->
+<ul class="nav nav-tabs" id="crudTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="list-tab" data-bs-toggle="tab" data-bs-target="#list" type="button" role="tab">Order List</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="list-coupon-tab" data-bs-toggle="tab" data-bs-target="#couponlist" type="button" role="tab">Coupon List</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="add-tab" data-bs-toggle="tab" data-bs-target="#add" type="button" role="tab">Add Coupon</button>
+  </li>
+</ul>
 
-    <!-- Edit Tab (Hidden Initially) -->
-    <div class="tab-pane fade" id="edit" role="tabpanel">
-      <h3 class="mt-3">Edit Product</h3>
-      <form id="edit-form" class="mt-2">
-        <div class="mb-3">
-          <label for="editProTitle" class="form-label">Product Title</label>
-          <input type="text" class="form-control" id="editProTitle" placeholder="Enter product title" required>
-        </div>
-        <div class="mb-3">
-          <label for="editProCategory" class="form-label">Category</label>
-          <input type="text" class="form-control" id="editProCategory" placeholder="Enter product category" required>
-        </div>
-        <div class="mb-3">
-          <label for="editProPrice" class="form-label">Price</label>
-          <input type="number" class="form-control" id="editProPrice" placeholder="Enter product price" required>
-        </div>
-        <div class="mb-3">
-          <label for="editProPlatform" class="form-label">Platform</label>
-          <input type="text" class="form-control" id="editProPlatform" placeholder="Enter platform (e.g., Online)" required>
-        </div>
-        <div class="mb-3">
-          <label for="editProDes" class="form-label">Description</label>
-          <textarea class="form-control" id="editProDes" rows="3" placeholder="Enter product description" required></textarea>
-        </div>
-        <div class="mb-3">
-          <label for="editProQA" class="form-label">Quantity Available</label>
-          <input type="number" class="form-control" id="editProQA" placeholder="Enter quantity available" required>
-        </div>
-        <div class="mb-3">
-          <label for="editThumbnail" class="form-label">Thumbnail</label>
-          <input type="text" class="form-control" id="editThumbnail" placeholder="Enter image URL" required>
-        </div>
-        <div class="mb-3">
-          <label for="editProImg1" class="form-label">Image URL 1</label>
-          <input type="text" class="form-control" id="editProImg1" placeholder="Enter image URL" required>
-        </div>
-        <div class="mb-3">
-          <label for="editProImg2" class="form-label">Image URL 2</label>
-          <input type="text" class="form-control" id="editProImg2" placeholder="Enter image URL" required>
-        </div>
+<div class="tab-content" id="crudTabContent">
 
-        
-        <button type="submit" class="btn btn-primary">Save Changes</button>
-      </form>
-    </div>
 
-    <!-- Add Goods Tab -->
-    <div class="tab-pane fade" id="add" role="tabpanel">
-  <h3 class="mt-3">Create Good Received Note</h3>
-  <form id="add-form" class="mt-2" onsubmit="">
-    <div class="mb-3">
-      <label for="addNccOrder" class="form-label">NCC Order</label>
-      <input type="text" class="form-control" id="addNccOrder" placeholder="Enter NCC Order" required>
-    </div>
-    <button id="checkNccId_btn" type="button" class="btn btn-primary">Check NCC ID</button> <!-- New Button -->
-    <button id="add_btn" type="submit" class="btn btn-success">Stock Goods</button>
-  </form>
-
-  <!-- Product List Section -->
-  <div id="product-list" class="mt-3" style="display:none;">
-    <h4>Products</h4>
-    <ul id="productItems" class="list-group"></ul>
-  </div>
+<!-- Order List tab -->
+<div class="tab-pane fade show active" id="list" role="tabpanel">
+  <table class="table table-bordered table-striped mt-2">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Date</th>
+        <th>Subtotal</th>
+        <th>Payment</th>
+        <th>Status</th>
+        <th>Invoice</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="order-list">
+      <!-- Order rows will be dynamically inserted here -->
+    </tbody>
+  </table>
 </div>
 
-   
- </div>
-</div>
-
-  </div>
-</div>
-
-<!-- Delete Confirmation Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+<!-- Bootstrap Modal for Order Details -->
+<div class="modal fade" id="order-details-modal" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title" id="orderDetailsModalLabel">Order Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
       <div class="modal-body">
-        <h5>Are you sure to delete this product ID: <span id="productIdToDelete"></span>?</h5>
-        <input type="text" id="confirmProductIdInput" placeholder="Re-input the id to delete" class="form-control">
+        <form id="order-details-form">
+          <div class="form-group">
+            <label for="or_name">Name:</label>
+            <input type="text" id="or_name" class="form-control" disabled>
+          </div>
+          <div class="form-group">
+            <label for="or_date">Date:</label>
+            <input type="text" id="or_date" class="form-control" disabled>
+          </div>
+          <div class="form-group">
+            <label for="or_subtotal">Subtotal:</label>
+            <input type="text" id="or_subtotal" class="form-control" disabled>
+          </div>
+          <div class="form-group">
+            <label for="or_payment">Payment:</label>
+            <input type="text" id="or_payment" class="form-control" disabled>
+          </div>
+          <div class="form-group">
+            <label for="or_status">Status:</label>
+            <input type="text" id="or_status" class="form-control" disabled>
+          </div>
+          <div class="form-group">
+            <label for="or_invo">Invoice:</label>
+            <input type="text" id="or_invo" class="form-control" disabled>
+          </div>
+          <div class="form-group">
+            <label for="or_items">Items:</label>
+            <div id="or_items_container"></div>
+          </div>
+        </form>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
-      </div>
+  
     </div>
   </div>
 </div>
+
+
+
+
+  <!-- Coupon list tab -->
+  <div class="tab-pane fade" id="couponlist" role="tabpanel">
+    <table class="table table-bordered table-striped mt-2">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Id</th>
+          <th>Exp</th>
+          <th>Discount</th>
+          <th>Status</th>
+          <th>User</th>
+        </tr>
+      </thead>
+      <tbody id="coupons-list">
+        <!-- List products for output request go here -->
+        
+      </tbody>
+    </table>
+  </div>
+
+<!-- Add Coupon Tab -->
+<div class="tab-pane fade" id="add" role="tabpanel">
+  <h3 class="mt-3">Add Coupon</h3>
+  <form id="add-coupon-form" class="mt-2" onsubmit="return false;">
+    
+      <div class="mb-3">
+          <label for="couponExp" class="form-label">Expiration Date</label>
+          <input type="date" class="form-control" id="couponExp" required>
+      </div>
+      
+      <div class="mb-3">
+          <label for="couponDiscount" class="form-label">Discount Percentage</label>
+          <input type="number" class="form-control" id="couponDiscount" placeholder="Enter Discount Percentage" required>
+      </div>
+     
+      <div class="mb-3">
+          <label for="userType" class="form-label">Select User Type</label>
+          <select class="form-select" id="userType" required onchange="toggleUserInput()">
+              <option value="all">All Users</option>
+              <option value="specific">Specific User</option>
+          </select>
+      </div>
+      
+      <div class="mb-3">
+          <label for="couponUser" class="form-label">User</label>
+          <input type="text" class="form-control" id="couponUser" placeholder="Enter User ID" disabled required>
+      </div>
+      
+      <button id="addCoupon_btn" type="button" class="btn btn-success" onclick="addCoupon()">Add Coupon</button>
+  </form>
+</div>
+
+
 
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 <script src="js/api.js"></script>
 <script src="class/class.js"></script>
+<script src="js/frontend/operation_frontend.js"></script>
 
 </body>
 </html>

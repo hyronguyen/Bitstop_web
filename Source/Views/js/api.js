@@ -578,3 +578,65 @@ async function apiUpdateEditStockQuantity(productId, editQuantity) {
       throw error;
   }
 }
+
+
+// api lấy dữ liệu của coupon
+async function apiGetCoupons() {
+  try {
+    const response = await axios({
+      method: 'GET',
+      url: `${URL}/api/coupon/get_coupon`,  
+    });
+
+    if (response.status === 200) {
+      const coupons = response.data;
+      console.log("API response data:", coupons); // Log the API response
+      renderCoupons(coupons); // Call the render function here
+    } else {
+      console.error('Error fetching coupons: ', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error fetching coupons: ', error.message);
+  }
+}
+
+
+
+// api lấy dữ liệu của order
+async function apiGetOrders() {
+  try {
+    const response = await axios({
+      method: 'GET',
+      url: `${URL}/api/coupon/get_allOrders`,  // Update this to match your orders API route
+    });
+
+    if (response.status === 200) {
+      const orders = response.data;
+      console.log("API response data:", orders); // Log the API response
+      renderOrders(orders); // Call the render function to display orders
+    } else {
+      console.error('Error fetching orders: ', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error fetching orders: ', error.message);
+  }
+}
+
+
+// Thêm coupon
+async function apiAddCoupon(couponData) {
+  try {
+    const response = await axios({
+      method: 'POST',
+      url: `${URL}/api/coupon/post_addCoupon`,  
+      data: couponData,
+    });
+
+    if (response.status === 201) {
+      console.log('Coupon created successfully:', response.data);
+      return response.data;  
+    } 
+  } catch (error) {
+    console.error('Error creating coupon: ', error.message);
+  }
+}
