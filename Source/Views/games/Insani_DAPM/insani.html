@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity WebGL Player | InsaniAquarium Webgl</title>
+
+    <style>
+      .unitygame_canvas {
+          width: 960px;
+          height: 600px;
+          border-radius: 20px;
+          box-shadow: 0px 0px 10px 5px grey;
+      }
+
+      .unity_gametitle {
+          color: #58629B;
+      }
+  </style>
+  </head>
+  <body style="text-align: center; padding: 0; border: 0; margin: 0;">
+    <h1 class="unity_gametitle"> <b>Insaniquarium - Bitstop</b></h1>
+    <canvas id="unity-canvas" class="unitygame_canvas" width=960 height=600 style="width: 960px; height: 600px; background: #231F20"></canvas>
+
+    <script src="Build/Insani_DAPM.loader.js"></script>
+    <script>
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        // Mobile device style: fill the whole browser client area with the game canvas:
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+        document.getElementsByTagName('head')[0].appendChild(meta);
+
+        var canvas = document.querySelector("#unity-canvas");
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
+        canvas.style.position = "fixed";
+
+        document.body.style.textAlign = "left";
+      }
+
+      createUnityInstance(document.querySelector("#unity-canvas"), {
+        dataUrl: "Build/Insani_DAPM.data",
+        frameworkUrl: "Build/Insani_DAPM.framework.js",
+        codeUrl: "Build/Insani_DAPM.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "Đồ An Phầm Mềm ",
+        productName: "InsaniAquarium Webgl",
+        productVersion: "1.0",
+        // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
+        // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
+      });
+    </script>
+
+    <!--Game Frontend-->
+
+
+<!--My JS-->
+<script src="../../js/frontend/insa_frontend.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="../../js/api.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+
+
+  
+  </body>
+</html>
