@@ -638,3 +638,18 @@ async function apiAddCoupon(couponData) {
     console.error('Error creating coupon: ', error.message);
   }
 }
+
+async function apigetCouponsByCustomerId(customerId) {
+  try {
+    const response = await axios({
+      method: 'GET',
+      url: `${URL}/api/coupon/get_CouponbyUser/${customerId}`,
+    });
+    
+    if (response.status === 200) {
+      return response.data;
+    }
+  } catch (error) {
+    console.error('Error fectching Coupon ', error.message);
+  }
+}

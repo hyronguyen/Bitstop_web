@@ -14,24 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         cart = localStorage.getItem('cart');
-        if(!cart){
-            const cartInnerDiv = document.querySelector('.table');
-        cartInnerDiv.innerHTML = ''; // Clear the cart content first
-
-        // If the cart is empty, load the image
-        const emptyCartImage = `
-            <tr>
-                <td colspan="4" style="text-align:center;">
-                    <img src="https://cdn-icons-png.flaticon.com/512/11329/11329060.png" alt="Empty Cart" style="width:200px; height:auto;">
-                    <p>Your cart is empty</p>
-                </td>
-            </tr>
-        `;
-        cartInnerDiv.insertAdjacentHTML('beforeend', emptyCartImage);
-        }
-        else{
           DisplayCart(cart);
-        }
         
     }
 });
@@ -53,6 +36,7 @@ async function DisplayCart(cart) {
                 <td colspan="4" style="text-align:center;">
                     <img src="https://cdn-icons-png.flaticon.com/512/11329/11329060.png" alt="Empty Cart" style="width:200px; height:auto;">
                     <p>Your cart is empty</p>
+                    <a href="category.html" class="btn btn-dark mt-3">Shop Now</a>
                 </td>
             </tr>
         `;
@@ -186,7 +170,11 @@ async function DisplayCart(cart) {
         add.value = response.user_address;
         phone.value = response.user_phone;
     });
-     
+
+    document.querySelector('input[placeholder="Coupon Code"]').addEventListener('click', showCouponModal);
+    
+    document.querySelector('.primary-btn').addEventListener('click', applyCoupon);
+
     document.getElementById("checkout_button").addEventListener('click', ()=>{
         CheckOut();
     });
@@ -194,6 +182,41 @@ async function DisplayCart(cart) {
 }
 //#endregion
 
+function applyCoupon() {
+    alert("Dùng mã thành công");
+}
+
+async function showCouponModal() {
+    // Show the modal
+    $('#couponModal').modal('show');
+
+    // Fetch coupons if not already fetched (you may also cache them for performance)
+    const response = await apigetCouponsByCustomerId(userId) 
+    console.log(response);// Replace with your API call
+    const couponList = document.getElementById('couponList');
+    couponList.innerHTML = ''; // Clear any existing items
+
+    response.forEach(coupon => {
+        const expirationDate = new Date(coupon.cou_exp.seconds * 1000).toLocaleDateString();
+        const couponItem = `
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                ${coupon.id} - ${Math.round(coupon.cou_discount * 100)}% off
+                <span class="badge badge-primary badge-pill">Expires: ${expirationDate}</span>
+                <button class="btn btn-sm btn-outline-success ml-2 apply-coupon" data-code="${coupon.id}">Apply</button>
+            </li>
+        `;
+        couponList.insertAdjacentHTML('beforeend', couponItem);
+    });
+
+    // Add event listeners to "Apply" buttons
+    document.querySelectorAll('.apply-coupon').forEach(button => {
+        button.addEventListener('click', (e) => {
+            const couponCode = e.target.getAttribute('data-code');
+            document.querySelector('input[placeholder="Coupon Code"]').value = couponCode;
+            $('#couponModal').modal('hide'); // Close the modal
+        });
+    });
+}
 
 //#region Cập nhật số lượng và thành tiền
 function updateQuantity(productId, quantityInputId, totalId, price, change) {
@@ -215,6 +238,24 @@ function updateQuantity(productId, quantityInputId, totalId, price, change) {
         let newTotal = price * quantity;
         document.getElementById(totalId).innerText = `${formatNumberWithCommas(newTotal)} VND`;
         updateCartInLocalStorage(productId, quantity);
+    }
+    
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    if (cart.length === 0) {
+        const cartInnerDiv = document.querySelector('.table');
+        cartInnerDiv.innerHTML = ''; // Clear the cart content first
+
+        // Show the empty cart image and message
+        const emptyCartImage = `
+            <tr>
+                <td colspan="4" style="text-align:center;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/11329/11329060.png" alt="Empty Cart" style="width:200px; height:auto;">
+                    <a href="category.html" class="btn btn-dark mt-3">Shop Now</a>
+                </td>
+            </tr>
+        `;
+        cartInnerDiv.insertAdjacentHTML('beforeend', emptyCartImage);
+        return;
     }
 
     updateSubtotal();

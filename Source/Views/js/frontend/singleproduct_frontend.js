@@ -36,6 +36,7 @@ async function LoadProduct(selectedId){
             productData.des,
             productData.quan
         );
+        console.log(product);
 
 
         document.querySelector('.product-name').textContent=capitalizeEachWord(product.title);
@@ -53,7 +54,8 @@ function RenderProduct(product) {
     const categoryElement = document.querySelector('.s_product_text .list li:first-child');
     const availabilityElement = document.querySelector('.s_product_text .list li:nth-child(2)');
     const platformElement = document.querySelector('.s_product_text p');
-
+    const des = document.getElementById("description");
+    des.innerHTML = product.description;
     // Split image URLs
     const imageUrls = product.img.split(' ');
     const defaultimg = imageUrls[0];
@@ -76,7 +78,11 @@ function RenderProduct(product) {
     titleElement.textContent =capitalizeEachWord(product.title);
     priceElement.textContent = formatNumberWithCommas(product.price) + ' VND';
     categoryElement.innerHTML = `<span>Category</span> : ${product.category}`;
-    platformElement.textContent = product.platform;
+    
+    const platforms = product.platform.split(',').map(platform => platform.trim());
+    platformElement.innerHTML = platforms.map(platform => 
+        `<span class="badge bg-dark text-white fs-6  me-2 p-2">${platform}</span>`
+    ).join(' ');
 
     // Set availability or other fields as needed
     availabilityElement.innerHTML = `<span>Availability</span> : In Stock`;

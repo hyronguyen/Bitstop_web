@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getCoupons,getAllOrders,addNewCoupon } from '../Controller/COUPONController.js';
+import { getCoupons,getAllOrders,addNewCoupon,getCouponsbyUser } from '../Controller/COUPONController.js';
 
 const couponRoutes = Router();
 
@@ -7,4 +7,5 @@ const couponRoutes = Router();
 couponRoutes.get('/get_coupon', getCoupons);
 couponRoutes.get('/get_allOrders',getAllOrders);
 couponRoutes.post('/post_addCoupon', addNewCoupon);
+couponRoutes.get('/get_CouponbyUser/:iduser',getCouponsbyUser)
 export default couponRoutes;

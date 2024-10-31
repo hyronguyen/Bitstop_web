@@ -1,4 +1,4 @@
-import { collection, query, where, getDocs,addDoc, doc ,getDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs,addDoc, doc ,getDoc,updateDoc } from 'firebase/firestore';
 import db from '../Configs/firestore.js';
 
 
@@ -80,6 +80,34 @@ export const addNewCoupon = async (req, res) => {
         const docRef = await addDoc(couponsCollection, newCoupon);
 
         res.status(201).json({ id: docRef.id, ...newCoupon });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+export const getCouponsbyUser = async (req, res) => {
+    try {
+        // Extract user ID from request parameters
+        const { iduser } = req.params; 
+
+        if (!iduser) {
+            return res.status(400).json({ error: 'Missing user ID' });
+        }
+
+        // Query to find coupons associated with the user
+        const q = query(collection(db, 'COUPON'), where('cou_user', '==', iduser));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+            return res.status(404).json({ message: 'No coupons found for this user' });
+        }
+
+        const coupons = [];
+        querySnapshot.forEach(doc => {
+            coupons.push({ id: doc.id, ...doc.data() });
+        });
+
+        res.status(200).json(coupons);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

@@ -30,6 +30,19 @@
 	<link rel="stylesheet" href="css/ion.rangeSlider.skinFlat.css" />
 	<link rel="stylesheet" href="css/magnific-popup.css">
 	<link rel="stylesheet" href="css/main.css">
+	<style>
+        .product-image {              
+            height: 270px;            /* Set a fixed height for the image */
+            object-fit: cover;        /* Cover the container while maintaining aspect ratio */
+            border-radius: 8px; 
+			transition: box-shadow 0.3s;      /* Optional: Add rounded corners */
+        }
+
+
+		.product-image:hover {
+   			 box-shadow: 0 0 20px rgba(253, 162, 6, 0.8); /* Glowing effect */
+			}
+    </style>
 </head>
 
 <body>
@@ -66,6 +79,7 @@
 								 aria-expanded="false">Pages</a>
 								<ul class="dropdown-menu">
 									<li class="nav-item"><a class="nav-link" href="tracking.html">Tracking</a></li>
+									<li class="nav-item"><a class="nav-link" href="coupon.html">Your Coupons</a></li>
 									<li class="nav-item"><a class="nav-link" href="elements.html">Profile</a></li>
 								</ul>
 							</li>
@@ -202,6 +216,7 @@
 				<div class="col-lg-8 col-md-12">
 					<div class="row">
 						<div class="col-lg-8 col-md-8">
+							<a href="../Views/category.html">
 							<div class="single-deal">
 								<div class="overlay"></div>
 								<img class="img-fluid w-100" src="img/category/c1.jpg" alt="">
@@ -211,8 +226,10 @@
 									</div>
 								</a>
 							</div>
+						</a>
 						</div>
 						<div class="col-lg-4 col-md-4">
+							<a href="../Views/category.html">
 							<div class="single-deal">
 								<div class="overlay"></div>
 								<img class="img-fluid w-100" src="img/category/c2.png" alt="">
@@ -222,8 +239,10 @@
 									</div>
 								</a>
 							</div>
+						</a>
 						</div>
 						<div class="col-lg-4 col-md-4">
+							<a href="../Views/category.html">
 							<div class="single-deal">
 								<div class="overlay"></div>
 								<img class="img-fluid w-100" src="img/category/c3.png" alt="">
@@ -233,8 +252,10 @@
 									</div>
 								</a>
 							</div>
+						</a>
 						</div>
 						<div class="col-lg-8 col-md-8">
+							<a href="../Views/category.html">
 							<div class="single-deal">
 								<div class="overlay"></div>
 								<img class="img-fluid w-100" src="img/category/c4.png" alt="">
@@ -243,7 +264,9 @@
 										<h6 class="deal-title">Retro</h6>
 									</div>
 								</a>
+								
 							</div>
+						</a>
 						</div>
 					</div>
 				</div>
@@ -267,554 +290,23 @@
 
 	<!-- start product Area -->
 
-	<section class="owl-carousel active-product-area section_gap">
-		<!-- single product slide -->
-		<div class="single-product-slider">
-			<div class="container">
-				<div class="row justify-content-center">
-					<div class="col-lg-6 text-center">
-						<div class="section-title">
-							<h1>Latest Game</h1>
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-								dolore
-								magna aliqua.</p>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<!-- single product -->
-					<div class="col-lg-3 col-md-6">
-						<div class="single-product">
-							<img class="img-fluid" src="img/product/p1.png" alt="">
-							<div class="product-details">
-								<h6>PRODUCT</h6>
-								<div class="price">
-									<h6>000,000 VND</h6>
-									<h6 class="l-through">000,000 VND</h6>
-								</div>
-								<div class="prd-bottom">
-
-									<a href="" class="social-info">
-										<span class="ti-bag"></span>
-										<p class="hover-text">add to bag</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-heart"></span>
-										<p class="hover-text">Wishlist</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-sync"></span>
-										<p class="hover-text">compare</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-move"></span>
-										<p class="hover-text">view more</p>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-lg-3 col-md-6">
-						<div class="single-product">
-							<img class="img-fluid" src="img/product/p1.png" alt="">
-							<div class="product-details">
-								<h6>PRODUCT</h6>
-								<div class="price">
-									<h6>000,000 VND</h6>
-									<h6 class="l-through">000,000 VND</h6>
-								</div>
-								<div class="prd-bottom">
-
-									<a href="" class="social-info">
-										<span class="ti-bag"></span>
-										<p class="hover-text">add to bag</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-heart"></span>
-										<p class="hover-text">Wishlist</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-sync"></span>
-										<p class="hover-text">compare</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-move"></span>
-										<p class="hover-text">view more</p>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-lg-3 col-md-6">
-						<div class="single-product">
-							<img class="img-fluid" src="img/product/p1.png" alt="">
-							<div class="product-details">
-								<h6>PRODUCT</h6>
-								<div class="price">
-									<h6>000,000 VND</h6>
-									<h6 class="l-through">000,000 VND</h6>
-								</div>
-								<div class="prd-bottom">
-
-									<a href="" class="social-info">
-										<span class="ti-bag"></span>
-										<p class="hover-text">add to bag</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-heart"></span>
-										<p class="hover-text">Wishlist</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-sync"></span>
-										<p class="hover-text">compare</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-move"></span>
-										<p class="hover-text">view more</p>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-lg-3 col-md-6">
-						<div class="single-product">
-							<img class="img-fluid" src="img/product/p1.png" alt="">
-							<div class="product-details">
-								<h6>PRODUCT</h6>
-								<div class="price">
-									<h6>000,000 VND</h6>
-									<h6 class="l-through">000,000 VND</h6>
-								</div>
-								<div class="prd-bottom">
-
-									<a href="" class="social-info">
-										<span class="ti-bag"></span>
-										<p class="hover-text">add to bag</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-heart"></span>
-										<p class="hover-text">Wishlist</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-sync"></span>
-										<p class="hover-text">compare</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-move"></span>
-										<p class="hover-text">view more</p>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-lg-3 col-md-6">
-						<div class="single-product">
-							<img class="img-fluid" src="img/product/p1.png" alt="">
-							<div class="product-details">
-								<h6>PRODUCT</h6>
-								<div class="price">
-									<h6>000,000 VND</h6>
-									<h6 class="l-through">000,000 VND</h6>
-								</div>
-								<div class="prd-bottom">
-
-									<a href="" class="social-info">
-										<span class="ti-bag"></span>
-										<p class="hover-text">add to bag</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-heart"></span>
-										<p class="hover-text">Wishlist</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-sync"></span>
-										<p class="hover-text">compare</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-move"></span>
-										<p class="hover-text">view more</p>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-lg-3 col-md-6">
-						<div class="single-product">
-							<img class="img-fluid" src="img/product/p1.png" alt="">
-							<div class="product-details">
-								<h6>PRODUCT</h6>
-								<div class="price">
-									<h6>000,000 VND</h6>
-									<h6 class="l-through">000,000 VND</h6>
-								</div>
-								<div class="prd-bottom">
-
-									<a href="" class="social-info">
-										<span class="ti-bag"></span>
-										<p class="hover-text">add to bag</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-heart"></span>
-										<p class="hover-text">Wishlist</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-sync"></span>
-										<p class="hover-text">compare</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-move"></span>
-										<p class="hover-text">view more</p>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-lg-3 col-md-6">
-						<div class="single-product">
-							<img class="img-fluid" src="img/product/p1.png" alt="">
-							<div class="product-details">
-								<h6>PRODUCT</h6>
-								<div class="price">
-									<h6>000,000 VND</h6>
-									<h6 class="l-through">000,000 VND</h6>
-								</div>
-								<div class="prd-bottom">
-
-									<a href="" class="social-info">
-										<span class="ti-bag"></span>
-										<p class="hover-text">add to bag</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-heart"></span>
-										<p class="hover-text">Wishlist</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-sync"></span>
-										<p class="hover-text">compare</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-move"></span>
-										<p class="hover-text">view more</p>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-lg-3 col-md-6">
-						<div class="single-product">
-							<img class="img-fluid" src="img/product/p1.png" alt="">
-							<div class="product-details">
-								<h6>PRODUCT</h6>
-								<div class="price">
-									<h6>000,000 VND</h6>
-									<h6 class="l-through">000,000 VND</h6>
-								</div>
-								<div class="prd-bottom">
-
-									<a href="" class="social-info">
-										<span class="ti-bag"></span>
-										<p class="hover-text">add to bag</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-heart"></span>
-										<p class="hover-text">Wishlist</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-sync"></span>
-										<p class="hover-text">compare</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-move"></span>
-										<p class="hover-text">view more</p>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-					
-				
+	
+	<section class="section_gap" id="productsection">
+		<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-lg-6 text-center">
+				<div class="section-title">
+					<h1>Feature Product</h1>
+					<p>Discover our latest and greatest offerings! From the hottest new releases to essential gaming accessories, we have everything you need to elevate your gaming experience.</p>
 				</div>
 			</div>
 		</div>
-		<!-- single product slide -->
-		<div class="single-product-slider">
-			<div class="container">
-				<div class="row justify-content-center">
-					<div class="col-lg-6 text-center">
-						<div class="section-title">
-							<h1>Coming Products</h1>
-							<p>product is comming soon</p>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<!-- single product -->
-					<div class="col-lg-3 col-md-6">
-						<div class="single-product">
-							<img class="img-fluid" src="img/product/p1.png" alt="">
-							<div class="product-details">
-								<h6>PRODUCT</h6>
-								<div class="price">
-									<h6>000,000 VND</h6>
-									<h6 class="l-through">000,000 VND</h6>
-								</div>
-								<div class="prd-bottom">
 
-									<a href="" class="social-info">
-										<span class="ti-bag"></span>
-										<p class="hover-text">add to bag</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-heart"></span>
-										<p class="hover-text">Wishlist</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-sync"></span>
-										<p class="hover-text">compare</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-move"></span>
-										<p class="hover-text">view more</p>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-lg-3 col-md-6">
-						<div class="single-product">
-							<img class="img-fluid" src="img/product/p1.png" alt="">
-							<div class="product-details">
-								<h6>PRODUCT</h6>
-								<div class="price">
-									<h6>000,000 VND</h6>
-									<h6 class="l-through">000,000 VND</h6>
-								</div>
-								<div class="prd-bottom">
-
-									<a href="" class="social-info">
-										<span class="ti-bag"></span>
-										<p class="hover-text">add to bag</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-heart"></span>
-										<p class="hover-text">Wishlist</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-sync"></span>
-										<p class="hover-text">compare</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-move"></span>
-										<p class="hover-text">view more</p>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-lg-3 col-md-6">
-						<div class="single-product">
-							<img class="img-fluid" src="img/product/p1.png" alt="">
-							<div class="product-details">
-								<h6>PRODUCT</h6>
-								<div class="price">
-									<h6>000,000 VND</h6>
-									<h6 class="l-through">000,000 VND</h6>
-								</div>
-								<div class="prd-bottom">
-
-									<a href="" class="social-info">
-										<span class="ti-bag"></span>
-										<p class="hover-text">add to bag</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-heart"></span>
-										<p class="hover-text">Wishlist</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-sync"></span>
-										<p class="hover-text">compare</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-move"></span>
-										<p class="hover-text">view more</p>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-lg-3 col-md-6">
-						<div class="single-product">
-							<img class="img-fluid" src="img/product/p1.png" alt="">
-							<div class="product-details">
-								<h6>PRODUCT</h6>
-								<div class="price">
-									<h6>000,000 VND</h6>
-									<h6 class="l-through">000,000 VND</h6>
-								</div>
-								<div class="prd-bottom">
-
-									<a href="" class="social-info">
-										<span class="ti-bag"></span>
-										<p class="hover-text">add to bag</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-heart"></span>
-										<p class="hover-text">Wishlist</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-sync"></span>
-										<p class="hover-text">compare</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-move"></span>
-										<p class="hover-text">view more</p>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-lg-3 col-md-6">
-						<div class="single-product">
-							<img class="img-fluid" src="img/product/p1.png" alt="">
-							<div class="product-details">
-								<h6>PRODUCT</h6>
-								<div class="price">
-									<h6>000,000 VND</h6>
-									<h6 class="l-through">000,000 VND</h6>
-								</div>
-								<div class="prd-bottom">
-
-									<a href="" class="social-info">
-										<span class="ti-bag"></span>
-										<p class="hover-text">add to bag</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-heart"></span>
-										<p class="hover-text">Wishlist</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-sync"></span>
-										<p class="hover-text">compare</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-move"></span>
-										<p class="hover-text">view more</p>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-lg-3 col-md-6">
-						<div class="single-product">
-							<img class="img-fluid" src="img/product/p1.png" alt="">
-							<div class="product-details">
-								<h6>PRODUCT</h6>
-								<div class="price">
-									<h6>000,000 VND</h6>
-									<h6 class="l-through">000,000 VND</h6>
-								</div>
-								<div class="prd-bottom">
-
-									<a href="" class="social-info">
-										<span class="ti-bag"></span>
-										<p class="hover-text">add to bag</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-heart"></span>
-										<p class="hover-text">Wishlist</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-sync"></span>
-										<p class="hover-text">compare</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-move"></span>
-										<p class="hover-text">view more</p>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-lg-3 col-md-6">
-						<div class="single-product">
-							<img class="img-fluid" src="img/product/p1.png" alt="">
-							<div class="product-details">
-								<h6>PRODUCT</h6>
-								<div class="price">
-									<h6>000,000 VND</h6>
-									<h6 class="l-through">000,000 VND</h6>
-								</div>
-								<div class="prd-bottom">
-
-									<a href="" class="social-info">
-										<span class="ti-bag"></span>
-										<p class="hover-text">add to bag</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-heart"></span>
-										<p class="hover-text">Wishlist</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-sync"></span>
-										<p class="hover-text">compare</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-move"></span>
-										<p class="hover-text">view more</p>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-lg-3 col-md-6">
-						<div class="single-product">
-							<img class="img-fluid" src="img/product/p1.png" alt="">
-							<div class="product-details">
-								<h6>PRODUCT</h6>
-								<div class="price">
-									<h6>000,000 VND</h6>
-									<h6 class="l-through">000,000 VND</h6>
-								</div>
-								<div class="prd-bottom">
-
-									<a href="" class="social-info">
-										<span class="ti-bag"></span>
-										<p class="hover-text">add to bag</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-heart"></span>
-										<p class="hover-text">Wishlist</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-sync"></span>
-										<p class="hover-text">compare</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-move"></span>
-										<p class="hover-text">view more</p>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-
-				</div>
-			</div>
+		<div class="row" id="product-cards-container">
+			<!--load product here-->
 		</div>
+		<!--load product here-->
+	</div>
 	</section> 
 
 	<!-- end product Area -->
@@ -896,6 +388,14 @@
 	<!-- Start brand Area -->
 	<section class="brand-area section_gap">
 		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-lg-6 text-center">
+					<div class="section-title">
+						<h1>Colaborations</h1>
+						<p>Supporting our parnership.</p>
+					</div>
+				</div>
+			</div>
 			<div class="row">
 				<a class="col single-img" href="#">
 					<img class="img-fluid d-block mx-auto" src="img/brand/1.png" alt="">
@@ -1013,6 +513,7 @@
 	<script src="js/api.js"></script>
 	<script src="js/frontend/index_frontend.js"></script>
 	<script src="js/search_engine.js"></script>
+	<script src="class/class.js"></script>
 	
 </body>
 
