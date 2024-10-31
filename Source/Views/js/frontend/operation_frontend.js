@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function LoadOrder() {
     const response = await apiGetOrders();
+    console.log(response);
     renderOrders(response);
     
     
@@ -60,6 +61,7 @@ function renderOrders(ordersData) {
     orders.forEach((order, index) => {
         const subtotal = (order.or_subtotal || 0).toLocaleString() + ' VND';
         const date = order.or_date ? new Date(order.or_date).toLocaleString() : 'No Date Available';
+        const statusBadgeClass = getOrderStatusBadge(order.or_status);
 
         const row = document.createElement('tr');
         row.innerHTML = `
@@ -68,7 +70,7 @@ function renderOrders(ordersData) {
             <td>${date}</td>
             <td>${subtotal}</td>
             <td>${order.or_payment || 'N/A'}</td>
-            <td>${order.or_status || 'N/A'}</td>
+            <td><span class="badge ${statusBadgeClass}">${order.or_status}</span></td>
             <td>
                 <a href="${order.or_invo || '#'}" target="_blank" class="btn btn-link">View Invoice</a>
             </td>
@@ -162,7 +164,7 @@ async function addCoupon() {
 
     try {
         // Call the API to add the coupon
-        const response = await apiAddCoupon(couponData);
+        await apiAddCoupon(couponData);
 
         // Show success notification
         alert('Coupon added successfully!');
@@ -173,3 +175,13 @@ async function addCoupon() {
     }
 }
 
+function getOrderStatusBadge(status) {
+    switch (status.toLowerCase()) {
+        case 'done':
+            return 'bg-success';
+        case 'processing':
+            return 'bg-warning';
+        default:
+            return 'bg-secondary';
+    }
+}

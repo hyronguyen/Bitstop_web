@@ -487,6 +487,8 @@ async function saveChanges() {
 
     // Cập nhật SM thành Done
     await apiUpdateSMStatus(sm_id, 'Done');
+    
+    await apiUpdateDeliverOrder(orderId);
 
     renderSMList(smList);
     alert("Stock has been successfully processed and SM status updated to 'Done'.");

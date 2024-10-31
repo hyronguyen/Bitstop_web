@@ -171,3 +171,33 @@ export const GetAllSuccedOrder = async (req, res) => {
     }
 };
 
+export const updateDeliveryOrder = async (req, res) => {
+    const { orderId } = req.params; // Assuming orderId is passed as a route parameter
+
+    if (!orderId) {
+        return res.status(400).json({ error: 'Order ID is required' });
+    }
+
+    try {
+        // Reference to the order document
+        const orderDocRef = doc(db, 'ORDERS', orderId);
+        
+        // Fetch the order document
+        const orderDoc = await getDoc(orderDocRef);
+        
+        // Check if the order exists
+        if (!orderDoc.exists()) {
+            return res.status(404).json({ error: 'Order not found' });
+        }
+
+        // Update the sm_status field to 'Delivering'
+        await updateDoc(orderDocRef, {
+            or_status: 'Delivering',
+        });
+
+        res.status(200).json({ message: `Order ${orderId} is now being delivered.` });
+    } catch (error) {
+        console.error('Error updating delivery order:', error);
+        res.status(500).json({ error: 'Internal server error: ' + error.message });
+    }
+};

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { CreateANewOrder,GetAllDeliveringOrder,GetAllOrder,GetAllProcessingOrder,GetAllSuccedOrder,GetOrderByCID,GetOrderByID } from '../Controller/ORDERControler.js';
+import { CreateANewOrder,GetAllDeliveringOrder,GetAllOrder,GetAllProcessingOrder,updateDeliveryOrder,GetAllSuccedOrder,GetOrderByCID,GetOrderByID } from '../Controller/ORDERControler.js';
 import { authMiddleware } from '../Middleware/authMiddleware.js';
 
 const ordersRouter = Router();
@@ -17,6 +17,8 @@ ordersRouter.get('/status/delivering', GetAllDeliveringOrder);
 ordersRouter.get('/status/succeeded', GetAllSuccedOrder);
 
 ordersRouter.get('/get_OrderByID/:orderId',GetOrderByID);
+
+ordersRouter.put('/updateDeli/:orderId', updateDeliveryOrder);
 
 
 export default ordersRouter;

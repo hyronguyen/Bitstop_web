@@ -653,3 +653,22 @@ async function apigetCouponsByCustomerId(customerId) {
     console.error('Error fectching Coupon ', error.message);
   }
 }
+
+async function apiUpdateDeliverOrder(orderId) {
+  try {
+      const response = await axios({
+          method: 'PUT',
+          url: `${URL}/api/orders/updateDeli/${orderId}`, // Update the endpoint to match your backend API
+          headers: {
+              'Content-Type': 'application/json',
+          },
+  
+      });
+
+      if (response.status === 200) {
+          console.log('Delivery order status updated successfully:', response.data);
+      }
+  } catch (error) {
+      console.error('Error updating delivery order status:', error.message);
+  }
+}
