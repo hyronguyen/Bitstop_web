@@ -49,7 +49,7 @@ export const getPurchaseItems = async (req, res) => {
 
             return {
                 id: purchaseDoc.id,
-                pur_invo: purchaseData.pur_invo || "No Invo",
+                pur_invo: purchaseData.pur_invo,
                 pur_ncc: purchaseData.pur_ncc || "Unknown Supplier",
                 pur_res: purchaseData.pur_res || "Unknown Staff",
                 pur_date: purchaseData.pur_date.toDate().toLocaleDateString(), // Format purchase date
@@ -82,11 +82,11 @@ export const updateStorageQuantity = async (req, res) => {
 
         const storageDoc = querySnapshot.docs[0];
 
-        // Lấy số lượng hiện tại
-        const currentQuantity = storageDoc.data().sto_qa || 0;
+        const currentQuantity = parseInt(storageDoc.data().sto_qa, 10) || 0; // Ensure it's an integer
+        const quantityToUpdate = parseInt(qa, 10); // Ensure qa is an integer
 
         // Tính số lượng mới
-        const newQuantity = currentQuantity + qa; // This adds the incoming quantity to the current quantity
+        const newQuantity = currentQuantity + quantityToUpdate; // This adds the incoming quantity to the current quantity
         await updateDoc(storageDoc.ref, { sto_qa: newQuantity });
 
         console.log('Product quantity updated successfully');

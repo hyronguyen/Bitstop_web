@@ -205,7 +205,8 @@ function displayPurchaseDetails(purchase) {
     const downloadButton = document.getElementById('downloadInvoiceBtn');
     const pdfErrorMsg = document.getElementById('pdfErrorMsg');
 
-    if (purchase.invo) {
+    if (purchase.invo && purchase.invo.trim() !== '') {
+        console.log(purchase.invo);
         downloadButton.href = purchase.invo;  // Set the PDF URL for download
         downloadButton.style.display = 'inline-block';  // Show the download button
         pdfErrorMsg.style.display = 'none';  // Hide error message
@@ -213,6 +214,7 @@ function displayPurchaseDetails(purchase) {
         downloadButton.style.display = 'none';  // Hide the download button
         pdfErrorMsg.style.display = 'block';  // Show error message
     }
+    
     
     document.getElementById('invoiceFormSection').style.display = 'block';
 }
@@ -489,7 +491,9 @@ async function saveChanges() {
     await apiUpdateDeliverOrder(orderId);
 
     renderSMList(smList);
-    alert("Stock has been successfully processed and SM status updated to 'Done'.");
+    alert("Ouput Success");
+    window.location.reload();
+
     }
     catch(error){
         console.log(error);

@@ -61,6 +61,31 @@ async function apiGetUserByID(userId) {
   }
 }
 
+async function apiSendMail(to, subject, text, html, infoforcheckout) {
+  try {
+    const response = await axios({
+      method: 'POST',
+      url: `${URL}/api/auth/send-email`,
+      data: {
+        to,
+        subject,
+        text,
+        html,
+        infoforcheckout,
+      },
+    });
+
+    // Kiểm tra nếu gửi mail thành công
+    if (response.status === 200) {
+      console.log('Email sent successfully');
+      return response.data;
+    }
+  } catch (error) {
+    console.error('Error:', error.message);
+  }
+}
+
+
 //APi LẤY TẤT CẢ sản phẩm
 async function apigetAllProducts() {
   try {

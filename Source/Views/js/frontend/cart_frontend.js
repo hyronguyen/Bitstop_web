@@ -321,7 +321,7 @@ function DeliveryChoice(){
 }
 
 async function CheckOut() {
-    debugger
+    $('#loadingModal').modal('show');
     const customerName = document.getElementById('customer_name').value.trim();
     const customerAddress = document.getElementById('customer_address').value.trim();
     const customerPhone = document.getElementById('customer_phone').value.trim();
@@ -391,6 +391,18 @@ async function CheckOut() {
                 console.log(inforCheckout);
                 const response = await apiCreateOrder(inforCheckout)
                 if(response){
+                    // Thông tin email
+        const to = 'hothanhgiang123@yopmail.com';  // Email người nhận (có thể là email của khách hàng)
+        const subject = 'Xác nhận đơn hàng';
+        const text = 'Cảm ơn bạn đã đặt hàng!';
+        const html = `<p>Xin chào ${inforCheckout.customerName},</p>
+                      <p>Cảm ơn bạn đã đặt hàng. Đây là thông tin đơn hàng của bạn:</p>
+                       ${generateOrderTableHTML(inforCheckout)}`;
+
+        // Gọi API gửi email
+                    await apiSendMail(to, subject, text, html, inforCheckout);
+
+                    $('#loadingModal').modal('hide');
                     alert('Đã tạo đơn thành công');
                     window.location.href = 'tracking.html';
                 }
@@ -399,6 +411,7 @@ async function CheckOut() {
         
     } catch (error) {
         console.error('Error creating order: ', error.message);
+        $('#loadingModal').modal('hide');
         alert('Failed to create the order. Please try again.');
     }
 }
@@ -417,6 +430,43 @@ function capitalizeEachWord(string) {
         .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
         .join(' ');
 }
+
+const generateOrderTableHTML = (inforCheckout) => {
+    // Khởi tạo bảng HTML với tiêu đề cột
+    let tableHTML = `
+      <table style="border-collapse: collapse; width: 100%;">
+        <thead>
+          <tr>
+            <th style="border: 1px solid #dddddd; padding: 8px;">Product ID</th>
+            <th style="border: 1px solid #dddddd; padding: 8px;">Title</th>
+            <th style="border: 1px solid #dddddd; padding: 8px;">Quantity</th>
+            <th style="border: 1px solid #dddddd; padding: 8px;">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+  
+    // Thêm từng dòng dữ liệu sản phẩm từ `inforCheckout`
+    inforCheckout.items.forEach(item => {
+      tableHTML += `
+        <tr>
+          <td style="border: 1px solid #dddddd; padding: 8px;">${item.id}</td>
+          <td style="border: 1px solid #dddddd; padding: 8px;">${item.title}</td>
+          <td style="border: 1px solid #dddddd; padding: 8px;">${item.quantity}</td>
+          <td style="border: 1px solid #dddddd; padding: 8px;">${item.total}</td>
+        </tr>
+      `;
+    });
+  
+    // Đóng thẻ `table`
+    tableHTML += `
+        </tbody>
+      </table>
+    `;
+  
+    return tableHTML;
+  };
+  
 //#endregion
 
 

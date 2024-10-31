@@ -162,54 +162,56 @@
           <label for="addNccOrder" class="form-label">NCC Order</label>
           <input type="text" class="form-control" id="addNccOrder" placeholder="Enter NCC Order" required>
       </div>
-      <button id="checkNccId_btn" type="button" class="btn btn-primary">Check NCC ID</button> 
-      <button id="add_btn" type="button" class="btn btn-success">Stock Goods</button>
+      <button id="checkNccId_btn" type="button" class="btn btn-dark">Check NCC ID</button> 
+      
   </form>
 
   <!-- Invoice Form (Initially Hidden, Appears after Search) -->
 <div id="invoiceFormSection" class="mt-4" style="display:none;">
-  <div class="card">
+  <div class="card bg-light text-dark">
     <div class="card-body">
-      <h3 class="card-title">Invoice Details</h3>
-      <form id="invoice-form">
-          <!-- Invoice ID -->
-          <div class="mb-3 row">
-              <label for="invoiceId" class="col-sm-3 col-form-label">Invoice ID</label>
-              <div class="col-sm-9">
-                  <input type="text" class="form-control" id="invoiceId" readonly>
-              </div>
-          </div>
-          <!-- NCC Order -->
-          <div class="mb-3 row">
-              <label for="invoiceNccOrder" class="col-sm-3 col-form-label">NCC Order</label>
-              <div class="col-sm-9">
-                  <input type="text" class="form-control" id="invoiceNccOrder" disabled>
-              </div>
-          </div>
-          <!-- Supplier -->
-          <div class="mb-3 row">
-              <label for="invoiceSupplier" class="col-sm-3 col-form-label">Supplier</label>
-              <div class="col-sm-9">
-                  <input type="text" class="form-control" id="invoiceSupplier" disabled>
-              </div>
-          </div>
-          <!-- Date -->
-          <div class="mb-3 row">
-              <label for="invoiceDate" class="col-sm-3 col-form-label">Date</label>
-              <div class="col-sm-9">
-                  <input type="text" class="form-control" id="invoiceDate" disabled>
-              </div>
-          </div>
-          <!-- Status -->
-          <div class="mb-3 row">
-              <label for="invoiceStatus" class="col-sm-3 col-form-label">Status</label>
-              <div class="col-sm-9">
-                  <input type="text" class="form-control" id="invoiceStatus" disabled>
-              </div>
-          </div>
-      </form>
+        <h3 class="card-title">Invoice Details</h3>
+        <form id="invoice-form">
+            <!-- Invoice ID -->
+            <div class="mb-3 row">
+                <label for="invoiceId" class="col-sm-3 col-form-label">Invoice ID</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control bg-secondary text-light" id="invoiceId" readonly>
+                </div>
+            </div>
+            <!-- NCC Order -->
+            <div class="mb-3 row">
+                <label for="invoiceNccOrder" class="col-sm-3 col-form-label">NCC Order</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control bg-secondary text-light" id="invoiceNccOrder" disabled>
+                </div>
+            </div>
+            <!-- Supplier -->
+            <div class="mb-3 row">
+                <label for="invoiceSupplier" class="col-sm-3 col-form-label">Supplier</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control bg-secondary text-light" id="invoiceSupplier" disabled>
+                </div>
+            </div>
+            <!-- Date -->
+            <div class="mb-3 row">
+                <label for="invoiceDate" class="col-sm-3 col-form-label">Date</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control bg-secondary text-light" id="invoiceDate" disabled>
+                </div>
+            </div>
+            <!-- Status -->
+            <div class="mb-3 row">
+                <label for="invoiceStatus" class="col-sm-3 col-form-label">Status</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control bg-secondary text-light" id="invoiceStatus" disabled>
+                </div>
+            </div>
+        </form>
+
+        <button id="add_btn" type="button" class="btn btn-success">Stock Goods</button>
     </div>
-  </div>
+</div>
 
   <!-- Items List Section -->
   <div class="card mt-3">
@@ -338,7 +340,7 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <!-- Thêm sự kiện onclick để gọi hàm saveChanges -->
-        <button type="button" class="btn btn-success" id="accpectbutton" onclick="saveChanges()">Accecpt output</button>
+        <button type="button" class="btn btn-success" id="accpectbutton" onclick="saveChanges()">Accecpt request</button>
     </div>
     </div>
   </div>
