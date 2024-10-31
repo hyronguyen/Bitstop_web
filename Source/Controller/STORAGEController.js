@@ -86,7 +86,7 @@ export const updateStorageQuantity = async (req, res) => {
         const currentQuantity = storageDoc.data().sto_qa || 0;
 
         // Tính số lượng mới
-        const newQuantity = currentQuantity + qa;
+        const newQuantity = currentQuantity + qa; // This adds the incoming quantity to the current quantity
         await updateDoc(storageDoc.ref, { sto_qa: newQuantity });
 
         console.log('Product quantity updated successfully');
@@ -96,6 +96,7 @@ export const updateStorageQuantity = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
 
 //cập nhật số lượng kho
 export const subtractStorageQuantity = async (req, res) => {

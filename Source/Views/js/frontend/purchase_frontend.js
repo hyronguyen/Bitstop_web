@@ -8,11 +8,13 @@ document.addEventListener('DOMContentLoaded', () => {
       window.location.href = 'login.html'; 
   } else 
   {
-    LoadProducts();
+    LoadLowStock();
+    
 
       console.log('Auth token is present. User is logged in.');
       
       const purchaseTab = document.getElementById('listpur-tab');
+      const nccprice = document.getElementById('nccprice-tab');
 
    purchaseTab.addEventListener('shown.bs.tab', function(event) {
     if (event.target.id === 'listpur-tab') {
@@ -20,36 +22,177 @@ document.addEventListener('DOMContentLoaded', () => {
     }
      });
 
+     nccprice.addEventListener('shown.bs.tab', function(event) {
+      if (event.target.id === 'nccprice-tab') {
+       LoadProducts();
+      }
+       });
+
       
   }
 });
 
 async function LoadProducts() {
   try {
-    const productData = await apigetAllProducts();
+    const productData = await apiGetProductwithNccPrice();
     // Clear productsDB before adding new data (optional based on your requirements)
     Object.keys(productsDB).forEach(key => delete productsDB[key]);
 
     productData.forEach(items => {
-      productsDB[items.id] = {
-        name: items.title,  // Mapping 'title' to 'name'
-        price: items.price*0.85  // Keeping the 'price' field as it is
+      productsDB[items.docId] = {
+        name: items.pro_title,  // Mapping 'title' to 'name'
+        price: items.ncc_price  // Keeping the 'price' field as it is
       };
     });
 
-    console.log(productsDB);
+    RenderNCCPRICE(productsDB)
     
   } catch (error) {
     console.log(error);
   }
 }
 
+async function LoadLowStock() {
+  try{
+    const Productlist = await apigetAllProducts();
+    const lowStockProducts = Productlist.filter(product => product.quan <=30 );
+    console.log(lowStockProducts);
+    RenderLowStockProducts(lowStockProducts);
 
-
-
+  }
+  catch(error){
+    console.log(error);
+  }
   
+  
+}
+
+function RenderLowStockProducts(lowStockProducts) {
+  const tableBody = document.getElementById('product-list');
+  tableBody.innerHTML = ''; // Xóa nội dung cũ trong bảng
+
+  lowStockProducts.forEach((product, index) => {
+    const row = document.createElement('tr');
+
+    // Tạo các ô dữ liệu cho từng thuộc tính sản phẩm
+    const indexCell = document.createElement('td');
+    indexCell.textContent = index + 1; // Số thứ tự
+
+    const titleCell = document.createElement('td');
+    titleCell.textContent = capitalizeEachWord(product.title); // Tên sản phẩm
+
+    const categoryCell = document.createElement('td');
+    categoryCell.textContent = product.category; // Danh mục
+
+    const priceCell = document.createElement('td');
+    priceCell.textContent = formatNumberWithCommas(product.price) + " VND"; // Giá, định dạng thành tiền tệ
+
+    const platformCell = document.createElement('td');
+    platformCell.textContent = product.platform; // Nền tảng
+
+    const identifyCell = document.createElement('td');
+    identifyCell.textContent = product.id; // Đặc điểm
+
+    const qaCell = document.createElement('td');
+    const badge = document.createElement('span');
+    
+    // Kiểm tra số lượng tồn kho và thêm lớp tương ứng
+    if (product.quan < 10) {
+      badge.classList.add('badge', 'bg-danger'); // Màu đỏ nếu tồn kho < 10
+    } else {
+      badge.classList.add('badge', 'bg-warning'); // Màu vàng nếu tồn kho >= 10
+    }
+    
+    badge.textContent = `${product.quan} items in stock`; // Số lượng tồn kho
+    qaCell.appendChild(badge); // Thêm badge vào ô
+
+    const imageCell = document.createElement('td');
+    const img = document.createElement('img');
+
+    const imageUrls = product.img.split(' ');
+    img.src = imageUrls[0] || 'https://via.placeholder.com/50'; // Hình ảnh sản phẩm
+    img.alt = 'Product Image';
+    img.width = 50; // Đặt chiều rộng
+    img.height = 50; // Đặt chiều cao
+    img.style.objectFit = 'cover'; // Đảm bảo hình ảnh không bị biến dạng
+
+    imageCell.appendChild(img);
+
+    // Thêm các ô dữ liệu vào hàng
+    row.appendChild(indexCell);
+    row.appendChild(titleCell);
+    row.appendChild(categoryCell);
+    row.appendChild(priceCell);
+    row.appendChild(platformCell);
+    row.appendChild(identifyCell);
+    row.appendChild(qaCell);
+    row.appendChild(imageCell);
+
+    // Thêm hàng vào bảng
+    tableBody.appendChild(row);
+  });
+}
+
+
+function RenderNCCPRICE(productData) {
+  // Clear previous data in the table
+  const tableBody = document.getElementById('nccpriceTableBody');
+  tableBody.innerHTML = '';
+
+  // Render new product data
+  Object.keys(productData).forEach(docId => {
+    const item = productData[docId]; // Lấy sản phẩm từ productsDB
+
+    const row = document.createElement('tr');
+
+    // Tạo các ô dữ liệu cho mỗi sản phẩm
+    const productIdCell = document.createElement('td');
+    productIdCell.textContent = docId; // ID của tài liệu
+
+    const productNameCell = document.createElement('td');
+    productNameCell.textContent = capitalizeEachWord(item.name); // Tên sản phẩm
+
+    const nccPriceCell = document.createElement('td');
+    nccPriceCell.textContent = formatNumberWithCommas(item.price)+ " VND"; // Giá NCC
+
+    // Thêm các ô dữ liệu vào hàng
+    row.appendChild(productIdCell);
+    row.appendChild(productNameCell);
+    row.appendChild(nccPriceCell);
+
+    // Thêm hàng vào bảng
+    tableBody.appendChild(row);
+  });
+}
+
+function formatNumberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+// Cập nhật price list
+document.getElementById('uploadButton').addEventListener('click', async () => {
+  const fileInput = document.getElementById('excelFile');
+  const file = fileInput.files[0];
+
+  if (file) {
+    try {
+      const result = await apiUpdatePriceListNcc(file);  // Gọi hàm để cập nhật giá
+      if (result) {
+        // Sau khi cập nhật thành công, tải lại bảng sản phẩm
+        LoadProducts();  // Tải lại danh sách sản phẩm với giá NCC mới
+        RenderNCCPRICE(productsDB);
+      }
+    } catch (error) {
+      console.error('Error during price list update:', error.message);
+    }
+  } else {
+    alert('Please select a file to upload.');
+  }
+});
+  
+
   // Check đơn mua không trùng lập
-  function isProductIdUnique(productIdInput) {
+function isProductIdUnique(productIdInput) {
     const allProductIds = document.querySelectorAll(".product-id");
     for (const input of allProductIds) {
       // Skip checking against the current input field
@@ -60,8 +203,8 @@ async function LoadProducts() {
     return true;
   }
   
-  //Sự kiện khi nhập ID
-  function attachProductIdListener(row) {
+//Sự kiện khi nhập ID
+function attachProductIdListener(row) {
     const productIdInput = row.querySelector(".product-id");
     const productNameInput = row.querySelector(".product-name");
     const productPriceInput = row.querySelector(".product-price");
@@ -102,11 +245,11 @@ async function LoadProducts() {
     });
   }
   
-  // Initial row product ID listener
-  attachProductIdListener(document.querySelector("#productRows tr"));
+// Initial row product ID listener
+attachProductIdListener(document.querySelector("#productRows tr"));
   
-  // Tạo thêm hàng
-  document.getElementById("addProductRow").addEventListener("click", function () {
+// Tạo thêm hàng
+document.getElementById("addProductRow").addEventListener("click", function () {
     const productRows = document.getElementById("productRows");
   
     // Tạo hàng mới
@@ -127,41 +270,43 @@ async function LoadProducts() {
     });
   });
   
-  // Xóa hàng
-  document.querySelector(".remove-row").addEventListener("click", function () {
+// Xóa hàng
+document.querySelector(".remove-row").addEventListener("click", function () {
     this.closest("tr").remove();
   });
   
-  // hàm sự kiện tạo đơn
-  function CreateOrder(){
+//Hàm tạo order cho purchase
+function CreateOrder(){
     collectOrderData();
     alert("succedd");
   }
 
-  function collectOrderData() {
+// Hàm tạo purchase
+async function collectOrderData() {
+  try{
     const allProductRows = document.querySelectorAll("#productRows tr");
     const purchaseItems = [];
     
     // Loop through each product row and gather details
     for (const row of allProductRows) {
-      const ID = row.querySelector(".product-id").value.trim();
-      const NAME = row.querySelector(".product-name").value.trim();
-      const PRICE = row.querySelector(".product-price").value.trim();
-      const QUANTITY = row.querySelector(".product-quantity").value.trim();
+      const item_id = row.querySelector(".product-id").value.trim();
+      const item_name = row.querySelector(".product-name").value.trim();
+      const item_price = row.querySelector(".product-price").value.trim();
+      const item_qty = row.querySelector(".product-quantity").value.trim();
   
       // Check if productId is empty, alert and return early if it is
-      if (!ID) {
+      if (!item_id) {
         alert("Product ID cannot be empty. Please fill in all product details.");
         return; // Exit the function early to prevent further execution
       }
   
       // Add the product details to the products array if all fields are filled
-      if (NAME && PRICE && QUANTITY) {
+      if (item_name && item_price && item_qty) {
         purchaseItems.push({
-          ID,
-          NAME,
-          PRICE,
-          QUANTITY
+          item_id,
+          item_name,
+          item_price,
+          item_qty
         });
       }
     }
@@ -176,21 +321,29 @@ async function LoadProducts() {
     };
   
     // Log the final data
-    console.log(orderData);
+    await apiCreateANewPurchaseOrder(orderData);
+    alert("Thành công tạo đơn purchase");
   
   }
+  catch(error){
+    alert("Tạo đơn purchase thất bại");
+  }
+    
+  }
 
-
+// Hàm render purchase
  async function renderPurchases() {
   const purchases =  await apiGetAllPurchase();
 
     const purchaseList = document.getElementById('purchase-list');
-    purchaseList.innerHTML = ''; // Clear existing content
+    purchaseList.innerHTML = ''; 
   
     purchases.forEach((purchase, index) => {
       
       const purchaseDate = new Date(purchase.pur_date.seconds * 1000);
       const formattedDate = purchaseDate.toLocaleDateString('en-GB');
+      const statusBadgeClass = getOrderStatusBadge(purchase.pur_status);
+
 
       const row = `
         <tr>
@@ -200,7 +353,7 @@ async function LoadProducts() {
           <td>${purchase.pur_items.length} items</td> <!-- Number of items in purchase -->
           <td>${formattedDate}</td> <!-- Purchase Date -->
           <td>${purchase.pur_res || 'N/A'}</td> <!-- Responsible person -->
-          <td>${purchase.pur_status || 'Processing'}</td> <!-- Status -->
+          <td><span class="badge ${statusBadgeClass}">${purchase.pur_status}</span></td>
           <td>
             <button class="btn btn-primary btn-sm" onclick="viewDetail()">View detail</button>
           </td>
@@ -210,5 +363,21 @@ async function LoadProducts() {
     });
   }
   
-  
-  
+// Hàm viết hoa
+function capitalizeEachWord(string) {
+    return string
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ');
+}
+
+function getOrderStatusBadge(status) {
+  switch (status.toLowerCase()) {
+      case 'done':
+          return 'bg-success';
+      case 'processing':
+          return 'bg-warning';
+      default:
+          return 'bg-secondary';
+  }
+}

@@ -1,6 +1,7 @@
 import { Router } from 'express';
-import { getAllProduct, getProductbyPlatform ,getProductByKeyword, getProductById, getProductByCategory, addNewProduct, getProductStorage} from '../Controller/PRODUCTController.js';
+import { getAllProduct,GetProductwithNccPrice, getProductbyPlatform,UpdatePriceListNcc ,getProductByKeyword, getProductById, getProductByCategory, addNewProduct, getProductStorage} from '../Controller/PRODUCTController.js';
 import { authMiddleware } from '../Middleware/authMiddleware.js';
+import upload from '../Middleware/multer.js';
 
 const productsRouter = Router();
 
@@ -24,5 +25,10 @@ productsRouter.post('/add_product',addNewProduct)
 
 // Route xem sản phẩm trong kho
 productsRouter.get('/check_storage',getProductStorage)
+
+productsRouter.post('/update-price-list', upload.single('file'), UpdatePriceListNcc);
+
+productsRouter.get('/get-products-with-ncc-price', GetProductwithNccPrice);
+
 
 export default productsRouter;

@@ -1,7 +1,8 @@
-import { collection, query, where, getDocs,addDoc, doc ,getDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs,addDoc, doc ,getDoc,updateDoc } from 'firebase/firestore';
 import db from '../Configs/firestore.js';
-
-
+import XLSX from 'xlsx';
+import upload from '../Middleware/multer.js';
+import fs from 'fs';
 
 // thêm sản phẩm
 export const addNewProduct = async (req, res) => {
@@ -152,7 +153,6 @@ export const getProductbyPlatform = async (req, res) => {
     }
 };
 
-
 // Lấy sản phẩm theo Keyword
 export const getProductByKeyword = async (req, res) => {
     try {
@@ -203,8 +203,6 @@ export const getProductByKeyword = async (req, res) => {
     }
 };
 
-
-
 //lấy sản phẩm theo ID
 export const getProductById = async (req, res) => {
     try {
@@ -245,8 +243,6 @@ export const getProductById = async (req, res) => {
         res.status(500).json({ message: `Error fetching product: ${error.message}` });
     }
 };
-
-
 
 // Lấy sản phẩm theo category
 export const getProductByCategory = async (req, res) => {
@@ -293,8 +289,6 @@ export const getProductByCategory = async (req, res) => {
         res.status(500).json({ message: 'Error retrieving products by category', error: error.message });
     }
 };
-
-
 //#endregion
 
 // xóa sản phẩm theo ID
@@ -308,7 +302,6 @@ export const deleteProductById = async (req, res) =>{
 
     }
 }
-
 
 // Xem sản phẩm trong kho
 export const getProductStorage = async (req,res)=>{
@@ -326,3 +319,77 @@ export const getProductStorage = async (req,res)=>{
         res.status(500).json({ message: 'Error retrievin storage', error: error.message });
     }
 }
+
+export const UpdatePriceListNcc = async (req, res) => {
+    try {
+        const filePath = req.file.path;
+
+        // Đọc file Excel và lấy dữ liệu dưới dạng mảng 2 chiều
+        const workbook = XLSX.readFile(filePath);
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        const data = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+        // Lặp qua từng hàng từ hàng thứ 2 trong Excel
+        for (let i = 2; i < data.length; i++) {
+            const [productId, nccPrice] = data[i];
+
+            if (productId && nccPrice) {
+                // Truy vấn Firestore để tìm tài liệu phù hợp với `product_id`
+                const nccPriceCollection = collection(db, 'NCCPRICE');
+                const q = query(nccPriceCollection, where('product_id', '==', productId));
+                const querySnapshot = await getDocs(q);
+
+                // Nếu tìm thấy tài liệu, cập nhật giá trị `ncc_price`
+                querySnapshot.forEach(async (doc) => {
+                    await updateDoc(doc.ref, { ncc_price: nccPrice });
+                });
+            }
+        }
+
+        // Xóa file sau khi xử lý và trả về phản hồi
+        fs.unlinkSync(filePath);
+        res.status(200).json({ message: "Prices updated successfully for all products" });
+
+    } catch (error) {
+        res.status(500).json({ error: `Failed to update prices: ${error.message}` });
+    }
+};
+
+export const GetProductwithNccPrice = async (req, res) => {
+    try {
+        const productsCollection = collection(db, 'PRODUCTS');
+        const nccPriceCollection = collection(db, 'NCCPRICE');
+
+        // Lấy tất cả tài liệu trong collection PRODUCT
+        const productsSnapshot = await getDocs(productsCollection);
+        const nccPricesSnapshot = await getDocs(nccPriceCollection);
+
+        // Chuyển đổi NCCPRICE thành một đối tượng cho nhanh chóng tìm kiếm
+        const nccPrices = {};
+        nccPricesSnapshot.forEach(doc => {
+            const data = doc.data();
+            nccPrices[data.product_id] = { ncc_price: data.ncc_price, docId: doc.id };
+        });
+
+        // Tạo mảng để lưu thông tin sản phẩm kèm theo ncc_price
+        const result = [];
+        productsSnapshot.forEach(doc => {
+            const productData = doc.data();
+            const productId = doc.id;  // ID của document trong collection PRODUCT
+
+            // Kiểm tra xem ncc_price có tồn tại cho product_id tương ứng không
+            if (nccPrices[productId]) {
+                result.push({
+                    pro_title: productData.pro_title,
+                    docId: productId,
+                    ncc_price: nccPrices[productId].ncc_price,
+                });
+            }
+        });
+
+        // Gửi kết quả về phía client
+        res.status(200).json(result);
+    } catch (error) {
+        res.status(500).json({ error: `Failed to fetch products with NCC price: ${error.message}` });
+    }
+};

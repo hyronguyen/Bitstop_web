@@ -249,22 +249,20 @@ async function handleStockGoods(event) {
         // Cập nhật kho cho từng item
         for (const item of invoiceItems) {
             const product = {
-                identify: item.item_id,  // Assuming each item has 'identify'
-                qa: item.item_qty,       // Assuming each item has 'qa'
+                identify: item.item_id,  
+                qa: item.item_qty,       
             };
     
             // Gọi API để cập nhật số lượng sản phẩm
-            await apiUpdateProductQuantity(product);
+            apiUpdateProductQuantity(product);
         }
+        
 
         // Sau khi cập nhật kho thành công, cập nhật trạng thái đơn hàng
         updatePurchaseStatus(purchaseId);
 
         // Call the new function to create an SM input record
         handleCreateSMInput(purchaseId, invoiceItems);
-        
-        // Thông báo người dùng
-        alert('Số lượng tồn đã được cập nhật và trạng thái đơn hàng đã chuyển sang "Delivered"');
 
     } catch (error) {
         console.error('Error:', error);

@@ -6,7 +6,6 @@ const storageRouter = Router();
 
 storageRouter.get('/get_storageItems',getStorgeItems);
 storageRouter.get('/get_PurchaseItems',getPurchaseItems);
-
 // Route để cập nhật số lượng sản phẩm
 storageRouter.put('/update_StorageQuantity', updateStorageQuantity);
 

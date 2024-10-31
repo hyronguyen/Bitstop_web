@@ -338,6 +338,24 @@ async function apiGetAllPurchase() {
   
 }
 
+async function apiCreateANewPurchaseOrder(purchaseData) {
+  try {
+    const response = await axios({
+      method: 'POST',
+      url: `${URL}/api/purchase/create_purchase`,  // Đường dẫn API tương ứng
+      data: purchaseData,
+    });
+
+    if (response.status === 201) {
+      console.log('Purchase order created successfully:', response.data);
+      return response.data;  
+    }
+  } catch (error) {
+    console.error('Error creating purchase order: ', error.response ? error.response.data.message : error.message);
+  }
+}
+
+
 //Lấy sản phẩm trong kho--Việt
 async function apiGetStorageItems() {
   try {
@@ -620,7 +638,6 @@ async function apiGetOrders() {
   }
 }
 
-
 // Thêm coupon
 async function apiAddCoupon(couponData) {
   try {
@@ -670,5 +687,44 @@ async function apiUpdateDeliverOrder(orderId) {
       }
   } catch (error) {
       console.error('Error updating delivery order status:', error.message);
+  }
+}
+
+async function apiUpdatePriceListNcc(file) {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await axios({
+      method: 'POST',
+      url: `${URL}/api/products/update-price-list`,  // Đường dẫn API tương ứng
+      data: formData,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    if (response.status === 200) {
+      console.log('Price list updated successfully:', response.data);
+      return response.data;
+    }
+  } catch (error) {
+    console.error('Error updating price list: ', error.message);
+  }
+}
+
+async function apiGetProductwithNccPrice() {
+  try {
+    const response = await axios({
+      method: 'GET',
+      url: `${URL}/api/products/get-products-with-ncc-price`,
+    });
+    
+    if (response.status === 200) {
+      console.log('Products with NCC prices retrieved successfully:', response.data);
+      return response.data;
+    }
+  } catch (error) {
+    console.error('Error fetching products with NCC prices:', error.message);
   }
 }
