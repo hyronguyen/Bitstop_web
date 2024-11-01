@@ -69,7 +69,11 @@ async function LoadProducts() {
                 img: items.pro_img            // img
             };
         });
-        currentlist = productList;
+        const sortedProductList = productList.sort((a, b) => a.qa - b.qa);
+        
+        currentlist = sortedProductList;
+
+        
 
         renderProductList(currentlist);
     

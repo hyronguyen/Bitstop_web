@@ -55,8 +55,9 @@ async function LoadProducts() {
 async function LoadLowStock() {
   try{
     const Productlist = await apigetAllProducts();
-    const lowStockProducts = Productlist.filter(product => product.quan <=30 );
-    console.log(lowStockProducts);
+    const lowStockProducts = Productlist
+    .filter(product => product.quan <= 30)
+    .sort((a, b) => a.quan - b.quan);
     RenderLowStockProducts(lowStockProducts);
 
   }
