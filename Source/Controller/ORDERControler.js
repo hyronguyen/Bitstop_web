@@ -102,7 +102,6 @@ export const GetOrderByID = async (req, res) => {
     }
 };
 
-
 // Tham chiếu tất cả đơn hàng
 export const GetAllOrder = async (req, res) => {
     try {
@@ -154,7 +153,6 @@ export const GetAllDeliveringOrder = async (req, res) => {
 };
 
 // tham chiếu đơn hàng đã thành công
-
 export const GetAllSuccedOrder = async (req, res) => {
     try {
         const q = query(collection(db, 'ORDERS'), where('or_status', '==', 'Succeeded'));
@@ -171,20 +169,19 @@ export const GetAllSuccedOrder = async (req, res) => {
     }
 };
 
+// cập nhật trạng thái "Đang vận chuyển
 export const updateDeliveryOrder = async (req, res) => {
-    const { orderId } = req.params; // Assuming orderId is passed as a route parameter
+    const { orderId } = req.params; 
 
     if (!orderId) {
         return res.status(400).json({ error: 'Order ID is required' });
     }
 
     try {
-        // Reference to the order document
         const orderDocRef = doc(db, 'ORDERS', orderId);
         
         // Fetch the order document
         const orderDoc = await getDoc(orderDocRef);
-        
         // Check if the order exists
         if (!orderDoc.exists()) {
             return res.status(404).json({ error: 'Order not found' });
@@ -198,6 +195,64 @@ export const updateDeliveryOrder = async (req, res) => {
         res.status(200).json({ message: `Order ${orderId} is now being delivered.` });
     } catch (error) {
         console.error('Error updating delivery order:', error);
+        res.status(500).json({ error: 'Internal server error: ' + error.message });
+    }
+};
+
+// cập nhật trạng thái "Yêu cầu hủy"
+export const CancelRequest = async (req, res) => {
+    const { orderId } = req.params; 
+
+    if (!orderId) {
+        return res.status(400).json({ error: 'Order ID is required' });
+    }
+
+    try {
+        const orderDocRef = doc(db, 'ORDERS', orderId);
+        
+        // Fetch the order document
+        const orderDoc = await getDoc(orderDocRef);
+        // Check if the order exists
+        if (!orderDoc.exists()) {
+            return res.status(404).json({ error: 'Order not found' });
+        }
+
+        // Cập nhật trạng thái đang yêu cầu hủy
+        await updateDoc(orderDocRef, {
+            or_status: 'Request',
+        });
+
+        res.status(200).json({ message: `Order ${orderId} is now being request for canceling.` });
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error: ' + error.message });
+    }
+};
+
+// cập nhật trạng thái "Đã hủy"
+export const CancelOrder = async (req, res) => {
+    const { orderId } = req.params; 
+
+    if (!orderId) {
+        return res.status(400).json({ error: 'Order ID is required' });
+    }
+
+    try {
+        const orderDocRef = doc(db, 'ORDERS', orderId);
+        
+        // Fetch the order document
+        const orderDoc = await getDoc(orderDocRef);
+        // Check if the order exists
+        if (!orderDoc.exists()) {
+            return res.status(404).json({ error: 'Order not found' });
+        }
+
+        // Cập nhật trạng thái đang yêu cầu hủy
+        await updateDoc(orderDocRef, {
+            or_status: 'Canceled',
+        });
+
+        res.status(200).json({ message: `Order ${orderId} is now Canceled` });
+    } catch (error) {
         res.status(500).json({ error: 'Internal server error: ' + error.message });
     }
 };

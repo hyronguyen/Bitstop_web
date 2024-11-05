@@ -104,7 +104,7 @@ function getOrderStatusBadge(status) {
             return 'bg-warning';
         case 'delivering':
             return 'bg-info';
-        case 'failed':
+        case 'canceled':
             return 'bg-danger';
         default:
             return 'bg-secondary';

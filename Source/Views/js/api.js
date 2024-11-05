@@ -554,8 +554,6 @@ async function apiUpdateStockQuantity(productId, newQuantity) {
   }
 }
 
-
-
 async function apiUpdateSMStatus(sm_id, sm_status) {
   try {
       const response = await axios({
@@ -577,7 +575,6 @@ async function apiUpdateSMStatus(sm_id, sm_status) {
       console.error('Error updating SM status:', error.message);
   }
 }
-
 
 async function apiGetDoneSMItems() {
   try {
@@ -622,7 +619,6 @@ async function apiUpdateEditStockQuantity(productId, editQuantity) {
   }
 }
 
-
 // api lấy dữ liệu của coupon
 async function apiGetCoupons() {
   try {
@@ -642,8 +638,6 @@ async function apiGetCoupons() {
     console.error('Error fetching coupons: ', error.message);
   }
 }
-
-
 
 // api lấy dữ liệu của order
 async function apiGetOrders() {
@@ -681,6 +675,7 @@ async function apiAddCoupon(couponData) {
   }
 }
 
+// Lấy coupon theo id người dùng
 async function apigetCouponsByCustomerId(customerId) {
   try {
     const response = await axios({
@@ -696,6 +691,7 @@ async function apigetCouponsByCustomerId(customerId) {
   }
 }
 
+// cập nhật trạng thái giao hàng cho order
 async function apiUpdateDeliverOrder(orderId) {
   try {
       const response = await axios({
@@ -712,6 +708,45 @@ async function apiUpdateDeliverOrder(orderId) {
       }
   } catch (error) {
       console.error('Error updating delivery order status:', error.message);
+  }
+}
+
+// cập nhật trạng thái yêu cầu hủy  cho order
+async function apiUpdateRequestOrder(orderId) {
+  try {
+      const response = await axios({
+          method: 'PUT',
+          url: `${URL}/api/orders/updateReqCancel/${orderId}`, // Update the endpoint to match your backend API
+          headers: {
+              'Content-Type': 'application/json',
+          },
+  
+      });
+
+      if (response.status === 200) {
+          console.log('Request order status updated successfully:', response.data);
+      }
+  } catch (error) {
+      console.error('Error updating Request order status:', error.message);
+  }
+}
+// cập nhật trạng thái hủy cho order
+async function apiUpdateCancelOrder(orderId) {
+  try {
+      const response = await axios({
+          method: 'PUT',
+          url: `${URL}/api/orders/updateCancel/${orderId}`, // Update the endpoint to match your backend API
+          headers: {
+              'Content-Type': 'application/json',
+          },
+  
+      });
+
+      if (response.status === 200) {
+          console.log('Cancel order status updated successfully:', response.data);
+      }
+  } catch (error) {
+      console.error('Error updating Cancel order status:', error.message);
   }
 }
 
@@ -751,5 +786,77 @@ async function apiGetProductwithNccPrice() {
     }
   } catch (error) {
     console.error('Error fetching products with NCC prices:', error.message);
+  }
+}
+
+async function apiGetTicketByCustomer(customerId) {
+  try {
+    const response = await axios({
+      method: 'GET',
+      url: `${URL}/api/tickets/get_TicketsByCustomer/${customerId}`,
+    });
+
+    if (response.status === 200) {
+      return response.data; // Return tickets data
+    } else {
+      console.error('Error fetching tickets by customer:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error fetching tickets by customer:', error.message);
+  }
+}
+
+// get tất cả ticket
+async function apiGetAllTickets() {
+  try {
+    const response = await axios({
+      method: 'GET',
+      url: `${URL}/api/tickets/get_allTickets`,
+    });
+
+    if (response.status === 200) {
+      return response.data; // Return all tickets
+    } else {
+      console.error('Error fetching all tickets:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error fetching all tickets:', error.message);
+  }
+}
+
+// get cập nhật trạng thái 
+async function apiUpdateTicketStatusToDone(ticketId) {
+  try {
+    const response = await axios({
+      method: 'PUT',
+      url: `${URL}/api/tickets/put_doneTicket/${ticketId}`,
+    });
+
+    if (response.status === 200) {
+      return response.data; // Confirm status update
+    } else {
+      console.error('Error updating ticket status:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error updating ticket status:', error.message);
+  }
+}
+
+// get tạo ticket
+async function apiCreateNewTicket(ticketData) {
+  try {
+    const response = await axios({
+      method: 'POST',
+      url: `${URL}/api/tickets/post_newTicket`,
+      data: ticketData,
+    });
+
+    if (response.status === 201) {
+      return response.data; // Confirm ticket creation
+    } else {
+      console.error('Error creating ticket:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error creating ticket:', error.message);
   }
 }
