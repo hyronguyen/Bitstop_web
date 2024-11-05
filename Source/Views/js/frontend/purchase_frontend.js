@@ -356,7 +356,7 @@ async function collectOrderData() {
           <td>${purchase.pur_res || 'N/A'}</td> <!-- Responsible person -->
           <td><span class="badge ${statusBadgeClass}">${purchase.pur_status}</span></td>
           <td>
-            <button class="btn btn-primary btn-sm" onclick="viewDetail()">View detail</button>
+            <button class="btn btn-primary btn-sm" onclick="viewDetail()"><i class="fa-solid fa-eye"></i></button>
           </td>
         </tr>
       `;

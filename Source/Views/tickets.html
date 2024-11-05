@@ -18,8 +18,8 @@
 	<title>Bitstop</title>
 
 	<!--
-		CSS
-		============================================= -->
+            CSS
+            ============================================= -->
 	<link rel="stylesheet" href="css/linearicons.css">
 	<link rel="stylesheet" href="css/owl.carousel.css">
 	<link rel="stylesheet" href="css/themify-icons.css">
@@ -49,13 +49,13 @@
 					<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
 						<ul class="nav navbar-nav menu_nav ml-auto">
 							<li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-							<li class="nav-item submenu dropdown active">
+							<li class="nav-item submenu dropdown">
 								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
 								 aria-expanded="false">Shop</a>
 								<ul class="dropdown-menu">
 									<li class="nav-item"><a class="nav-link" href="category.html">Shop Category</a></li>
 									<li class="nav-item"><a class="nav-link" href="cart.html">Shopping Cart</a></li>
-				
+					
 								</ul>
 							</li>
 							
@@ -63,14 +63,14 @@
 								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
 								 aria-expanded="false">Pages</a>
 								<ul class="dropdown-menu">
-						
+							
 									<li class="nav-item"><a class="nav-link" href="tracking.html">Tracking</a></li>
 									<li class="nav-item"><a class="nav-link" href="coupon.html">Your Coupons</a></li>
 									<li class="nav-item"><a class="nav-link" href="tickets.html">Your Tickets</a></li>
 									<li class="nav-item"><a class="nav-link" href="elements.html">Profile</a></li>
 								</ul>
 							</li>
-							<li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+							<li class="nav-item active"><a class="nav-link" href="contact.html">Contact</a></li>
 						</ul>
 						<ul class="nav navbar-nav navbar-right">
 							<li class="nav-item"><a href="cart.html" class="cart"><span class="ti-bag"></span></a></li>
@@ -99,10 +99,10 @@
 		<div class="container">
 			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
 				<div class="col-first">
-					<h1>Confirmation</h1>
+					<h1>Contact Us</h1>
 					<nav class="d-flex align-items-center">
 						<a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
-						<a href="category.html">Confirmation</a>
+						<a href="category.html">Contact</a>
 					</nav>
 				</div>
 			</div>
@@ -110,122 +110,22 @@
 	</section>
 	<!-- End Banner Area -->
 
-	<!--================Order Details Area =================-->
-	<section class="order_details section_gap">
-		<div class="container">
-			<div class="row order_d_inner">
-				<div class="col-lg-4">
-					<div class="details_item">
-						<h4>Order Info</h4>
-						<ul class="list">
-							<li><span>Order ID</span> : <span id="order_id">60235</span</li>
-							<li><span>Date</span> : <span id="order_date">Los Angeles</span></li>
-							<li><span>Total</span> : <span id="order_total">USD 2210</span></li>
-							<li><span>Payment method</span> : <span id="order_payment">Check payments</span></li>
-						</ul>
-					</div>
-				</div>
-				<div class="col-lg-4">
-					<div class="details_item">
-						<h4>Shipping Address</h4>
-						<ul class="list">
-							<li><span>Customer</span> : <span id="shipping_customer">abc</span></li>
-							<li><span>Address</span> : <span id="shipping_address">56/8</span></li>
-							<li><span>Phone</span> : <span id="shipping_phone">00000</span></li>
-						</ul>
-					</div>
-				</div>
-				<div class="col-lg-4">
-					<div class="details_item">
-						<h4>Status</h4>
-						<ul class="list">
-						<li><span>Status</span> : <span id="statusbar">status</span></li>
-						<li>
-							<button id="cancel_order_btn" class="btn btn-danger">Cancel Order</button>
-							<button id="received_order_btn" class="btn btn-success" style="display: none;">Received</button>
-						</li>
-					</ul>
-						
-					</div>
-				</div>
-			</div>
-			<div class="order_details_table">
-				<h2>Order Details</h2>
-				<div class="table-responsive">
-					<table class="table">
-						<thead>
-							<tr>
-								<th scope="col">Product</th>
-								<th scope="col">Quantity</th>
-								<th scope="col">Total</th>
-							</tr>
-						</thead>
-						<tbody id="order_items">
-							<!-- Sẽ được điền vào từ script -->
-						</tbody>
-						<tfoot>
-							<tr>
-								<td><h4>Subtotal</h4></td>
-								<td></td>
-								<td><p id="order_subtotal">$2160.00</p></td>
-							</tr>
-							<tr>
-								<td><h4>Shipping</h4></td>
-								<td></td>
-								<td><p>Flat rate: $50.00</p></td>
-							</tr>
-							<tr>
-								<td><h4>Total</h4></td>
-								<td></td>
-								<td><p id="order_final_total">$2210.00</p></td>
-							</tr>
-						</tfoot>
-					</table>
-				</div>
+<section class="section_gap container">
+	<div class="row justify-content-center">
+		<div class="col-lg-6 text-center">
+			<div class="section-title">
+				<h1>Your Tickets</h1>
+				<p>Tracking your orders status here.</p>
 			</div>
 		</div>
-	</section>
+	</div>
+	<div class="row" id="ticketsContainer">
+		<!-- Tickets will be loaded here -->
+	</div>
 
-	<!-- Modal for Cancel Order -->
-<div class="modal fade" id="cancelOrderModal" tabindex="-1" role="dialog" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="cancelOrderModalLabel">Create a Ticket for Cancel Order</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="ticketForm">
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" class="form-control" id="name" required readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" class="form-control" id="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="reason">Reason for Cancellation</label>
-                        <select class="form-control" id="reason" required>
-                            <option value="" disabled selected>Select a reason</option>
-                            <option value="Change Address">Change Address</option>
-                            <option value="No Longer Interested">No Longer Interested</option>
-                            <option value="Change Item">Change Item</option>
-                            <option value="Other Reasons">Other Reasons</option>
-                        </select>
-                    </div>
-                    <input type="hidden" id="order_id_hidden" value="">
-                    <button style="margin-top: 10px;" type="submit" class="btn btn-primary">Create Ticket</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+</section>
 
-	
-	<!--================End Order Details Area =================-->
+	<!--================Contact Area =================-->
 
 	<!-- start footer Area -->
 	<footer class="footer-area section_gap">
@@ -258,6 +158,7 @@
 	<!-- End footer Area -->
 
 
+	<!--================End Contact Success and Error message Area =================-->
 
 
 	<script src="js/vendor/jquery-2.2.4.min.js"></script>
@@ -275,12 +176,14 @@
 	<script src="js/gmaps.min.js"></script>
 	<script src="js/main.js"></script>
 
+	<!--My Js-->
 	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 	<script src="js/api.js"></script>
 	<script src="./class/class.js"></script>
 	<script src="js/search_engine.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
-    <script src="js/frontend/confirmation_frontend.js"></script>
+    <script src="js/frontend/ticket_frontend.js"></script>
+	
 </body>
 
 </html>

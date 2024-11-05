@@ -365,7 +365,7 @@ function renderSMList(smList) {
             <td>${smItem.sm_des}</td>
             <td><span class="badge ${statusBadgeClass}">${smItem.sm_status}</span></td>
             <td>
-              <button class="btn btn-primary btn-sm" onclick="viewDetails(${index})">View Details</button>
+              <button class="btn btn-primary btn-sm" onclick="viewDetails(${index})"><i class="fa-solid fa-eye"></i></button>
             </td>
           </tr>
         `;
@@ -553,7 +553,7 @@ function renderDoneSMList(smList) {
             <td>${smItem.sm_des}</td>
                <td><span class="badge ${statusBadgeClass}">${smItem.sm_status}</span></td>
             <td>
-              <button class="btn btn-primary btn-sm" onclick="viewDetailsDone(${index})">View Details</button>
+              <button class="btn btn-primary btn-sm" onclick="viewDetailsDone(${index})"><i class="fa-solid fa-eye"></i></button>
             </td>
           </tr>
         `;

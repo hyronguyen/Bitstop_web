@@ -320,6 +320,7 @@ function DeliveryChoice(){
   
 }
 
+//#region Checkout
 async function CheckOut() {
     $('#loadingModal').modal('show');
     const customerName = document.getElementById('customer_name').value.trim();
@@ -387,19 +388,18 @@ async function CheckOut() {
             } 
             else 
             {
-            
-                console.log(inforCheckout);
+            // TẠO ĐƠN HÀNG
                 const response = await apiCreateOrder(inforCheckout)
                 if(response){
                     // Thông tin email
-        const to = 'hothanhgiang123@yopmail.com';  // Email người nhận (có thể là email của khách hàng)
-        const subject = 'Xác nhận đơn hàng';
-        const text = 'Cảm ơn bạn đã đặt hàng!';
-        const html = `<p>Xin chào ${inforCheckout.customerName},</p>
+                    const to = 'hothanhgiang123@yopmail.com';  // Email người nhận (có thể là email của khách hàng)
+                    const subject = 'Xác nhận đơn hàng';
+                    const text = 'Cảm ơn bạn đã đặt hàng!';
+                    const html = `<p>Xin chào ${inforCheckout.customerName},</p>
                       <p>Cảm ơn bạn đã đặt hàng. Đây là thông tin đơn hàng của bạn:</p>
                        ${generateOrderTableHTML(inforCheckout)}`;
 
-        // Gọi API gửi email
+                    // Gọi API gửi email
                     await apiSendMail(to, subject, text, html, inforCheckout);
 
                     $('#loadingModal').modal('hide');

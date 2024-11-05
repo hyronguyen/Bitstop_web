@@ -16,19 +16,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function LoadOrder() {
     const response = await apiGetOrders();
-    console.log(response);
-    renderOrders(response);
-    
-    
-}
+    orders = response;
+    renderOrders(orders);
+}   
+document.getElementById('request-tab').addEventListener('click', loadTickets);
 
-
-// Add event listeners to each tab
-document.getElementById('list-tab').addEventListener('click', apiGetOrders);
-document.getElementById('list-coupon-tab').addEventListener('click', apiGetCoupons);
+document.getElementById('list-coupon-tab').addEventListener('click', renderCoupons);
 
 // renderCoupons.js
-function renderCoupons(coupons) {
+async function renderCoupons() {
+    const coupons = await apiGetCoupons();
+    try{
     const couponsList = document.getElementById('coupons-list'); // Ensure this ID matches your HTML
     couponsList.innerHTML = ''; // Clear any existing content
 
@@ -37,7 +35,6 @@ function renderCoupons(coupons) {
     }
 
     coupons.forEach((coupon, index) => {
-        console.log(`Rendering coupon #${index + 1}:`, coupon); // Log each coupon being rendered
         const couponRow = `
             <tr>
                 <td>${index + 1}</td>
@@ -49,7 +46,10 @@ function renderCoupons(coupons) {
             </tr>
         `;
         couponsList.insertAdjacentHTML('beforeend', couponRow);
-    });
+    });}
+    catch(error){
+        console.log(error);
+    }
 }
 
 // Function to render orders in the HTML table
@@ -75,7 +75,7 @@ function renderOrders(ordersData) {
                 <a href="${order.or_invo || '#'}" target="_blank" class="btn btn-link">View Invoice</a>
             </td>
             <td>
-                <button class="btn btn-primary" onclick="viewOrderDetails(${index})">View Details</button>
+                <button class="btn btn-primary" onclick="viewOrderDetails(${index})"><i class="fa-solid fa-eye"></i></button>
             </td>
         `;
         orderListElement.appendChild(row);
@@ -174,6 +174,94 @@ async function addCoupon() {
         console.error('Error adding coupon:', error);
     }
 }
+//#region Ticket
+// Hàm mở modal
+
+async function loadTickets() {
+    const tickets = await apiGetAllTickets(); // Gọi API để lấy dữ liệu
+    const ticketListContainer = document.getElementById('ticket_list');
+    ticketListContainer.innerHTML = ''; // Xóa nội dung cũ
+
+    tickets.forEach(ticket => {
+
+        const descriptionParts = ticket.tic_des.split('|');
+         const firstDescription = descriptionParts[0]; // Lấy phần đầu tiên
+
+        const ticketRow = document.createElement('tr');
+        ticketRow.innerHTML = `
+            <td>${ticket.id}</td>
+            <td>${ticket.tic_name}</td>
+            <td>${new Date(ticket.tic_date.seconds * 1000).toLocaleDateString()}</td>
+            <td>${firstDescription}</td>
+            <td>${ticket.tic_status}</td>
+            <td>
+                <button class="btn btn-primary" onclick="openModal('${ticket.id}', '${ticket.tic_name}', '${ticket.tic_des}', '${ticket.tic_mail}', '${ticket.tic_order}', '${new Date(ticket.tic_date.seconds * 1000).toLocaleDateString()}', '${ticket.tic_user}')">
+                    <i class="fa-solid fa-eye"></i>
+                </button>
+            </td>
+        `;
+        ticketListContainer.appendChild(ticketRow);
+    });
+}
+
+//Xem chi tiết
+function openModal(ticketId, ticketName, ticketDes, ticketMail, ticketOrder, ticketDate, ticketUserId) {
+    document.getElementById('modalTicketId').textContent = ticketId; // Order ID
+    document.getElementById('modalName').textContent = ticketName; // Name
+    document.getElementById('modalDescription').textContent = ticketDes; // Description
+    document.getElementById('modalEmail').textContent = ticketMail; // Email
+    document.getElementById('modalOrder').textContent = ticketOrder; // Status
+    document.getElementById('modalDate').textContent = ticketDate; // Date
+    document.getElementById('modalUserId').textContent = ticketUserId; // User ID
+
+    // Mở modal
+    $('#ticketModal').modal('show');
+}
+
+// xử lý phiếu
+document.getElementById('doneButton').addEventListener('click', function() {
+
+
+    const order =  document.getElementById('modalOrder').textContent;
+    const mail = document.getElementById('modalEmail').textContent;
+    const ticketid=  document.getElementById('modalTicketId').textContent;
+    const c_name =  document.getElementById('modalName').textContent;
+    const sendmessage = document.getElementById('messageInput').value;
+
+    const html = `<h1>Xin chào ${c_name},</h1>
+    <h3>Cảm ơn bạn liên hệ với Bitstop. Đây là thông tin phản hồi của chúng tôi dành cho bạn:</h3>
+    <p>${sendmessage}</p>`;
+
+
+    const subject = "Phản hồi Ticket: "+ ticketid;
+  
+    if (order!="No Order"){
+        apiUpdateCancelOrder(order);
+        SendMail("hothanhgiang123@yopmail.com",subject,"",html);
+        apiUpdateTicketStatusToDone(ticketid);
+    }
+    else {
+        SendMail("hothanhgiang123@yopmail.com",subject,"",html);
+        apiUpdateTicketStatusToDone(ticketid);
+    } 
+    alert('Ticket marked as done!');
+
+    window.location.reload();
+    $('#ticketModal').modal('hide');
+    
+});
+//#endregion
+
+async function SendMail(to,subject,text,html) {
+    try{
+        await apiSendMail(to, subject, text,html)
+    }
+    catch(error){
+        console.log(error);
+    }
+}
+
+
 
 function getOrderStatusBadge(status) {
     switch (status.toLowerCase()) {
@@ -181,7 +269,11 @@ function getOrderStatusBadge(status) {
             return 'bg-success';
         case 'processing':
             return 'bg-warning';
+            case 'canceled':
+            return 'bg-danger';
+            case 'delivering':
+            return 'bg-info';
         default:
             return 'bg-secondary';
     }
-}
+    }

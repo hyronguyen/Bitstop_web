@@ -11,7 +11,7 @@ export const sendMail = async (req, res) => {
       to: to,                      // Địa chỉ người nhận
       subject: subject,            // Tiêu đề email
       text: text,                  // Nội dung văn bản của email (tuỳ chọn)
-      html: html || `<p>${infoforcheckout}</p>`, // Nội dung HTML của email, có thể tùy chọn sử dụng infoforcheckout
+      html: html || `<p>${infoforcheckout}</p>` , // Nội dung HTML của email, có thể tùy chọn sử dụng infoforcheckout
     };
 
     // Gửi email

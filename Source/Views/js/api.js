@@ -628,9 +628,7 @@ async function apiGetCoupons() {
     });
 
     if (response.status === 200) {
-      const coupons = response.data;
-      console.log("API response data:", coupons); // Log the API response
-      renderCoupons(coupons); // Call the render function here
+      return response.data;
     } else {
       console.error('Error fetching coupons: ', response.statusText);
     }
