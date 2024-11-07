@@ -45,7 +45,7 @@ function RenderCoupons(coupons) {
                     <div class="card-body text-center">
                         <h5 class="card-title">Coupon: ${coupon.id}</h5>
                         <p class="card-text text-muted"><strong>Status:</strong> ${coupon.cou_status}</p>
-                        <p class="card-text text-success"><strong>Discount:</strong> ${Math.round(coupon.cou_discount * 100)}%</p>
+                        <p class="card-text text-success"><strong>Discount:</strong> ${coupon.cou_discount}%</p>
                         <p class="card-text "><strong>Expires in:</strong> ${countdownText}</p>
                     </div>
                     <div class="card-footer bg-transparent border-top-0 text-center">

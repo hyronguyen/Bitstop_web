@@ -128,6 +128,7 @@ function DisplayProducts(products) {
 
     // Render available products (with "add to bag" button)
     availableProducts.forEach(product => {
+        
         const imageUrls = product.img.split(' ');
         const firstImageUrl = imageUrls[0] || '';
 
